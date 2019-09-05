@@ -33,7 +33,7 @@ class App extends React.Component {
       return (
          <div className="App">
 
-            <h2>This is App.js</h2>
+            <h3>This is "App"</h3>
             
             <AddChallenge />
 
