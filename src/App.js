@@ -3,7 +3,7 @@ import React from 'react';
 // import './App.css';
 // require('./index.css'); 
 
-import KeywordList from './KeywordList';
+import AddChallenge from './AddChallenge';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -16,7 +16,9 @@ class App extends React.Component {
       this.state = {
          username: '',
          password: '',
-         loggedIn: false
+         loggedIn: false,
+         isTeacher: false,
+         keywords: [],
       }
    }
    
@@ -26,8 +28,6 @@ class App extends React.Component {
 
    }
 
-   
-
    render() {
 
       return (
@@ -35,13 +35,12 @@ class App extends React.Component {
 
             <h2>This is App.js</h2>
             
-            <KeywordList />
+            <AddChallenge />
 
          </div>
       );
 
    }
 }
-
 
 export default App;

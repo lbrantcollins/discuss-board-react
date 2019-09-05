@@ -7,7 +7,7 @@ import React from 'react';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 
-class KeywordList extends React.Component {
+class SelectKeyword extends React.Component {
    constructor() {
       super();
 
@@ -46,8 +46,6 @@ class KeywordList extends React.Component {
          return <option key={keyword.id} value={keyword.keyword}>{keyword.keyword}</option>
       })
 
-      console.log(this.state.keywords);
-
       return (
          <div>
             <select>
@@ -60,4 +58,4 @@ class KeywordList extends React.Component {
 }
 
 
-export default KeywordList;
+export default SelectKeyword;
