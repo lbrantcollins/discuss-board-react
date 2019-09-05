@@ -1,140 +1,94 @@
 import React from 'react';
 import './index.css'
 
+import SelectKeywords from '../SelectKeywords';
+
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 
 class AddChallenge extends React.Component {
-   constructor() {
-      super();
+   constructor(props) {
+      super(props);
 
       this.state = {
       	id: null,
+         teacher_id: this.props.teacher_id,
       	title: '',
       	description: '',
-      	keywords: [],
-      	keywordSelections: [],
-      	languages: [],
-      	languageSelections: []
+         newChallengeCreated: false,
       }
 
    }
    
    componentDidMount = async () => {
-
-      // retrieve list of all available keyword choices
-      try {
-
-         const response = await fetch(API_URL + '/keywords', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-               'content-type': 'application/json'
-            }
-         })
-         const parsedResponse = await response.json();
-        
-         const keywordSelections = new Array(parsedResponse.length).fill(false);
-         keywordSelections[2] = true;
-         keywordSelections[5] = true;
-         await this.setState({
-               keywords: parsedResponse,
-               keywordSelections: keywordSelections
-            })
-
-      } catch (err) {
-         console.log(err)
-      }
-
-      // retrieve list of all available language choices
-      try {
-
-         const response = await fetch(API_URL + '/languages', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-               'content-type': 'application/json'
-            }
-         })
-         const parsedResponse = await response.json();
-
-         const languageSelections = new Array(parsedResponse.length).fill(false);
-         await this.setState({
-               languages: parsedResponse,
-               languageSelections: languageSelections
-            })
-
-      } catch (err) {
-         console.log(err)
-      }
+      // likely not needed
    }
 
-   toggleKeywordSelections = (keyword_ids) => {
-   	console.log("inside toggleKeywordSelections");
+   handleChange = (e) => {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
    }
 
-   toggleKeywordSelection = (i) => {
-   	const selectionsCopy = [...this.state.keywordSelections];
-   	selectionsCopy[i] = !this.state.keywordSelections[i];
-   	this.setState({
-   		keywordSelections: selectionsCopy
-   	})
-   }
+   handleSubmit = async (e) => {
+      e.preventDefault();
 
+      // send new challenge data to database and lift up state
+      const newChallenge = await this.props.addChallenge({
+         teacher_id: this.state.teacher_id,
+         title: this.state.title,
+         description: this.state.description
+      })
 
-   toggleLanguageSelection = (i) => {
+      this.setState({
+         id: newChallenge.id,
+         newChallengeCreated: true
+      })
 
-   	const selectionsCopy = [...this.state.languageSelections];
-   	selectionsCopy[i] = !this.state.languageSelections[i];
-   	this.setState({
-   		languageSelections: selectionsCopy
-   	})
-   }
+      // return the new challenge in case we need a return
+      return newChallenge;
 
-         	
+      // this.props.history.push('/media/' + newMedia.data.id)
+
+  }
+   
    render() {
-
-
-      const keywordList = this.state.keywords.map( (keyword, i) => {
-         return (
-         	<div key={keyword.id}>
-         		<input type="checkbox" name="keywords[]" value={keyword.id} checked={this.state.keywordSelections[i]}/>
-         		{keyword.keyword}
-         	</div>
-			);
-      })
-
-      const languageList = this.state.languages.map( (language, i) => {
-         return (
-         	<div key={language.id} className="language-selection">
-         		<button onClick={this.toggleLanguageSelection.bind(null, i)}>
-         			{this.state.languageSelections[i] ? "Delete" : "  Add  "}
-         			</button>
-      			{language.language}
-   			</div>
-			);
-      })
 
       return (
 
          <div>
 
-         <h3>This is "AddChallenge"</h3>
+            <h3>This is "AddChallenge"</h3>
 
-         	Available keywords:
-      		<form className="keyword-selections" onSubmit={this.toggleKeywordSelections(keywords)}>
-            	{keywordList}
-            	<button>Submit Keywords</button>
+            <form onSubmit={this.handleSubmit}>
+               <label>Title:</label>
+               <br/>
+               <input 
+                  type="text" 
+                  name="title" 
+                  placeholder="Challenge Title" 
+                  onChange={this.handleChange}
+               />
+               <br/>
+               <label>Description:</label>
+               <br/>
+               <textarea 
+                  rows="8"
+                  name="description" 
+                  placeholder="Challenge Description"
+                  onChange={this.handleChange}
+               ></textarea>
+               <br/>
+               <button>Submit Challenge</button>
             </form>
-           
 
-            Available languages:
-            <div className="language-selections">
-               {languageList}
-            </div>
+            {/* Allow keyword selection after challenge created */}
+            {this.state.newChallengeCreated ? <SelectKeywords challengeId={this.state.id} /> : null}
+            
 
          </div>
+           
       );
 
    }
