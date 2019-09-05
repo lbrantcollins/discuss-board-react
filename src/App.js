@@ -1,26 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// import './App.css';
+// require('./index.css'); 
+
+import KeywordList from './KeywordList';
+
+// use the API url from environment if it exists
+const API_URL = process.env.REACT_APP_API_URL || ''; 
+
+
+class App extends React.Component {
+   constructor() {
+      super();
+
+      this.state = {
+         username: '',
+         password: '',
+         loggedIn: false
+      }
+   }
+   
+   componentDidMount = async () => {
+
+      console.log("we may want to do something when the app first starts");
+
+   }
+
+   
+
+   render() {
+
+      return (
+         <div className="App">
+
+            <h2>This is App.js</h2>
+            
+            <KeywordList />
+
+         </div>
+      );
+
+   }
 }
+
 
 export default App;
