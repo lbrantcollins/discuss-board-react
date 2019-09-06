@@ -4,6 +4,7 @@ import React from 'react';
 // require('./index.css'); 
 
 import AddChallenge from './AddChallenge';
+import EditChallenge from './EditChallenge';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -24,7 +25,7 @@ class App extends React.Component {
    
    componentDidMount = async () => {
 
-      console.log("we may want to do something when the app first starts");
+      // we may want to do something when the app first starts"
 
    }
 
@@ -62,7 +63,36 @@ class App extends React.Component {
          console.log(err)
       }
    }
+
+   editChallenge = async (id, data) => {
+ 
+      try {
+
+         // update the title, description for a challenge
+         // using data from EditChallenge component input form
+         // (keywords/languages are updated from EditChallenge component)
+         const response = await fetch(API_URL + '/challenges/' + id, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+         })
+
+         // return the new challenge in case call needs the return
+         const editedChallenge = await response.json();
+         return editedChallenge;
+
+      } catch (err) {
+         console.log(err)
+      }
+   }
             
+            // <AddChallenge 
+               // teacher_id={2} 
+               // addChallenge={this.addChallenge}
+            // />
 
    render() {
 
@@ -71,12 +101,11 @@ class App extends React.Component {
 
             <h3>This is "App"</h3>
             
-            
-
-            <AddChallenge 
-               teacher_id={2} 
-               addChallenge={this.addChallenge}
+            <EditChallenge
+               challenge_id={2}
+               editChallenge={this.editChallenge}
             />
+
 
 
          </div>

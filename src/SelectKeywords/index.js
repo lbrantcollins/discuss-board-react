@@ -106,11 +106,6 @@ class SelectKeywords extends Component {
   	
    render() {
 
-      console.log(" ----  state  ---- ");
-      console.log(this.state.currentKeywordSelections);
-      console.log(this.state.newKeywordSelections);
-      console.log(this.state.keywords);
-
       const keywordList = this.state.keywords.map( (keyword, i) => {
          return (
          	<div key={keyword.id}>

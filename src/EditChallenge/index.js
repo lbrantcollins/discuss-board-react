@@ -7,12 +7,13 @@ import SelectKeywords from '../SelectKeywords';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 
-class AddChallenge extends React.Component {
+class EditChallenge extends React.Component {
    // props: challenge_id
-   constructor() {
-      super();
+   constructor(props) {
+      super(props);
 
       this.state = {
+         teacher_id: null,
       	title: '',
       	description: '',
       }
@@ -20,7 +21,31 @@ class AddChallenge extends React.Component {
    }
    
    componentDidMount = async () => {
-      // not sure if this is needed
+
+      try {
+
+         // retrieve the challenge to be edited
+         const response = await fetch(API_URL + '/challenges/' + this.props.challenge_id, {
+            method: 'GET',
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+         })
+         const challenge = await response.json();
+
+         console.log("--- challenge to be edited ---");
+         console.log(challenge);
+        
+         this.setState({
+            teacher_id: challenge.teacher_id,
+            title: challenge.title,
+            description: challenge.description
+         })
+
+      } catch (err) {
+         console.log(err);
+      }
    }
 
    handleChange = (e) => {
@@ -32,20 +57,17 @@ class AddChallenge extends React.Component {
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      // send new challenge data to database and lift up state
-      const newChallenge = await this.props.addChallenge({
-         teacher_id: this.state.teacher_id,
-         title: this.state.title,
-         description: this.state.description
-      })
+      // send edited challenge data to database and lift up state
+      const editedChallenge = this.props.editChallenge(this.props.challenge_id, 
+         {
+            teacher_id: this.state.teacher_id,
+            title: this.state.title,
+            description: this.state.description
+         }
+      )
 
-      this.setState({
-         id: newChallenge.id,
-         newChallengeCreated: true
-      })
-
-      // return the new challenge in case we need a return
-      return newChallenge;
+      // return the edited challenge in case we need a return
+      return editedChallenge;
 
       // this.props.history.push('/media/' + newMedia.data.id)
 
@@ -65,7 +87,8 @@ class AddChallenge extends React.Component {
                <input 
                   type="text" 
                   name="title" 
-                  placeholder="Challenge Title" 
+                  placeholder={this.state.title}
+                  value={this.state.title} 
                   onChange={this.handleChange}
                />
                <br/>
@@ -74,15 +97,15 @@ class AddChallenge extends React.Component {
                <textarea 
                   rows="8"
                   name="description" 
-                  placeholder="Challenge Description"
+                  placeholder={this.state.description}
+                  value={this.state.description}
                   onChange={this.handleChange}
                ></textarea>
                <br/>
                <button>Submit Challenge</button>
             </form>
 
-            {/* Allow keyword selection after challenge created */}
-            {this.state.newChallengeCreated ? <SelectKeywords challengeId={this.props.challenge_id} /> : null}
+            <SelectKeywords challengeId={this.props.challenge_id} /> : null}
             
 
          </div>
@@ -100,4 +123,4 @@ class AddChallenge extends React.Component {
 
 
 
-export default AddChallenge;
+export default EditChallenge;
