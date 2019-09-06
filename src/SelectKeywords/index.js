@@ -11,10 +11,11 @@ class SelectKeywords extends Component {
 
       this.state = {
       	keywords: [],
+         keywordsToBeDeleted: [],
          currentKeywordSelections: [],
       	newKeywordSelections: [],
          newKeyword: '',
-         editKeywordList: false,
+         keywordEditListToggle: false,
       }
 
    }
@@ -25,7 +26,6 @@ class SelectKeywords extends Component {
 
       try {
 
-         console.log("I am just about to fetch all the keywords");
          // retrieve list of all available keyword choices
          const response1 = await fetch(API_URL + '/keywords', {
             method: 'GET',
@@ -33,7 +33,7 @@ class SelectKeywords extends Component {
             credentials: 'include',
          })
          const keywords = await response1.json();
-         console.log(keywords);
+
          // sort the keywords in alphabetical order for a nicer display
          keywords.sort((a, b) => (a.keyword > b.keyword) ? 1 : -1)
         
@@ -56,10 +56,15 @@ class SelectKeywords extends Component {
             return challengeKeywordIds.includes(keyword.id);
          })
 
+         // create a boolean array (all false) until user
+         // indicates which words to be deleted while editing keywords
+         const keywordsToBeDeleted = Array(currentKeywordSelections.length).fill(false);
+
          this.setState({
             keywords: keywords,
+            keywordsToBeDeleted: keywordsToBeDeleted,
             currentKeywordSelections: currentKeywordSelections,
-            newKeywordSelections: currentKeywordSelections
+            newKeywordSelections: currentKeywordSelections,
          })
 
       } catch (err) {
@@ -73,12 +78,33 @@ class SelectKeywords extends Component {
       });
    }
 
+   toggleKeywordEditList = (e) => {
+      e.preventDefault();
+
+      setState({
+         keywordEditListToggle: !this.state.keywordEditListToggle
+      })
+   }
+
+   deleteKeywords = (e) => {
+      e.preventDefault();
+
+      // delete selected keywords from table of available keywords
+      // AND delete from challenge-keyword through-table
+
+      // send DELETE an array of record ids from keywords table
+      const keywordsToDelete = [];
+
+
+      // grab the full list of keywords, sort, and display
+      await this.componentDidMount();
+
+   }
+
    addKeyword = async (e) => {
       e.preventDefault();
 
-      console.log("--- this.state.newKeyword ---");
-      console.log(this.state.newKeyword);
-
+      // add the new keyword to the list of available keywords
       const response = await fetch(API_URL + '/keywords', {
          method: 'POST',
          body: JSON.stringify( {keyword: this.state.newKeyword} ),
@@ -87,13 +113,18 @@ class SelectKeywords extends Component {
       })
       const addedKeyword = await response.json();
 
-      console.log("--- addedKeyword ---");
-      console.log(addedKeyword);
-
+      // reset newKeyword to blank (to blank out the input form)
       this.setState({
          newKeyword: ''
       })
 
+      // must push one more (false) entry onto keywordsToBeDeleted 
+      // so this array's length matches the number of available words
+      // (each entry=false, until user chooses which to delete on a diff form)
+      const keywordsToBeDeleted = [...this.state.keywordsToBeDeleted]
+      keywordsToBeDeleted.push(false);
+
+      // grab the full list of keywords, sort, and display
       await this.componentDidMount();
    }
 
@@ -150,8 +181,6 @@ class SelectKeywords extends Component {
       }
 
       // Create challenge-keyword through-table entries for NEW selected keywords
-      console.log("just about to add newly selected keywords to the through-table");
-      console.log(keywordsToAdd);
       await fetch(API_URL + '/challengekeywords/', {
          method: 'POST',
          body: JSON.stringify(keywordsToAdd),
@@ -176,6 +205,14 @@ class SelectKeywords extends Component {
    		newKeywordSelections: newKeywordSelections
    	})
    }
+
+   toggleKeywordsToBeDeleted = async (i) => {
+      const keywordsToBeDeleted = [...this.state.keywordsToBeDeleted];
+      keywordsToBeDeleted[i] = !this.state.keywordsToBeDeleted[i];
+      await this.setState({
+         keywordsToBeDeleted: keywordsToBeDeleted
+      })
+   }
   	
 
    render() {
@@ -197,10 +234,29 @@ class SelectKeywords extends Component {
 
          <div>
 
-            {this.state.toggleEditKeywordList 
+            {this.state.keywordEditListToggle 
                ? 
                   <div>
-                     <h4>Edit Keywords</h4>
+
+                     <h4>Edit Keyword List</h4>
+
+                     {keywordList}
+
+                     <form className="checkbox-selections" onSubmit={this.deleteKeywords}>
+                        <button>Delete Checked Keywords</button>
+                     </form>
+
+                     <form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
+                        <input 
+                           type="text"
+                           name="newKeyword"
+                           value={this.state.newKeyword}
+                           placeholder="Enter a new keyword"
+                           onChange={this.handleChange}
+                        />
+                        <button>Add New Keyword</button>
+                     </form>
+
                   </div>   
                :
                   <div>
@@ -214,15 +270,8 @@ class SelectKeywords extends Component {
                      	<button>Submit Keywords</button>
                      </form>
 
-                     <form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
-                        <input 
-                           type="text"
-                           name="newKeyword"
-                           value={this.state.newKeyword}
-                           placeholder="Enter a new keyword"
-                           onChange={this.handleChange}
-                        />
-                        <button>Submit</button>
+                     <form onSubmit={this.toggleKeywordEditList}>
+                        <button>Edit List of Available Keywords</button>
                      </form>
 
                   </div>
