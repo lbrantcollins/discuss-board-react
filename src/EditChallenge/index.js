@@ -108,6 +108,9 @@ class EditChallenge extends React.Component {
             </form>
 
             <SelectKeywords challenge_id={this.props.challenge_id} />
+
+            <SelectLanguages challenge_id={this.props.challenge_id} />
+
             
 
          </div>
