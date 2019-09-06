@@ -14,6 +14,7 @@ class SelectKeywords extends Component {
          currentKeywordSelections: [],
       	newKeywordSelections: [],
          newKeyword: '',
+         editKeywordList: false,
       }
 
    }
@@ -24,6 +25,7 @@ class SelectKeywords extends Component {
 
       try {
 
+         console.log("I am just about to fetch all the keywords");
          // retrieve list of all available keyword choices
          const response1 = await fetch(API_URL + '/keywords', {
             method: 'GET',
@@ -31,6 +33,7 @@ class SelectKeywords extends Component {
             credentials: 'include',
          })
          const keywords = await response1.json();
+         console.log(keywords);
          // sort the keywords in alphabetical order for a nicer display
          keywords.sort((a, b) => (a.keyword > b.keyword) ? 1 : -1)
         
@@ -147,6 +150,8 @@ class SelectKeywords extends Component {
       }
 
       // Create challenge-keyword through-table entries for NEW selected keywords
+      console.log("just about to add newly selected keywords to the through-table");
+      console.log(keywordsToAdd);
       await fetch(API_URL + '/challengekeywords/', {
          method: 'POST',
          body: JSON.stringify(keywordsToAdd),
@@ -192,23 +197,36 @@ class SelectKeywords extends Component {
 
          <div>
 
-            <h3>This is "SelectKeywords"</h3>
+            {this.state.toggleEditKeywordList 
+               ? 
+                  <div>
+                     <h4>Edit Keywords</h4>
+                  </div>   
+               :
+                  <div>
 
-         	Available keywords:
-            	{keywordList}
-      		<form className="checkbox-selections" onSubmit={this.updateKeywordSelections}>
-            	<button>Submit Keywords</button>
-            </form>
-            <form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
-               <input 
-                  type="text"
-                  name="newKeyword"
-                  value={this.state.newKeyword}
-                  placeholder="Enter a new keyword"
-                  onChange={this.handleChange}
-               />
-               <button>Submit</button>
-            </form>
+                     <h3>This is "SelectKeywords"</h3>
+
+                  	<p>Available keywords:</p>
+                     	{keywordList}
+
+               		<form className="checkbox-selections" onSubmit={this.updateKeywordSelections}>
+                     	<button>Submit Keywords</button>
+                     </form>
+
+                     <form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
+                        <input 
+                           type="text"
+                           name="newKeyword"
+                           value={this.state.newKeyword}
+                           placeholder="Enter a new keyword"
+                           onChange={this.handleChange}
+                        />
+                        <button>Submit</button>
+                     </form>
+
+                  </div>
+            }  
 
          </div>
       );
