@@ -81,12 +81,12 @@ class SelectKeywords extends Component {
    toggleKeywordEditList = (e) => {
       e.preventDefault();
 
-      setState({
+      this.setState({
          keywordEditListToggle: !this.state.keywordEditListToggle
       })
    }
 
-   deleteKeywords = (e) => {
+   deleteKeywords = async (e) => {
       e.preventDefault();
 
       // delete selected keywords from table of available keywords
@@ -94,6 +94,25 @@ class SelectKeywords extends Component {
 
       // send DELETE an array of record ids from keywords table
       const keywordsToDelete = [];
+
+      for (let i = 0; i < this.state.keywordsToBeDeleted.length; i++) {
+         // if a checkbox is marked, send the keyword id for deletion
+         if (this.state.keywordsToBeDeleted[i]) {            
+            keywordsToDelete.push(this.state.keywords[i].id);
+         }
+      }
+
+      console.log("------------- keywordsToDelete");
+      console.log(keywordsToDelete);
+
+      // Delete selected keywords from the keywords table
+      // ...and, by extension, delete from the challenge-keyword through table 
+      await fetch(API_URL + '/keywords', {
+         method: 'DELETE',
+         body: JSON.stringify(keywordsToDelete),
+         headers: {'Content-Type': 'application/json'},
+         credentials: 'include',
+      }) 
 
 
       // grab the full list of keywords, sort, and display
@@ -111,7 +130,6 @@ class SelectKeywords extends Component {
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
       })
-      const addedKeyword = await response.json();
 
       // reset newKeyword to blank (to blank out the input form)
       this.setState({
@@ -206,7 +224,7 @@ class SelectKeywords extends Component {
    	})
    }
 
-   toggleKeywordsToBeDeleted = async (i) => {
+   toggleKeywordToBeDeleted = async (i) => {
       const keywordsToBeDeleted = [...this.state.keywordsToBeDeleted];
       keywordsToBeDeleted[i] = !this.state.keywordsToBeDeleted[i];
       await this.setState({
@@ -230,6 +248,20 @@ class SelectKeywords extends Component {
 			);
       })
 
+      const blankBoxKeywordList = this.state.keywords.map( (keyword, i) => {
+         return (
+            <div key={keyword.id}>
+               <input 
+                  type="checkbox" 
+                  onChange={this.toggleKeywordToBeDeleted.bind(null, i)} 
+                  checked={this.state.keywordsToBeDeleted[i]}
+               />
+               {keyword.keyword}
+            </div>
+         );
+      })
+
+
       return (
 
          <div>
@@ -240,11 +272,13 @@ class SelectKeywords extends Component {
 
                      <h4>Edit Keyword List</h4>
 
-                     {keywordList}
+                     {blankBoxKeywordList}
 
                      <form className="checkbox-selections" onSubmit={this.deleteKeywords}>
-                        <button>Delete Checked Keywords</button>
+                        <button>Delete All Checked Keywords</button>
                      </form>
+                     <br/>
+                     <p>CAUTION: Deleting a keyword deletes it from all existing challenges.</p>
 
                      <form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
                         <input 
