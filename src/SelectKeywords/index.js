@@ -102,9 +102,6 @@ class SelectKeywords extends Component {
          }
       }
 
-      console.log("------------- keywordsToDelete");
-      console.log(keywordsToDelete);
-
       // Delete selected keywords from the keywords table
       // ...and, by extension, delete from the challenge-keyword through table 
       await fetch(API_URL + '/keywords', {
@@ -123,6 +120,9 @@ class SelectKeywords extends Component {
    addKeyword = async (e) => {
       e.preventDefault();
 
+      console.log("----- this.state.newKeyword---- in addKeyword");
+      console.log(this.state.newKeyword);
+
       // add the new keyword to the list of available keywords
       const response = await fetch(API_URL + '/keywords', {
          method: 'POST',
@@ -135,12 +135,6 @@ class SelectKeywords extends Component {
       this.setState({
          newKeyword: ''
       })
-
-      // must push one more (false) entry onto keywordsToBeDeleted 
-      // so this array's length matches the number of available words
-      // (each entry=false, until user chooses which to delete on a diff form)
-      const keywordsToBeDeleted = [...this.state.keywordsToBeDeleted]
-      keywordsToBeDeleted.push(false);
 
       // grab the full list of keywords, sort, and display
       await this.componentDidMount();
