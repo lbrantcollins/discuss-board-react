@@ -38,9 +38,7 @@ class App extends React.Component {
          const response = await fetch(API_URL + '/challenges', {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: {
-               'Content-Type': 'application/json'
-            },
+            headers: {'Content-Type': 'application/json'},
             credentials: 'include',
          })
 
@@ -74,9 +72,7 @@ class App extends React.Component {
          const response = await fetch(API_URL + '/challenges/' + id, {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers: {
-               'Content-Type': 'application/json'
-            },
+            headers: {'Content-Type': 'application/json'},
             credentials: 'include',
          })
 
@@ -105,8 +101,6 @@ class App extends React.Component {
                challenge_id={2}
                editChallenge={this.editChallenge}
             />
-
-
 
          </div>
       );

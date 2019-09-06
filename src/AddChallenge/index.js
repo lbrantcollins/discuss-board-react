@@ -3,9 +3,6 @@ import './index.css'
 
 import SelectKeywords from '../SelectKeywords';
 
-// use the API url from environment if it exists
-const API_URL = process.env.REACT_APP_API_URL || ''; 
-
 
 class AddChallenge extends React.Component {
    // props: challenge_id
@@ -90,12 +87,7 @@ class AddChallenge extends React.Component {
       );
 
    }
-// <div key={keyword.id} className="keyword-selection">
-//          		<button onClick={this.toggleKeywordSelection.bind(null, i)}>
-//          			{this.state.keywordSelections[i] ? "Delete" : "  Add  "}
-//       			</button>
-//       			{keyword.keyword}
-//    			</div> 
+
 }
 
 
