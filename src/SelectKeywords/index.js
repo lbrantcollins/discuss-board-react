@@ -65,6 +65,7 @@ class SelectKeywords extends Component {
             keywordsToBeDeleted: keywordsToBeDeleted,
             currentKeywordSelections: currentKeywordSelections,
             newKeywordSelections: currentKeywordSelections,
+            keywordEditListToggle: false,
          })
 
       } catch (err) {
@@ -111,17 +112,16 @@ class SelectKeywords extends Component {
          credentials: 'include',
       }) 
 
-
+      ////////////////////////////////
+      // NEED TO REDIRECT SOMEWHERE (RATHER THAN RUN THIS FUNCTION)
       // grab the full list of keywords, sort, and display
       await this.componentDidMount();
+      ////////////////////////////////
 
    }
 
    addKeyword = async (e) => {
       e.preventDefault();
-
-      console.log("----- this.state.newKeyword---- in addKeyword");
-      console.log(this.state.newKeyword);
 
       // add the new keyword to the list of available keywords
       const response = await fetch(API_URL + '/keywords', {
@@ -136,8 +136,11 @@ class SelectKeywords extends Component {
          newKeyword: ''
       })
 
+      ////////////////////////////////
+      // NEED TO REDIRECT SOMEWHERE (RATHER THAN RUN THIS FUNCTION)
       // grab the full list of keywords, sort, and display
       await this.componentDidMount();
+      ////////////////////////////////
    }
 
    updateKeywordSelections = async (e) => {
@@ -260,6 +263,8 @@ class SelectKeywords extends Component {
 
          <div>
 
+            <h3>This is "SelectKeywords"</h3>
+
             {this.state.keywordEditListToggle 
                ? 
                   <div>
@@ -289,8 +294,7 @@ class SelectKeywords extends Component {
                :
                   <div>
 
-                     <h3>This is "SelectKeywords"</h3>
-
+                     
                   	<p>Available keywords:</p>
                      	{keywordList}
 

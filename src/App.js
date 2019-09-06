@@ -78,6 +78,7 @@ class App extends React.Component {
 
          // return the new challenge in case call needs the return
          const editedChallenge = await response.json();
+
          return editedChallenge;
 
       } catch (err) {

@@ -33,9 +33,6 @@ class EditChallenge extends React.Component {
             credentials: 'include',
          })
          const challenge = await response.json();
-
-         console.log("--- challenge to be edited ---");
-         console.log(challenge);
         
          this.setState({
             teacher_id: challenge.teacher_id,
@@ -58,7 +55,7 @@ class EditChallenge extends React.Component {
       e.preventDefault();
 
       // send edited challenge data to database and lift up state
-      const editedChallenge = this.props.editChallenge(this.props.challenge_id, 
+      const editedChallenge = await this.props.editChallenge(this.props.challenge_id, 
          {
             teacher_id: this.state.teacher_id,
             title: this.state.title,
@@ -66,10 +63,15 @@ class EditChallenge extends React.Component {
          }
       )
 
-      // return the edited challenge in case we need a return
-      return editedChallenge;
+      this.setState({
+         title: editedChallenge.title,
+         description: editedChallenge.description
+      })
 
+      //////////////////////////////
+      // redirect somewhere?
       // this.props.history.push('/media/' + newMedia.data.id)
+      //////////////////////////////
 
   }
    
@@ -113,12 +115,7 @@ class EditChallenge extends React.Component {
       );
 
    }
-// <div key={keyword.id} className="keyword-selection">
-//          		<button onClick={this.toggleKeywordSelection.bind(null, i)}>
-//          			{this.state.keywordSelections[i] ? "Delete" : "  Add  "}
-//       			</button>
-//       			{keyword.keyword}
-//    			</div> 
+
 }
 
 
