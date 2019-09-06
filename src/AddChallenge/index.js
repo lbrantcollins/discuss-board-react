@@ -2,6 +2,7 @@ import React from 'react';
 import './index.css'
 
 import SelectKeywords from '../SelectKeywords';
+import SelectLanguages from '../SelectLanguages';
 
 
 class AddChallenge extends React.Component {
