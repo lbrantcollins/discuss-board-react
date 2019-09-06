@@ -105,7 +105,7 @@ class EditChallenge extends React.Component {
                <button>Submit Challenge</button>
             </form>
 
-            <SelectKeywords challengeId={this.props.challenge_id} /> : null}
+            <SelectKeywords challenge_id={this.props.challenge_id} />
             
 
          </div>

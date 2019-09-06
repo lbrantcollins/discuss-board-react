@@ -82,7 +82,7 @@ class AddChallenge extends React.Component {
             </form>
 
             {/* Allow keyword selection after challenge created */}
-            {this.state.newChallengeCreated ? <SelectKeywords challengeId={this.props.challenge_id} /> : null}
+            {this.state.newChallengeCreated ? <SelectKeywords challenge_id={this.props.challenge_id} /> : null}
             
 
          </div>

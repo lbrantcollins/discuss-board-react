@@ -34,7 +34,7 @@ class SelectKeywords extends Component {
          const keywords = await response1.json();
         
          // retrieve ids of keywords associate w props.challenge_id
-         const response2 = await fetch(API_URL + '/challengekeywords/challengeId', {
+         const response2 = await fetch(API_URL + "/challengekeywords/" + this.props.challenge_id, {
             method: 'GET',
             headers: {
                'Content-Type': 'application/json'
