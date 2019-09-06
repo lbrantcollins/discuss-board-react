@@ -32,6 +32,8 @@ class SelectKeywords extends Component {
             credentials: 'include',
          })
          const keywords = await response1.json();
+         // sort the keywords in alphabetical order for a nicer display
+         keywords.sort((a, b) => (a.keyword > b.keyword) ? 1 : -1)
         
          // retrieve ids of keywords associated with props.challenge_id
          const response2 = await fetch(API_URL + "/challengekeywords/" + this.props.challenge_id, {
