@@ -43,7 +43,7 @@ class SelectKeywords extends Component {
          })
          const parsedResponse2 = await response2.json();
 
-         const keywordIds = parsedResponse2.map( (keyword) => {
+         const challengeKeywordIds = parsedResponse2.map( (keyword) => {
             return keyword.keyword_id;
          })
 
@@ -51,7 +51,7 @@ class SelectKeywords extends Component {
          // are already associated with this challenge_id
          // (use this array to populate checkboxes in a form)
          const currentKeywordSelections = keywords.map( (keyword) => {
-            return keywordIds.includes(keyword.id);
+            return challengeKeywordIds.includes(keyword.id);
          })
 
          this.setState({
@@ -87,6 +87,7 @@ class SelectKeywords extends Component {
       // delete newly un-selected keywords from database
       // send DELETE an array of record ids from challengeKeywords table
       const keywordsToDelete = [];
+
       // In order to delete the through-table entries, we need to retrieve all
       // challenge-keyword through-table entry ids associated with props.challenge_id
       const response = await fetch(API_URL + "/challengekeywords/" + this.props.challenge_id, {
@@ -101,15 +102,22 @@ class SelectKeywords extends Component {
       console.log("--- challengekeywords ---");
       console.log(challengekeywords);
 
+      // organize the keywords for addition into an array of objects (challenge & keyword ids)
+      // and organize the keywords for deletion into an array of through-table ids
       for (let i = 0; i < newSelections.length; i++) {
+         // if a checkbox has changed
          if (newSelections[i] !== currentSelections[i]) {
+            // if checkbox was selected while editing the challenge
             if (newSelections[i]) {
                keywordsToAdd.push({
                   challenge_id: this.props.challenge_id,
-                  keyword_id: i + 1 // ids start from 1, not 0
+                  keyword_id: this.state.keywords[i].id
                })
+            // else was de-selected while editing the challenge
             } else {
-               keywordsToDelete.push( challengekeywords[i].id ); 
+               // find the through-table id associated with keyword i (by matching the keyword ids)
+               const index = challengekeywords.findIndex(kw => kw.keyword_id === this.state.keywords[i].id)
+               keywordsToDelete.push(challengekeywords[index].id); 
             }
          }
       }
@@ -129,10 +137,7 @@ class SelectKeywords extends Component {
 
 
       // Delete challenge-keyword through-table entries for DE-selected keywords 
-
-      
-
-      await fetch(API_URL + '/challengekeywords/', {
+      await fetch(API_URL + '/challengekeywords', {
          method: 'DELETE',
          body: JSON.stringify(keywordsToDelete),
          headers: {
