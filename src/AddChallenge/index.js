@@ -17,7 +17,7 @@ class AddChallenge extends React.Component {
    }
    
    componentDidMount = async () => {
-      // not sure if this is needed
+      // not sure if this will be needed for this component
    }
 
    handleChange = (e) => {
