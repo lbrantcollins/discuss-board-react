@@ -33,7 +33,7 @@ class SelectKeywords extends Component {
          })
          const keywords = await response1.json();
         
-         // retrieve ids of keywords associate w props.challenge_id
+         // retrieve ids of keywords associated with props.challenge_id
          const response2 = await fetch(API_URL + "/challengekeywords/" + this.props.challenge_id, {
             method: 'GET',
             headers: {
@@ -41,10 +41,11 @@ class SelectKeywords extends Component {
             },
             credentials: 'include',
          })
-         const keywordIds = await response2.json();
+         const parsedResponse2 = await response2.json();
 
-         console.log("------------ keywordIds in SelectKeywords componentDidMount");
-         console.log(keywordIds);
+         const keywordIds = parsedResponse2.map( (keyword) => {
+            return keyword.keyword_id;
+         })
 
          // create a boolean array to indicate which keywords
          // are already associated with this challenge_id
@@ -64,37 +65,84 @@ class SelectKeywords extends Component {
       }
    }
 
-   updateKeywordSelections = () => {
+   updateKeywordSelections = async (e) => {
+      e.preventDefault();
 
       // make a copy of the current state of selected keywords
       const currentSelections = [...this.state.currentKeywordSelections];
       // make a copy of the new state of selected keywords
       const newSelections = [...this.state.newKeywordSelections];
 
+      // update state to reflect the changes in the browser
+      this.setState({
+         currentKeywordSelections: this.state.newKeywordSelections
+      })
+
+      // update the DB to reflect the changes in the data
+
       // add newly selected keywords to database
       // send POST an array of objects
       const keywordsToAdd = [];
+
       // delete newly un-selected keywords from database
       // send DELETE an array of record ids from challengeKeywords table
       const keywordsToDelete = [];
+      // In order to delete the through-table entries, we need to retrieve all
+      // challenge-keyword through-table entry ids associated with props.challenge_id
+      const response = await fetch(API_URL + "/challengekeywords/" + this.props.challenge_id, {
+            method: 'GET',
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+         })
+      const challengekeywords = await response.json();
+
+      console.log("--- challengekeywords ---");
+      console.log(challengekeywords);
 
       for (let i = 0; i < newSelections.length; i++) {
          if (newSelections[i] !== currentSelections[i]) {
             if (newSelections[i]) {
                keywordsToAdd.push({
                   challenge_id: this.props.challenge_id,
-                  keyword_id: i
+                  keyword_id: i + 1 // ids start from 1, not 0
                })
             } else {
-               // keywordsToDelete.push()
+               keywordsToDelete.push( challengekeywords[i].id ); 
             }
          }
       }
 
-      // create
+      console.log("--- keywordsToDelete ---");
+      console.log(keywordsToDelete);
 
-      // destroy   	
+      // Create challenge-keyword through-table entries for NEW selected keywords
+      await fetch(API_URL + '/challengekeywords/', {
+         method: 'POST',
+         body: JSON.stringify(keywordsToAdd),
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         credentials: 'include',
+      })
+
+
+      // Delete challenge-keyword through-table entries for DE-selected keywords 
+
+      
+
+      await fetch(API_URL + '/challengekeywords/', {
+         method: 'DELETE',
+         body: JSON.stringify(keywordsToDelete),
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         credentials: 'include',
+      })
+ 	
    }
+
 
    toggleKeywordSelection = async (i) => {
    	const newKeywordSelections = [...this.state.newKeywordSelections];
@@ -104,7 +152,9 @@ class SelectKeywords extends Component {
    	})
    }
   	
+
    render() {
+
 
       const keywordList = this.state.keywords.map( (keyword, i) => {
          return (
@@ -122,6 +172,7 @@ class SelectKeywords extends Component {
       return (
 
          <div>
+
          <h3>This is "SelectKeywords"</h3>
 
          	Available keywords:
@@ -129,6 +180,7 @@ class SelectKeywords extends Component {
       		<form className="keyword-selections" onSubmit={this.updateKeywordSelections}>
             	<button>Submit Keywords</button>
             </form>
+
          </div>
       );
 

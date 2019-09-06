@@ -99,7 +99,7 @@ class App extends React.Component {
       return (
          <div className="App">
 
-            <h3>This is "App"</h3>
+            <h2>This is "App"</h2>
             
             <EditChallenge
                challenge_id={2}

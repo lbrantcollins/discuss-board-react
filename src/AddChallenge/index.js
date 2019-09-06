@@ -57,7 +57,7 @@ class AddChallenge extends React.Component {
 
          <div>
 
-            <h3>This is "EditChallenge"</h3>
+            <h2>This is "EditChallenge"</h2>
 
             <form onSubmit={this.handleSubmit}>
                <label>Title:</label>
