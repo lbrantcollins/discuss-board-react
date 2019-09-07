@@ -295,8 +295,9 @@ class SelectLanguages extends Component {
                   <div>
 
                      
-                  	<p>Available languages:</p>
-                     	{languageList}
+                  	<h4>Select Languages for the Challenge</h4>
+
+                     {languageList}
 
                		<form className="checkbox-selections" onSubmit={this.updateLanguageSelections}>
                      	<button>Submit Languages</button>

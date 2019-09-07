@@ -295,8 +295,9 @@ class SelectKeywords extends Component {
                   <div>
 
                      
-                  	<p>Available keywords:</p>
-                     	{keywordList}
+                  	<h4>Select Keywords for the Challenge</h4>
+                     
+                     {keywordList}
 
                		<form className="checkbox-selections" onSubmit={this.updateKeywordSelections}>
                      	<button>Submit Keywords</button>

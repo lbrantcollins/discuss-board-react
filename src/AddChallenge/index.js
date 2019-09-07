@@ -1,5 +1,4 @@
 import React from 'react';
-import './index.css'
 
 import SelectKeywords from '../SelectKeywords';
 import SelectLanguages from '../SelectLanguages';
@@ -17,9 +16,9 @@ class AddChallenge extends React.Component {
 
    }
    
-   componentDidMount = async () => {
-      // not sure if this will be needed for this component
-   }
+   // pre-processing may not be needed for this component
+   // componentDidMount = async () => {
+   // }
 
    handleChange = (e) => {
       this.setState({
