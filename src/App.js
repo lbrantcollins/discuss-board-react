@@ -6,6 +6,9 @@ import React from 'react';
 import AddChallenge from './AddChallenge';
 import EditChallenge from './EditChallenge';
 
+// just temporary to test component functionality
+import AddComment from './AddComment';
+
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
@@ -101,6 +104,12 @@ class App extends React.Component {
             <EditChallenge
                challenge_id={2}
                editChallenge={this.editChallenge}
+            />
+
+            <AddComment 
+               userId={1}
+               elementId={2}
+               modelName={"comment"}
             />
 
          </div>
