@@ -7,7 +7,7 @@ import AddChallenge from './AddChallenge';
 import EditChallenge from './EditChallenge';
 
 // just temporary to test component functionality
-import AddComment from './AddComment';
+import AddRemark from './AddRemark';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -88,6 +88,28 @@ class App extends React.Component {
          console.log(err)
       }
    }
+
+   addRemark = async (remarkRoute, data) => {
+      
+      try {
+
+         const response = await fetch(API_URL + '/' + remarkRoute, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })    
+
+         // return the new remark in case call needs the return
+         const newRemark = await response.json();
+
+         return newRemark;
+
+      } catch (err) {
+         console.log(err)
+      }        
+      
+   }
             
             // <AddChallenge 
                // teacher_id={2} 
@@ -106,10 +128,11 @@ class App extends React.Component {
                editChallenge={this.editChallenge}
             />
 
-            <AddComment 
-               userId={1}
-               elementId={2}
-               modelName={"comment"}
+            <AddRemark
+               userId={2}
+               elementId={1}
+               elementType={"question"}
+               addRemark={this.addRemark}
             />
 
          </div>

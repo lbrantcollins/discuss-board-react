@@ -3,7 +3,7 @@ import React from 'react';
 
 class AddRemark extends React.Component {
    // props: userId, elementtId (id of challenge, question, snippet, comment)
-   //        modelName("challenge", "question", "snippet", "comment")
+   //        elementType ("challenge", "question", "snippet", "comment")
    constructor() {
       super();
 
@@ -17,33 +17,36 @@ class AddRemark extends React.Component {
    // pre-processing for this component
    componentDidMount = async () => {
 
-      // provide a label to the "add comment" title 
+      // provide a label to the "add (remark)" title 
       // where the form is displayed with the relevant component
       let label;
- 
-      switch (this.props.modelName) {
+       
+      switch (this.props.elementType) {
 
-         // Set a label to title the comment box
+         // Set a label to title the remark box
 
          case 'challenge':
-            this.label = "Ask a Question";
+            label = "Ask a Question";
             break;
 
          case 'snippet':
-            this.label = "Make a Comment";
+            label = "Leave a Comment";
             break;
 
          case 'question':
-            this.label = "Give a Response";
+            label = "Give a Response";
             break;
 
          case 'comment':
-             this.label = "Make an Observation";
+             label = "Make an Observation";
             break;
+
+         default:
+            console.log("Remarks are only for a challenge, snippet, question, or comment")
       }
 
       this.setState({
-         label: this.label,
+         label: label,
       })
 
       
@@ -61,58 +64,67 @@ class AddRemark extends React.Component {
 
       // return data: the remark content and accompanying fields
       let data;
+      // route for posting the remark to the database
+      let remarkRoute;
 
-      switch (this.props.modelName) {
+      switch (this.props.elementType) {
 
          // the content is a student question about a challenge
          case 'challenge':
-            this.data = {
+            data = {
                challenge_id: this.props.elementId,
                student_id: this.props.userId,
                question: this.state.content,
                substantial: false
             }
+            remarkRoute = "questions"
             break;
 
          // the content is a student comment about a snippet
          case 'snippet':
-            this.data = {
+            data = {
                snippet_id: this.props.elementId,
                student_id: this.props.userId,
                comment: this.state.content,
                substantial: false
             }
+            remarkRoute = "comments"
             break;
 
          // the content is a teacher response to a student question about a challenge
          case 'question':
-            this.data = {
+            data = {
                question_id: this.props.elementId,
                teacher_id: this.props.userId,
                response: this.state.content,
             }
+            remarkRoute = "responses"
             break;
 
          // the content is a teacher response to a student comment about a snippet
          case 'comment':
-            this.data = {
+            data = {
                comment_id: this.props.elementId,
                teacher_id: this.props.userId,
                observation: this.state.content,
             }
+            remarkRoute = "observations"
             break;
+
+         default:
+            console.log("Remarks are only for a challenge, snippet, question, or comment");
       }
 
       // add the remark to the relevant component
-      const remark = await this.props.addComment(this.props.modelName, this.data)
+      const remark = await this.props.addRemark(remarkRoute, data)
 
       // blank out the form for adding another remark on the relevant component
       this.setState({
          content: '',
       })
 
-      // return the remark in case we need a return
-      return this.remark;
+      // return the remark in case we need a return from the function call
+      return remark;
 
       // redirect back to the relevant component
       // this.props.history.push('/media/' + newMedia.data.id). ?????
@@ -125,7 +137,7 @@ class AddRemark extends React.Component {
 
          <div>
 
-            <h3>This is "AddComment"</h3>
+            <h3>This is "AddRemark"</h3>
 
             <form onSubmit={this.handleSubmit}>
                <label>{this.state.label}:</label>
