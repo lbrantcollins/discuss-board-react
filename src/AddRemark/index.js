@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class AddComment extends React.Component {
+class AddRemark extends React.Component {
    // props: userId, elementtId (id of challenge, question, snippet, comment)
    //        modelName("challenge", "question", "snippet", "comment")
    constructor() {
@@ -147,4 +147,4 @@ class AddComment extends React.Component {
 
 }
 
-export default AddComment;
+export default AddRemark;
