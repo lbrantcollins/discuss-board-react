@@ -22,9 +22,6 @@ class ShowRemark extends React.Component {
    // pre-processing for this component
    componentDidMount = async () => {
 
-      console.log("--------> this.props at start of ShowRemark <--------");
-      console.log(this.props);
-
       this.setState({
          remark: this.props.remark,
       })
@@ -39,8 +36,6 @@ class ShowRemark extends React.Component {
 
    handleSubmitEditedRemark = async (e) => {
       e.preventDefault();
-
-      console.log("*********** inside handleSubmitEditedRemark");
 
       // variable to hold response from the PUT fetch
       let putResponse;
@@ -69,9 +64,7 @@ class ShowRemark extends React.Component {
             break;
 
          case 'snippet':
-
-            console.log("----------->  in the snippet case writing to DB <---------");
-            
+    
             // update database
             putResponse = await fetch(API_URL + '/comments/' + this.props.remarkId, {
                method: 'PUT',
@@ -155,7 +148,7 @@ class ShowRemark extends React.Component {
                               onChange={this.handleChange}
                            ></textarea>
                            <br/>
-                           <button onSubmit={this.props.editRemark.bind(null,
+                           <button onClick={this.props.editRemark.bind(null,
                                  this.props.elementType,
                                  this.props.parentId,
                                  this.props.remarkId,

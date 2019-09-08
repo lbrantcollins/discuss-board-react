@@ -118,29 +118,37 @@ class App extends React.Component {
 
    editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
 
-      // variable to hold response from the PUT fetch
+      console.log("-----> inside editRemark function <-----");
+
+      // variables to hold response from the database PUT
       let putResponse;
       let returnRemark;
 
-      switch (this.props.elementType) {
+      switch (elementType) {
 
          // Set a label to title the remark box
 
          case 'challenge':
             
             // update database
-            putResponse = await fetch(API_URL + '/questions/' + remarkId, {
-               method: 'PUT',
-               body: JSON.stringify({
-                  challenge_id: parentId,
-                  student_id: remarkUserId,
-                  question: remark,
-                  substantial: substantial,
-               }),
-               headers: {'Content-Type': 'application/json'},
-               credentials: 'include',
-            }) 
-            returnRemark = await putResponse.json();
+            try {
+
+               putResponse = await fetch(API_URL + '/questions/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     challenge_id: parentId,
+                     student_id: remarkUserId,
+                     question: remark,
+                     substantial: substantial,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
 
             break;
 
@@ -149,52 +157,70 @@ class App extends React.Component {
             console.log("----------->  in the snippet case writing to DB <---------");
             
             // update database
-            putResponse = await fetch(API_URL + '/comments/' + remarkId, {
-               method: 'PUT',
-               body: JSON.stringify({
-                  snippet_id: parentId,
-                  student_id: remarkUserId,
-                  comment: remark,
-                  substantial: substantial,
-               }),
-               headers: {'Content-Type': 'application/json'},
-               credentials: 'include',
-            }) 
-            returnRemark = await putResponse.json();
+            try {
+
+               putResponse = await fetch(API_URL + '/comments/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     snippet_id: parentId,
+                     student_id: remarkUserId,
+                     comment: remark,
+                     substantial: substantial,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
 
             break;
 
          case 'question':
                        
             // update database
-            putResponse = await fetch(API_URL + '/responses/' + remarkId, {
-               method: 'PUT',
-               body: JSON.stringify({
-                  comment_id: parentId,
-                  teacher_id: remarkUserId,
-                  response: remark,
-               }),
-               headers: {'Content-Type': 'application/json'},
-               credentials: 'include',
-            }) 
-            returnRemark = await putResponse.json();
+            try {
+
+               putResponse = await fetch(API_URL + '/responses/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     comment_id: parentId,
+                     teacher_id: remarkUserId,
+                     response: remark,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
 
             break;
 
          case 'comment':
             
             // update database
-            putResponse = await fetch(API_URL + '/observations/' + remarkId, {
-               method: 'PUT',
-               body: JSON.stringify({
-                  comment_id: parentId,
-                  teacher_id: remarkUserId,
-                  observation: remark,
-               }),
-               headers: {'Content-Type': 'application/json'},
-               credentials: 'include',
-            }) 
-            returnRemark = await putResponse.json();
+            try {
+
+               putResponse = await fetch(API_URL + '/observations/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     comment_id: parentId,
+                     teacher_id: remarkUserId,
+                     observation: remark,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
 
             break;
 
@@ -256,7 +282,7 @@ class App extends React.Component {
             <h2>This is "App"</h2>
 
                <ShowSnippet
-                  userId={2}
+                  userId={1}
                   loggedIn={true}
                   isTeacher={false}
                   snippet_id={1} 

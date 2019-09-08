@@ -8,12 +8,13 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 class ShowSnippet extends React.Component {
    // props: userId, loggedIn, isTeacher, snippet_id
-   //        editRemark (a function)
+   //        editSnippet (a function), editRemark (a function)
    constructor() {
       super();
 
       this.state = {
-         snippet: {},
+         snippetObject: {},
+         snippet: '',
          language: '',
          comments:[],
       }
@@ -48,10 +49,9 @@ class ShowSnippet extends React.Component {
          })
          const comments = await response3.json();
 
-         console.log(comments);
-
          this.setState({
-            snippet: snippet,
+            snippetObject: snippet,
+            snippet: snippet.snippet,
             language: language,
             comments: comments,
          })
@@ -60,6 +60,37 @@ class ShowSnippet extends React.Component {
          console.log(err);
       }
 
+   }
+
+   handleChange = (e) => {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+   }
+
+   editSnippet = async (e) => {
+      e.preventDefault();
+
+      // add the snippet to the database
+      const response = await fetch(API_URL + '/snippets/' + this.props.snippet_id, {
+         method: 'PUT',
+         body: JSON.stringify({
+            challenge_id: this.state.snippetObject.challenge_id,
+            language_id: this.state.snippetObject.language_id,
+            student_id: this.state.snippetObject.student_id,
+            snippet: this.state.snippet,
+            substantial: this.state.snippetObject.substantial,
+         }),
+         headers: {'Content-Type': 'application/json'},
+         credentials: 'include',
+      })
+
+      // return the new snippet in case the call needs a return
+      const snippet = await response.json();
+
+      // just in case the call needs a return
+      return snippet;
+  
    }
 
    
@@ -77,7 +108,7 @@ class ShowSnippet extends React.Component {
                loggedIn={this.props.loggedIn}
                isTeacher={this.props.isTeacher}
                remarkId={comment.id}
-               parentId={this.state.snippet.id}
+               parentId={this.props.snippet_id}
                elementType="snippet"
                remarkUserId={comment.student_id}
                remark={comment.comment}
@@ -100,10 +131,32 @@ class ShowSnippet extends React.Component {
             Code Snippet:
             <br/>
 
-            <pre><code>
-               {this.state.snippet.snippet}
-            </code></pre>
-            <br/>
+            
+
+            {this.props.loggedIn && (this.state.snippetObject.student_id === this.props.userId)
+               ?
+                  <form onSubmit={this.editSnippet}>
+           
+                     <h4>You can edit your code snippet here:</h4>
+
+                     <br/>
+                     <textarea 
+                        rows="8"
+                        name="snippet" 
+                        value={this.state.snippet}
+                        placeholder={this.state.snippet}
+                        onChange={this.handleChange}
+                     ></textarea>
+                     <br/> 
+
+                     <button>Submit Changes</button>
+                  </form>
+               : 
+                  <pre><code>
+                     {this.state.snippet}
+                  </code></pre>
+
+            }
 
 
             <div>
