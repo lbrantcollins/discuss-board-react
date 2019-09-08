@@ -1,5 +1,7 @@
 import React from 'react';
 
+// use the API url from environment if it exists
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:9292'; 
 
 class AddRemark extends React.Component {
    // props: userId, elementtId (id of challenge, question, snippet, comment)
@@ -10,6 +12,7 @@ class AddRemark extends React.Component {
       this.state = {
       	content: '',
          label: '',
+         placeholder: '',
       }
 
    }
@@ -18,8 +21,10 @@ class AddRemark extends React.Component {
    componentDidMount = async () => {
 
       // provide a label to the "add (remark)" title 
-      // where the form is displayed with the relevant component
+      // and provide placeholder text
+      // for when the form is displayed for the relevant component
       let label;
+      let placeholder;
        
       switch (this.props.elementType) {
 
@@ -27,18 +32,22 @@ class AddRemark extends React.Component {
 
          case 'challenge':
             label = "Ask a Question";
+            placeholder = "...about the challenge your instructor posed.";
             break;
 
          case 'snippet':
             label = "Leave a Comment";
+            placeholder = "...about your fellow student's suggested code snippet.";
             break;
 
          case 'question':
             label = "Give a Response";
+            placeholder = "...to your student's question about the challenge posed.";
             break;
 
          case 'comment':
              label = "Make an Observation";
+             placeholder = "...about your student's comment on the code snippet.";
             break;
 
          default:
@@ -47,6 +56,7 @@ class AddRemark extends React.Component {
 
       this.setState({
          label: label,
+         placeholder: placeholder,
       })
 
       
@@ -115,8 +125,13 @@ class AddRemark extends React.Component {
             console.log("Remarks are only for a challenge, snippet, question, or comment");
       }
 
-      // add the remark to the relevant component
-      const remark = await this.props.addRemark(remarkRoute, data)
+      // add the remark to the database for the relevant component
+      const remark = await fetch(API_URL + '/' + remarkRoute, {
+         method: 'POST',
+         body: JSON.stringify(data),
+         headers: {'Content-Type': 'application/json'},
+         credentials: 'include',
+      })
 
       // blank out the form for adding another remark on the relevant component
       this.setState({
@@ -130,7 +145,6 @@ class AddRemark extends React.Component {
       // this.props.history.push('/media/' + newMedia.data.id). ?????
    }
 
-   
    render() {
 
       return (
@@ -142,12 +156,13 @@ class AddRemark extends React.Component {
             <form onSubmit={this.handleSubmit}>
                <label>{this.state.label}:</label>
                <br/>
-               <input 
+               <textarea
+                  rows="8" 
                   type="text" 
                   name="content" 
-                  placeholder="Enter your remark" 
+                  placeholder={this.state.placeholder} 
                   onChange={this.handleChange}
-               />
+               ></textarea>
                <button>Submit</button>
             </form>
 

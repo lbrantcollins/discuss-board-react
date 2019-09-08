@@ -10,6 +10,7 @@ import EditChallenge from './EditChallenge';
 import AddRemark from './AddRemark';
 import AddSnippet from './AddSnippet';
 import EditSnippet from './EditSnippet';
+import ShowSnippet from './ShowSnippet';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -135,6 +136,10 @@ class App extends React.Component {
                // student_id={1}
             // />
 
+            // <EditSnippet
+               // snippet_id={1} 
+            // />
+
    render() {
 
       return (
@@ -142,7 +147,7 @@ class App extends React.Component {
 
             <h2>This is "App"</h2>
 
-            <EditSnippet
+            <ShowSnippet
                snippet_id={1} 
             />
             
