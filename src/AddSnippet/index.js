@@ -66,27 +66,7 @@ class AddSnippet extends React.Component {
       });
    }
 
-   handleSubmit = async (e) => {
-      e.preventDefault();
-
-      // send new snippet data to database and lift up state
-      const newChallenge = await this.props.addSnippet({
-      	challenge_id: this.props.challenge_id,
-      	language_id: this.state.language_id,
-         student_id: this.props.student_id,
-         snippet: this.state.title,
-         substantial: false,
-      })
-
-      // return the new challenge in case we need a return
-      return newChallenge;
-
-      // redirect???
-      // this.props.history.push('/media/' + newMedia.data.id)
-
-  	}	
-
-  	toggleLanguageSelection = (i) => {
+   toggleLanguageSelection = (i) => {
 
   		// mark the selected "checkbox" as true, all others false
   		// (since can only choose ONE language for a code snippet)
@@ -119,6 +99,11 @@ class AddSnippet extends React.Component {
    		headers: {'Content-Type': 'application/json'},
          credentials: 'include',
    	})
+
+   	// return the new snippet in case the call needs a return
+      const newSnippet = await response.json();
+
+      return newSnippet;
   
    }
 

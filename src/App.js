@@ -9,6 +9,7 @@ import EditChallenge from './EditChallenge';
 // just temporary to test component functionality
 import AddRemark from './AddRemark';
 import AddSnippet from './AddSnippet';
+import EditSnippet from './EditSnippet';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -129,6 +130,11 @@ class App extends React.Component {
             //    addRemark={this.addRemark}
             // />
 
+            // <AddSnippet
+               // challenge_id={2} 
+               // student_id={1}
+            // />
+
    render() {
 
       return (
@@ -136,9 +142,8 @@ class App extends React.Component {
 
             <h2>This is "App"</h2>
 
-            <AddSnippet
-               challenge_id={2} 
-               student_id={1}
+            <EditSnippet
+               snippet_id={1} 
             />
             
 
