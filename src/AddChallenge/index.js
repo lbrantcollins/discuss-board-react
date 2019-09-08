@@ -3,15 +3,16 @@ import React from 'react';
 import SelectKeywords from '../SelectKeywords';
 import SelectLanguages from '../SelectLanguages';
 
-
 class AddChallenge extends React.Component {
    // props: challenge_id
    constructor() {
       super();
 
       this.state = {
+         id: '',
       	title: '',
       	description: '',
+         newChallengeCreated: false,
       }
 
    }
@@ -29,9 +30,9 @@ class AddChallenge extends React.Component {
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      // send new challenge data to database and lift up state
+      // send new challenge data to database
       const newChallenge = await this.props.addChallenge({
-         teacher_id: this.state.teacher_id,
+         teacher_id: this.props.teacher_id,
          title: this.state.title,
          description: this.state.description
       })

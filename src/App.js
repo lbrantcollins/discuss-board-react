@@ -8,6 +8,7 @@ import EditChallenge from './EditChallenge';
 
 // just temporary to test component functionality
 import AddRemark from './AddRemark';
+import AddSnippet from './AddSnippet';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -116,24 +117,30 @@ class App extends React.Component {
                // addChallenge={this.addChallenge}
             // />
 
+            // <EditChallenge
+               // challenge_id={2}
+               // editChallenge={this.editChallenge}
+            // />
+
+            // <AddRemark
+            //    userId={2}
+            //    elementId={1}
+            //    elementType={"question"}
+            //    addRemark={this.addRemark}
+            // />
+
    render() {
 
       return (
          <div className="App">
 
             <h2>This is "App"</h2>
-            
-            <EditChallenge
-               challenge_id={2}
-               editChallenge={this.editChallenge}
-            />
 
-            <AddRemark
-               userId={2}
-               elementId={1}
-               elementType={"question"}
-               addRemark={this.addRemark}
+            <AddSnippet
+               challenge_id={2} 
+               student_id={1}
             />
+            
 
          </div>
       );

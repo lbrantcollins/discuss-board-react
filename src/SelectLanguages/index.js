@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './index.css'
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
-class SelectLanguages extends Component {
+class SelectLanguages extends React.Component {
    constructor() {
       // props: challenge_id
       super();
@@ -20,7 +20,7 @@ class SelectLanguages extends Component {
 
    }
 
-   // retrieve list of all available language choices
+   // retrieve list of all available language choices (not challenge-specific)
    // and all languages selected for the current challenge
    componentDidMount = async () => {
 
