@@ -1,7 +1,7 @@
 import React from 'react';
 
 // use the API url from environment if it exists
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:9292'; 
+const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class AddRemark extends React.Component {
    // props: userId, elementtId (id of challenge, question, snippet, comment)
@@ -16,19 +16,20 @@ class AddRemark extends React.Component {
       }
 
    }
-   
-   // pre-processing for this component
-   componentDidMount = async () => {
 
-      // provide a label to the "add (remark)" title 
+   // pre-processing for this component
+   componentDidMount = () => {
+
+      // provide a label to the add-remark title 
       // and provide placeholder text
-      // for when the form is displayed for the relevant component
+      // (customized for the specific component)
       let label;
       let placeholder;
        
       switch (this.props.elementType) {
 
-         // Set a label to title the remark box
+         // Set a label to title the add-remark text box
+         // set a placeholder for the add-remark text box
 
          case 'challenge':
             label = "Ask a Question";
@@ -56,6 +57,40 @@ class AddRemark extends React.Component {
 
       this.setState({
          label: label,
+         placeholder: placeholder,
+      })
+   
+   }
+
+   initializeFormPlaceholder = () => {
+
+      // set a placeholder for the add-remark text box
+      // (customized for the specific component)
+      let placeholder;
+       
+      switch (this.props.elementType) {
+
+         case 'challenge':
+            placeholder = "...about the challenge your instructor posed.";
+            break;
+
+         case 'snippet':
+            placeholder = "...about your fellow student's suggested code snippet.";
+            break;
+
+         case 'question':
+            placeholder = "...to your student's question about the challenge posed.";
+            break;
+
+         case 'comment':
+             placeholder = "...about your student's comment on the code snippet.";
+            break;
+
+         default:
+            console.log("Remarks are only for a challenge, snippet, question, or comment")
+      }
+
+      this.setState({
          placeholder: placeholder,
       })
 
@@ -125,15 +160,19 @@ class AddRemark extends React.Component {
             console.log("Remarks are only for a challenge, snippet, question, or comment");
       }
 
+      // const remark = this.addRemark(remarkRoute, data);
+
       // add the remark to the database for the relevant component
-      const remark = await fetch(API_URL + '/' + remarkRoute, {
+      const response = await fetch(API_URL + '/' + remarkRoute, {
          method: 'POST',
          body: JSON.stringify(data),
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
       })
+      const remark = await response.json();
 
       // blank out the form for adding another remark on the relevant component
+      this.initializeFormPlaceholder();
       this.setState({
          content: '',
       })
@@ -163,6 +202,7 @@ class AddRemark extends React.Component {
                   placeholder={this.state.placeholder} 
                   onChange={this.handleChange}
                ></textarea>
+               <br/>
                <button>Submit</button>
             </form>
 

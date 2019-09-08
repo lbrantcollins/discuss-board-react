@@ -1,19 +1,21 @@
 import React from 'react';
 
-import ShowRemarks from '../ShowRemarks';
 import AddRemark from '../AddRemark';
+import ShowRemark from '../ShowRemark';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class ShowSnippet extends React.Component {
-   // props: snippet_id
+   // props: userId, loggedIn, isTeacher, snippet_id
+   //        editRemark (a function)
    constructor() {
       super();
 
       this.state = {
          snippet: {},
          language: '',
+         comments:[],
       }
 
    }
@@ -29,8 +31,6 @@ class ShowSnippet extends React.Component {
          })
          const snippet = await response.json(); 
 
-         console.log(snippet);
-
          // retrieve the name of the language of the snippet
          const response2 = await fetch(API_URL + '/languages/' + snippet.language_id, {
             method: 'GET',
@@ -41,16 +41,19 @@ class ShowSnippet extends React.Component {
          const language = languageObject.language;
 
          // retrieve any comments on the snippet
-         // const response3 = await fetch(API_URL + '/comments/' + snippet.id, {
-         //    method: 'GET',
-         //    headers: {'Content-Type': 'application/json'},
-         //    credentials: 'include',
-         // })
-         // const comments = await response3.json();
+         const response3 = await fetch(API_URL + '/comments/snippet/' + snippet.id, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         const comments = await response3.json();
+
+         console.log(comments);
 
          this.setState({
             snippet: snippet,
             language: language,
+            comments: comments,
          })
 
       } catch(err) {
@@ -59,8 +62,31 @@ class ShowSnippet extends React.Component {
 
    }
 
-
+   
    render() {
+
+      // instead of "ShowRemark" below, will show the list of comments
+      // each of which is a "ShowRemark" generated here by a map method on all remarks
+
+      const commentList = this.state.comments.map( (comment) => {
+
+         return (
+            <ShowRemark 
+               key={comment.id}
+               userId={this.props.userId}
+               loggedIn={this.props.loggedIn}
+               isTeacher={this.props.isTeacher}
+               remarkId={comment.id}
+               parentId={this.state.snippet.id}
+               elementType="snippet"
+               remarkUserId={comment.student_id}
+               remark={comment.comment}
+               substantial={comment.substantial}
+               editRemark={this.props.editRemark}
+            /> 
+         )
+         
+      })
 
     	return (
             		
@@ -79,13 +105,13 @@ class ShowSnippet extends React.Component {
             </code></pre>
             <br/>
 
-            <ShowRemarks 
-               elementId={this.props.snippet_id}
-               elementType="snippet"
-            />
+
+            <div>
+               {commentList}
+            </div>
 
             <AddRemark 
-               userId={this.state.snippet.user_id}
+               userId={this.props.userId}
                elementId={this.props.snippet_id}
                elementType="snippet"
             />

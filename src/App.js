@@ -11,6 +11,8 @@ import AddRemark from './AddRemark';
 import AddSnippet from './AddSnippet';
 import EditSnippet from './EditSnippet';
 import ShowSnippet from './ShowSnippet';
+import ShowRemark from './ShowRemark';
+
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -113,6 +115,101 @@ class App extends React.Component {
       }        
       
    }
+
+   editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
+
+      // variable to hold response from the PUT fetch
+      let putResponse;
+      let returnRemark;
+
+      switch (this.props.elementType) {
+
+         // Set a label to title the remark box
+
+         case 'challenge':
+            
+            // update database
+            putResponse = await fetch(API_URL + '/questions/' + remarkId, {
+               method: 'PUT',
+               body: JSON.stringify({
+                  challenge_id: parentId,
+                  student_id: remarkUserId,
+                  question: remark,
+                  substantial: substantial,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            }) 
+            returnRemark = await putResponse.json();
+
+            break;
+
+         case 'snippet':
+
+            console.log("----------->  in the snippet case writing to DB <---------");
+            
+            // update database
+            putResponse = await fetch(API_URL + '/comments/' + remarkId, {
+               method: 'PUT',
+               body: JSON.stringify({
+                  snippet_id: parentId,
+                  student_id: remarkUserId,
+                  comment: remark,
+                  substantial: substantial,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            }) 
+            returnRemark = await putResponse.json();
+
+            break;
+
+         case 'question':
+                       
+            // update database
+            putResponse = await fetch(API_URL + '/responses/' + remarkId, {
+               method: 'PUT',
+               body: JSON.stringify({
+                  comment_id: parentId,
+                  teacher_id: remarkUserId,
+                  response: remark,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            }) 
+            returnRemark = await putResponse.json();
+
+            break;
+
+         case 'comment':
+            
+            // update database
+            putResponse = await fetch(API_URL + '/observations/' + remarkId, {
+               method: 'PUT',
+               body: JSON.stringify({
+                  comment_id: parentId,
+                  teacher_id: remarkUserId,
+                  observation: remark,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            }) 
+            returnRemark = await putResponse.json();
+
+            break;
+
+         default:
+            console.log("Remarks are only for a challenge, snippet, question, or comment")
+      }
+
+      // just in case the call needs a return
+      return returnRemark;
+
+
+
+   }
+
+
             
             // <AddChallenge 
                // teacher_id={2} 
@@ -128,7 +225,6 @@ class App extends React.Component {
             //    userId={2}
             //    elementId={1}
             //    elementType={"question"}
-            //    addRemark={this.addRemark}
             // />
 
             // <AddSnippet
@@ -140,6 +236,18 @@ class App extends React.Component {
                // snippet_id={1} 
             // />
 
+            
+
+
+            // <ShowRemark
+               // userId={2}
+               // loggedIn={true}
+               // isTeacher={false}
+               // elementId={3}
+               // elementType={"challenge"}
+            // />
+            
+
    render() {
 
       return (
@@ -147,10 +255,13 @@ class App extends React.Component {
 
             <h2>This is "App"</h2>
 
-            <ShowSnippet
-               snippet_id={1} 
-            />
-            
+               <ShowSnippet
+                  userId={2}
+                  loggedIn={true}
+                  isTeacher={false}
+                  snippet_id={1} 
+                  editRemark={this.editRemark}
+               />
 
          </div>
       );
