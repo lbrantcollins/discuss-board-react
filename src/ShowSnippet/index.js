@@ -13,7 +13,7 @@ class ShowSnippet extends React.Component {
       super();
 
       this.state = {
-         snippetObject: {},
+         snippetRecord: {},
          snippet: '',
          language: '',
          comments:[],
@@ -49,8 +49,10 @@ class ShowSnippet extends React.Component {
          })
          const comments = await response3.json();
 
+         console.log(comments);
+
          this.setState({
-            snippetObject: snippet,
+            snippetRecord: snippet,
             snippet: snippet.snippet,
             language: language,
             comments: comments,
@@ -75,11 +77,11 @@ class ShowSnippet extends React.Component {
       const response = await fetch(API_URL + '/snippets/' + this.props.snippet_id, {
          method: 'PUT',
          body: JSON.stringify({
-            challenge_id: this.state.snippetObject.challenge_id,
-            language_id: this.state.snippetObject.language_id,
-            student_id: this.state.snippetObject.student_id,
+            challenge_id: this.state.snippetRecord.challenge_id,
+            language_id: this.state.snippetRecord.language_id,
+            student_id: this.state.snippetRecord.student_id,
             snippet: this.state.snippet,
-            substantial: this.state.snippetObject.substantial,
+            substantial: this.state.snippetRecord.substantial,
          }),
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
@@ -102,19 +104,38 @@ class ShowSnippet extends React.Component {
       const commentList = this.state.comments.map( (comment) => {
 
          return (
-            <ShowRemark 
-               key={comment.id}
-               userId={this.props.userId}
-               loggedIn={this.props.loggedIn}
-               isTeacher={this.props.isTeacher}
-               remarkId={comment.id}
-               parentId={this.props.snippet_id}
-               elementType="snippet"
-               remarkUserId={comment.student_id}
-               remark={comment.comment}
-               substantial={comment.substantial}
-               editRemark={this.props.editRemark}
-            /> 
+
+            <div key={comment.id}>
+
+               <h2>This is a pair of remarks</h2>
+
+               <ShowRemark className="student-remark"
+                  userId={this.props.userId}
+                  loggedIn={this.props.loggedIn}
+                  isTeacher={this.props.isTeacher}
+                  remarkId={comment.id}
+                  parentId={this.props.snippet_id}
+                  elementType="snippet"
+                  remarkUserId={comment.student_id}
+                  remark={comment.comment}
+                  substantial={comment.substantial}
+                  editRemark={this.props.editRemark}
+               />
+
+               <ShowRemark className="teacher-remark"
+                  userId={this.props.userId}
+                  loggedIn={this.props.loggedIn}
+                  isTeacher={this.props.isTeacher}
+                  remarkId={comment.id}
+                  parentId={this.props.snippet_id}
+                  elementType="snippet"
+                  remarkUserId={comment.student_id}
+                  remark={comment.comment}
+                  substantial={comment.substantial}
+                  editRemark={this.props.editRemark}
+               />
+
+            </div> 
          )
          
       })
@@ -130,10 +151,9 @@ class ShowSnippet extends React.Component {
 
             Code Snippet:
             <br/>
-
             
 
-            {this.props.loggedIn && (this.state.snippetObject.student_id === this.props.userId)
+            {this.props.loggedIn && (this.state.snippetRecord.student_id === this.props.userId)
                ?
                   <form onSubmit={this.editSnippet}>
            
