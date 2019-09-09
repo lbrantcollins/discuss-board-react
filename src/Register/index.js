@@ -26,9 +26,6 @@ class Register extends React.Component {
    toggleTeacher = (e) => {
       e.preventDefault();
 
-      console.log("I am in toggleTeacher");
-      console.log(this.state.is_teacher);
-
       this.setState({
          is_teacher: !this.state.is_teacher
       })
@@ -38,12 +35,11 @@ class Register extends React.Component {
       e.preventDefault();
 
       // send new user data to database
-      const response = await this.props.register({
+      const user = await this.props.register({
       	username: this.state.username,
          password: this.state.password,
          is_teacher: this.state.is_teacher,
       })
-      const user = await response.json();
 
       // redirect somewhere
       // this.props.history.push('/browse-media')
@@ -53,6 +49,14 @@ class Register extends React.Component {
   	}
 
    render() {
+
+   	// console.log("this.state.is_teacher", this.state.is_teacher);
+
+   	// <input 
+         					// type="checkbox" 
+         					// onChange={this.toggleTeacher} 
+         					// checked={this.state.is_teacher}
+      					// />  
 
       return (
       
@@ -70,7 +74,9 @@ class Register extends React.Component {
                      Password:
                      <Form.Input fluid icon='lock' iconPosition='left' type='password' name='password' onChange={this.handleChange}/>
 
-                     <checkbox label="Teacher" onChange={this.toggleTeacher}/>
+                     Are you a teacher?
+                     <Checkbox onChange={this.toggleTeacher} checked={this.state.is_teacher}/>
+               		                  
                      
                      <Button fluid size='large' type='sumbit'>Register</Button>
 

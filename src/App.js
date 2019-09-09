@@ -42,25 +42,25 @@ class App extends React.Component {
 
    register = async (data) => {
 
-      console.log(`${process.env.API_URL} + "/users/register"`);
-
       try {
 
+         // create a new user in the database
          const response = await fetch(API_URL + '/users/register', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
          })
-
          const user = await response.json();
 
-         if (user.status === 201) {
-            this.setState({
-               ...user.data,
-             loggedIn: true
-            })
-         }
+         // console.log("user.data", user.data);
+         // // set state so that user is considered "loggedIn"
+         // if (user.status === 201) {
+         //    this.setState({
+         //       ...user.data,
+         //     loggedIn: true
+         //    })
+         // }
 
          // return just in case call needs a return
          return user;
@@ -317,6 +317,8 @@ class App extends React.Component {
             
 
    render() {
+
+
 
       return (
          <div className="App">
