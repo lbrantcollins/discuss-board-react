@@ -5,17 +5,16 @@ import { Link } from 'react-router-dom';
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
-class Register extends React.Component {
+class Login extends React.Component {
+	// props: login (function)
    constructor(){
       super();
 
       this.state = {
          username: '',
          password: '',
-         is_teacher: false,
       }
    }
-
    
    handleChange = (e) => {
       this.setState({
@@ -23,22 +22,13 @@ class Register extends React.Component {
       });
    }
 
-   toggleTeacher = (e) => {
-      e.preventDefault();
-
-      this.setState({
-         is_teacher: !this.state.is_teacher
-      })
-   }
-
    handleSubmit = async (e) => {
       e.preventDefault();
 
       // send new user data to database
-      const user = await this.props.register({
+      const user = await this.props.login({
       	username: this.state.username,
          password: this.state.password,
-         is_teacher: this.state.is_teacher,
       })
 
       // redirect somewhere
@@ -49,14 +39,6 @@ class Register extends React.Component {
   	}
 
    render() {
-
-   	// console.log("this.state.is_teacher", this.state.is_teacher);
-
-   	// <input 
-         					// type="checkbox" 
-         					// onChange={this.toggleTeacher} 
-         					// checked={this.state.is_teacher}
-      					// />  
 
       return (
       
@@ -73,15 +55,11 @@ class Register extends React.Component {
 
                      Password:
                      <Form.Input fluid icon='lock' iconPosition='left' type='password' name='password' onChange={this.handleChange}/>
-
-                     Are you a teacher?
-                     <Checkbox onChange={this.toggleTeacher} checked={this.state.is_teacher}/>
-               		                  
                      
-                     <Button fluid size='large' type='sumbit'>Register</Button>
+                     <Button fluid size='large' type='sumbit'>Log in</Button>
 
                      <Message>
-                        Already registered? <Link to='/users/login'>Log in</Link>
+                        Not registered? <Link to='/users/register'>Sign up</Link>
                      </Message>
              
                   </Segment>
@@ -92,4 +70,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+export default Login;

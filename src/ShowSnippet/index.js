@@ -7,7 +7,7 @@ import ShowRemark from '../ShowRemark';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class ShowSnippet extends React.Component {
-   // props: userId, loggedIn, isTeacher, snippet_id
+   // props: userId, loggedIn, is_teacher, snippet_id
    //        editSnippet (a function), editRemark (a function)
    constructor() {
       super();
@@ -119,7 +119,7 @@ class ShowSnippet extends React.Component {
                <ShowRemark className="student-remark"
                   userId={this.props.userId}
                   loggedIn={this.props.loggedIn}
-                  isTeacher={this.props.isTeacher}
+                  is_teacher={this.props.is_teacher}
                   remarkId={comment.id}
                   parentId={this.props.snippet_id}
                   elementType="snippet"
@@ -137,7 +137,7 @@ class ShowSnippet extends React.Component {
                         <ShowRemark className="teacher-remark"
                            userId={this.props.userId}
                            loggedIn={this.props.loggedIn}
-                           isTeacher={this.props.isTeacher}
+                           is_teacher={this.props.is_teacher}
                            remarkId={comment.observation.id}
                            parentId={comment.id}
                            elementType="comment"

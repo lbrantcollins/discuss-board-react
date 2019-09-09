@@ -12,10 +12,10 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 // import AddRemark from './AddRemark';
 // import AddSnippet from './AddSnippet';
 // import EditSnippet from './EditSnippet';
-// import ShowSnippet from './ShowSnippet';
+import ShowSnippet from './ShowSnippet';
 // import ShowRemark from './ShowRemark';
 import Register from './Register';
-
+import Login from './Login';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -40,6 +40,36 @@ class App extends React.Component {
 
    }
 
+   login = async (data) => {
+
+      try {
+
+         // create a new user in the database
+         const response = await fetch(API_URL + '/users/login', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         const user = await response.json();
+
+         // set state so that user is considered "loggedIn"
+         this.setState({
+            username: user.username,
+            password: user.password,
+            is_teacher: user.is_teacher,
+            loggedIn: true,
+         })
+
+         // return just in case call needs a return
+         return user;
+
+      } catch (err) {
+         console.log(err)
+      }
+   }
+
+
    register = async (data) => {
 
       try {
@@ -53,14 +83,13 @@ class App extends React.Component {
          })
          const user = await response.json();
 
-         // console.log("user.data", user.data);
-         // // set state so that user is considered "loggedIn"
-         // if (user.status === 201) {
-         //    this.setState({
-         //       ...user.data,
-         //     loggedIn: true
-         //    })
-         // }
+         // set state so that user is considered "loggedIn"
+         this.setState({
+            username: user.username,
+            password: user.password,
+            is_teacher: user.is_teacher,
+            loggedIn: true,
+         })
 
          // return just in case call needs a return
          return user;
@@ -70,6 +99,7 @@ class App extends React.Component {
       }
    }
 
+   
 
    addChallenge = async (data) => {
  
@@ -296,24 +326,15 @@ class App extends React.Component {
                // snippet_id={1} 
             // />
 
-            
-
-
             // <ShowRemark
-               // userId={2}
-               // loggedIn={true}
-               // isTeacher={false}
-               // elementId={3}
-               // elementType={"challenge"}
-            // />
+                           // userId={2}
+                           // loggedIn={this.state.loggedIn}
+                           // is_teacher={false}
+                           // elementId={3}
+                           // elementType={"challenge"}
+                        // />
 
-            // <ShowSnippet
-                  // userId={5}
-                  // loggedIn={true}
-                  // isTeacher={false}
-                  // snippet_id={1} 
-                  // editRemark={this.editRemark}
-               // />
+
             
 
    render() {
@@ -325,7 +346,27 @@ class App extends React.Component {
 
             <h2>This is "App"</h2>
             <Router>
-               <Register register={this.register}/>
+               <Login login={this.login}/>
+
+               {this.state.loggedIn
+                  ?
+                     <div>
+                        <h4>User is logged in.</h4>
+
+                        <ShowSnippet
+                           userId={5}
+                           loggedIn={true}
+                           is_teacher={false}
+                           snippet_id={1} 
+                           editRemark={this.editRemark}
+                        />
+
+                        
+                     </div>
+
+                  : null
+               }
+
             </Router>
 
          </div>

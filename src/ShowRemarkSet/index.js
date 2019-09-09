@@ -4,7 +4,7 @@ import React from 'react';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class ShowRemark extends React.Component {
-   // props: userID, loggedIn, isTeacher,
+   // props: userID, loggedIn, is_teacher,
    //        remarkId (id of question, comment, response, observation),
    //        parentId (id of challenge, snippet, question, comment),
    //        elementType ("challenge", "snippet", "question", "comment"),
@@ -42,7 +42,7 @@ class ShowRemark extends React.Component {
 
             <h3>This is "ShowRemark"</h3>
 
-            <div className={this.props.isTeacher ? "teacher-remark" : "student-remark"}>
+            <div className={this.props.is_teacher ? "teacher-remark" : "student-remark"}>
 
                
                {
