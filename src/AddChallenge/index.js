@@ -42,6 +42,11 @@ class AddChallenge extends React.Component {
          newChallengeCreated: true
       })
 
+      // how to access session[:message] here?
+      // and then reset it to null so does not continue to display?
+      // and can CSS style good "message" vs. "bad" message:
+      // className="message {session[:message][:status]}"
+
       // return the new challenge in case we need a return
       return newChallenge;
 

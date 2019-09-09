@@ -16,3 +16,14 @@ body {
 	background-color: lavender;
 }
 
+.message.good {
+	background-color: lightgreen;
+}
+
+.message.bad {
+	background-color: pink;
+}
+
+.message.neutral {
+	background-color: lightblue;
+}

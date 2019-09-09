@@ -1,7 +1,7 @@
 import React from 'react';
 
 // use the API url from environment if it exists
-const API_URL = process.env.REACT_APP_API_URL || ''; 
+// const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class ShowRemark extends React.Component {
    // props: userID, loggedIn, isTeacher,
@@ -39,8 +39,6 @@ class ShowRemark extends React.Component {
       return (
 
          <div>
-
-            <h3>This is "ShowRemark"</h3>
 
             <div className={this.props.isTeacher ? "teacher-remark" : "student-remark"}>
 

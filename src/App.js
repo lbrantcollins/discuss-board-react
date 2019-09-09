@@ -3,15 +3,15 @@ import React from 'react';
 // import './App.css';
 // require('./index.css'); 
 
-import AddChallenge from './AddChallenge';
-import EditChallenge from './EditChallenge';
+// import AddChallenge from './AddChallenge';
+// import EditChallenge from './EditChallenge';
 
 // just temporary to test component functionality
-import AddRemark from './AddRemark';
-import AddSnippet from './AddSnippet';
-import EditSnippet from './EditSnippet';
+// import AddRemark from './AddRemark';
+// import AddSnippet from './AddSnippet';
+// import EditSnippet from './EditSnippet';
 import ShowSnippet from './ShowSnippet';
-import ShowRemark from './ShowRemark';
+// import ShowRemark from './ShowRemark';
 
 
 // use the API url from environment if it exists
@@ -282,7 +282,7 @@ class App extends React.Component {
             <h2>This is "App"</h2>
 
                <ShowSnippet
-                  userId={1}
+                  userId={5}
                   loggedIn={true}
                   isTeacher={false}
                   snippet_id={1} 

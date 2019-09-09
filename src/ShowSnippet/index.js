@@ -23,6 +23,8 @@ class ShowSnippet extends React.Component {
 
    componentDidMount = async () => {
 
+      console.log("snippet_id", this.props.snippet_id);
+
       try {
          // retrieve the existing snippet from the database
          const response = await fetch(API_URL + '/snippets/' + this.props.snippet_id, {
@@ -32,6 +34,9 @@ class ShowSnippet extends React.Component {
          })
          const snippet = await response.json(); 
 
+         console.log(snippet);
+         console.log(snippet.language);
+
          // retrieve the name of the language of the snippet
          const response2 = await fetch(API_URL + '/languages/' + snippet.language_id, {
             method: 'GET',
@@ -40,6 +45,8 @@ class ShowSnippet extends React.Component {
          })
          const languageObject = await response2.json();  
          const language = languageObject.language;
+
+         console.log(language);
 
          // retrieve any comments on the snippet
          const response3 = await fetch(API_URL + '/comments/snippet/' + snippet.id, {
@@ -122,18 +129,26 @@ class ShowSnippet extends React.Component {
                   editRemark={this.props.editRemark}
                />
 
-               <ShowRemark className="teacher-remark"
-                  userId={this.props.userId}
-                  loggedIn={this.props.loggedIn}
-                  isTeacher={this.props.isTeacher}
-                  remarkId={comment.id}
-                  parentId={this.props.snippet_id}
-                  elementType="snippet"
-                  remarkUserId={comment.student_id}
-                  remark={comment.comment}
-                  substantial={comment.substantial}
-                  editRemark={this.props.editRemark}
-               />
+               {comment.observation 
+                  ?
+                     <div>
+                        <p>This is ShowRemark for a teacher observation</p>
+
+                        <ShowRemark className="teacher-remark"
+                           userId={this.props.userId}
+                           loggedIn={this.props.loggedIn}
+                           isTeacher={this.props.isTeacher}
+                           remarkId={comment.observation.id}
+                           parentId={comment.id}
+                           elementType="comment"
+                           remarkUserId={comment.observation.teacher_id}
+                           remark={comment.observation.observation}
+                           substantial={null}  
+                           editRemark={this.props.editRemark}
+                        />
+                     </div>
+                  : null
+               }
 
             </div> 
          )
