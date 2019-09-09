@@ -13,9 +13,8 @@ class ShowSnippet extends React.Component {
       super();
 
       this.state = {
-         snippetRecord: {},
-         snippet: '',
-         language: '',
+         snippet: {},
+         snippetText: '',
          comments:[],
       }
 
@@ -23,7 +22,7 @@ class ShowSnippet extends React.Component {
 
    componentDidMount = async () => {
 
-      console.log("snippet_id", this.props.snippet_id);
+      // console.log("snippet_id", this.props.snippet_id);
 
       try {
          // retrieve the existing snippet from the database
@@ -35,33 +34,20 @@ class ShowSnippet extends React.Component {
          const snippet = await response.json(); 
 
          console.log(snippet);
-         console.log(snippet.language);
 
-         // retrieve the name of the language of the snippet
-         const response2 = await fetch(API_URL + '/languages/' + snippet.language_id, {
+         // retrieve any comments (& observations) on the snippet
+         const response2 = await fetch(API_URL + '/comments/snippet/' + this.props.snippet_id, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
          })
-         const languageObject = await response2.json();  
-         const language = languageObject.language;
-
-         console.log(language);
-
-         // retrieve any comments on the snippet
-         const response3 = await fetch(API_URL + '/comments/snippet/' + snippet.id, {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
-         const comments = await response3.json();
+         const comments = await response2.json();
 
          console.log(comments);
 
          this.setState({
-            snippetRecord: snippet,
-            snippet: snippet.snippet,
-            language: language,
+            snippet: snippet,
+            snippetText: snippet.snippet,
             comments: comments,
          })
 
@@ -84,11 +70,11 @@ class ShowSnippet extends React.Component {
       const response = await fetch(API_URL + '/snippets/' + this.props.snippet_id, {
          method: 'PUT',
          body: JSON.stringify({
-            challenge_id: this.state.snippetRecord.challenge_id,
-            language_id: this.state.snippetRecord.language_id,
-            student_id: this.state.snippetRecord.student_id,
-            snippet: this.state.snippet,
-            substantial: this.state.snippetRecord.substantial,
+            challenge_id: this.state.snippet.challenge_id,
+            language_id: this.state.snippet.language_id,
+            student_id: this.state.snippet.student_id,
+            snippet: this.state.snippetText,
+            substantial: this.state.snippet.substantial,
          }),
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
@@ -129,7 +115,7 @@ class ShowSnippet extends React.Component {
                   editRemark={this.props.editRemark}
                />
 
-               {comment.observation 
+               {comment.observation
                   ?
                      <div>
                         <p>This is ShowRemark for a teacher observation</p>
@@ -138,11 +124,11 @@ class ShowSnippet extends React.Component {
                            userId={this.props.userId}
                            loggedIn={this.props.loggedIn}
                            is_teacher={this.props.is_teacher}
-                           remarkId={comment.observation.id}
+                           remarkId={comment.observation_id}
                            parentId={comment.id}
                            elementType="comment"
-                           remarkUserId={comment.observation.teacher_id}
-                           remark={comment.observation.observation}
+                           remarkUserId={comment.teacher_id}
+                           remark={comment.observation}
                            substantial={null}  
                            editRemark={this.props.editRemark}
                         />
@@ -161,14 +147,14 @@ class ShowSnippet extends React.Component {
 
    			<h3>This is "ShowSnippet"</h3>
 
-            Language: {this.state.language}
+            Language: {this.state.snippet.language}
             <br/>
 
             Code Snippet:
             <br/>
             
 
-            {this.props.loggedIn && (this.state.snippetRecord.student_id === this.props.userId)
+            {this.props.loggedIn && (this.state.snippet.student_id === this.props.userId)
                ?
                   <form onSubmit={this.editSnippet}>
            
@@ -177,9 +163,9 @@ class ShowSnippet extends React.Component {
                      <br/>
                      <textarea 
                         rows="8"
-                        name="snippet" 
-                        value={this.state.snippet}
-                        placeholder={this.state.snippet}
+                        name="snippetText" 
+                        value={this.state.snippetText}
+                        placeholder={this.state.snippetText}
                         onChange={this.handleChange}
                      ></textarea>
                      <br/> 
@@ -188,7 +174,7 @@ class ShowSnippet extends React.Component {
                   </form>
                : 
                   <pre><code>
-                     {this.state.snippet}
+                     {this.state.snippetText}
                   </code></pre>
 
             }
@@ -200,6 +186,8 @@ class ShowSnippet extends React.Component {
 
             <AddRemark 
                userId={this.props.userId}
+               loggedIn={this.props.loggedIn}
+               is_teacher={this.props.is_teacher}
                elementId={this.props.snippet_id}
                elementType="snippet"
             />

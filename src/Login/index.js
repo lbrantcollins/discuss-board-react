@@ -45,7 +45,7 @@ class Login extends React.Component {
          <Grid textAlign='center' verticalAlign='middle' style={{ height: '100vh'}}>
             <Grid.Column style={{maxWidth: 450}}>
                <Header as='h2' textAlign='center'>
-                  Register
+                  Welcome!  Please log in.
                </Header>
                <Form onSubmit={this.handleSubmit}>
                   <Segment stacked textAlign='left'>
