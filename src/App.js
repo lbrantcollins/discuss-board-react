@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
+
 // import './App.css';
 // require('./index.css'); 
 
@@ -10,8 +12,9 @@ import React from 'react';
 // import AddRemark from './AddRemark';
 // import AddSnippet from './AddSnippet';
 // import EditSnippet from './EditSnippet';
-import ShowSnippet from './ShowSnippet';
+// import ShowSnippet from './ShowSnippet';
 // import ShowRemark from './ShowRemark';
+import Register from './Register';
 
 
 // use the API url from environment if it exists
@@ -25,8 +28,8 @@ class App extends React.Component {
       this.state = {
          username: '',
          password: '',
+         is_teacher: false,
          loggedIn: false,
-         isTeacher: false,
          challenges: [],
       }
    }
@@ -36,6 +39,37 @@ class App extends React.Component {
       // we may want to do something when the app first starts"
 
    }
+
+   register = async (data) => {
+
+      console.log(`${process.env.API_URL} + "/users/register"`);
+
+      try {
+
+         const response = await fetch(API_URL + '/users/register', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+
+         const user = await response.json();
+
+         if (user.status === 201) {
+            this.setState({
+               ...user.data,
+             loggedIn: true
+            })
+         }
+
+         // return just in case call needs a return
+         return user;
+
+      } catch (err) {
+         console.log(err)
+      }
+   }
+
 
    addChallenge = async (data) => {
  
@@ -272,6 +306,14 @@ class App extends React.Component {
                // elementId={3}
                // elementType={"challenge"}
             // />
+
+            // <ShowSnippet
+                  // userId={5}
+                  // loggedIn={true}
+                  // isTeacher={false}
+                  // snippet_id={1} 
+                  // editRemark={this.editRemark}
+               // />
             
 
    render() {
@@ -280,14 +322,9 @@ class App extends React.Component {
          <div className="App">
 
             <h2>This is "App"</h2>
-
-               <ShowSnippet
-                  userId={5}
-                  loggedIn={true}
-                  isTeacher={false}
-                  snippet_id={1} 
-                  editRemark={this.editRemark}
-               />
+            <Router>
+               <Register register={this.register}/>
+            </Router>
 
          </div>
       );
