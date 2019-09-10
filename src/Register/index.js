@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class Register extends React.Component {
+	// props: lregister (function), toggleLoginRegister (function)
    constructor(){
       super();
 
@@ -81,7 +82,7 @@ class Register extends React.Component {
                      <Button fluid size='large' type='sumbit'>Register</Button>
 
                      <Message>
-                        Already registered? <Link to='/users/login'>Log in</Link>
+                        Already registered? <span className="link-text" onClick={this.props.toggleLoginRegister}>Log in</span>
                      </Message>
              
                   </Segment>

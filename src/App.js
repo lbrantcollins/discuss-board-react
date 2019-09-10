@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
-
 // import './App.css';
 // require('./index.css'); 
 
@@ -31,7 +29,10 @@ class App extends React.Component {
          password: '',
          is_teacher: false,
          loggedIn: false,
+         goToLogin: true,
+         message: '',
          challenges: [],
+
       }
    }
    
@@ -39,6 +40,13 @@ class App extends React.Component {
 
       // we may want to do something when the app first starts"
 
+   }
+
+   toggleLoginRegister = () => {
+
+      this.setState({
+         goToLogin: !this.state.goToLogin
+      })
    }
 
    login = async (data) => {
@@ -54,21 +62,30 @@ class App extends React.Component {
          })
          const user = await response.json();
 
-         // set state so that user is considered "loggedIn"
-         this.setState({
-            id: user.id,
-            username: user.username,
-            password: user.password,
-            is_teacher: user.is_teacher,
-            loggedIn: true,
-         })
+         if (user.success) {
 
-         // return just in case call needs a return
+         // set state so that user is considered "loggedIn"
+            this.setState({
+               id: user.id,
+               username: user.username,
+               is_teacher: user.is_teacher,
+               loggedIn: true,
+               message: user.message,
+            })
+         } else {
+
+            this.setState({
+               message: user.message
+            })
+         }
+         
+      // return just in case call needs a return
          return user;
 
       } catch (err) {
          console.log(err)
       }
+
    }
 
 
@@ -85,37 +102,45 @@ class App extends React.Component {
          })
          const user = await response.json();
 
-         // add new user to either the student or teachers table
-         if (user.is_teacher) {
-            await fetch(API_URL + '/teachers', {
-               method: 'POST',
-               body: JSON.stringify({
-                  user_id: user.id,
-               }),
-               headers: {'Content-Type': 'application/json'},
-               credentials: 'include',
+         if (user.success) {
+
+            // set state so that user is considered "loggedIn"
+            this.setState({
+               id: user.id,
+               username: user.username,
+               is_teacher: user.is_teacher,
+               loggedIn: true,
+               message: user.message,
             })
+
+            // add new user to either the student or teachers table
+            if (user.is_teacher) {
+               await fetch(API_URL + '/teachers', {
+                  method: 'POST',
+                  body: JSON.stringify({
+                     user_id: user.id,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               })
+            } else {
+               await fetch(API_URL + '/students', {
+                  method: 'POST',
+                  body: JSON.stringify({
+                     user_id: user.id,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               })
+
+            }
+
          } else {
-            await fetch(API_URL + '/students', {
-               method: 'POST',
-               body: JSON.stringify({
-                  user_id: user.id,
-               }),
-               headers: {'Content-Type': 'application/json'},
-               credentials: 'include',
+            this.setState({
+               message: user.message
             })
-
          }
-
-         // set state so that user is considered "loggedIn"
-         this.setState({
-            id: user.id,
-            username: user.username,
-            password: user.password,
-            is_teacher: user.is_teacher,
-            loggedIn: true,
-         })
-
+ 
          // return just in case call needs a return
          return user;
 
@@ -363,35 +388,41 @@ class App extends React.Component {
 
    render() {
 
+      console.log("message:", this.state.message);
+
       return (
-         <div className="App">
+         <div>
+            {this.state.loggedIn
+               ?
+                  <div>
+                     <h4>User is logged in.</h4>
 
-            <h2>This is "App"</h2>
-            <Router>
-                           <Login login={this.login}/>
 
-
-               {this.state.loggedIn
-                  ?
-                     <div>
-                        <h4>User is logged in.</h4>
-
-                        
-                        <ShowSnippet
-                           userId={this.state.id}
-                           loggedIn={this.state.loggedIn}
-                           is_teacher={this.state.is_teacher}
-                           snippet_id={1} 
-                           editRemark={this.editRemark}
-                        />
-                        
-                     </div>
-
-                  : null
-               }
-
-            </Router>
-
+                     <ShowSnippet
+                        userId={this.state.id}
+                        loggedIn={this.state.loggedIn}
+                        is_teacher={this.state.is_teacher}
+                        snippet_id={1} 
+                        editRemark={this.editRemark}
+                     />
+                     
+                  </div>
+               :
+                  <div>
+                     {this.state.goToLogin 
+                        ? 
+                           <Login 
+                              toggleLoginRegister={this.toggleLoginRegister}
+                              login={this.login} 
+                           />
+                        :
+                           <Register 
+                              toggleLoginRegister={this.toggleLoginRegister}
+                              register={this.register}
+                           />
+                     }
+                  </div>
+            }
          </div>
       );
 

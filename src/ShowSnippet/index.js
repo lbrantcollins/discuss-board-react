@@ -103,7 +103,7 @@ class ShowSnippet extends React.Component {
          return (
 
             <Container key={comment.id} className="ui two cards">
-               <Segment border stacked textAlign='left'>
+               <Segment stacked textAlign='left'>
 
                <ShowRemark className="student-remark"
                   userId={this.props.userId}
@@ -164,7 +164,32 @@ class ShowSnippet extends React.Component {
             		
    		<div>
 
-   			<h3>This is "ShowSnippet"</h3>
+   			<Card>
+            <Card.Content>
+                        
+                           <Form>
+                              <Form.TextArea 
+                                 name="remark" 
+                                 value={this.state.remark}
+                                 placeholder={this.state.remark}
+                                 onChange={this.handleChange}
+                              />
+                              <Button 
+                                 content='Submit Changes'
+                                 onClick={this.props.editRemark.bind(null,
+                                 this.props.elementType,
+                                 this.props.parentId,
+                                 this.props.remarkId,
+                                 this.props.remarkUserId,
+                                 this.state.remark,
+                                 this.props.substantial
+                              )}/>
+                           </Form>
+                           
+                        </Card.Content>
+                     </Card>
+
+
 
             Language: {this.state.snippet.language}
             <br/>

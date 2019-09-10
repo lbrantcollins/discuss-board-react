@@ -17,6 +17,10 @@ body {
   margin: auto 0;
 }
 
+.link-text {
+  color: lightblue;
+}
+
 .card {
   background-color: pink;
 }

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class Login extends React.Component {
-	// props: login (function)
+	// props: login (function), register (function)
    constructor(){
       super();
 
@@ -59,7 +59,7 @@ class Login extends React.Component {
                      <Button fluid size='large' type='sumbit'>Log in</Button>
 
                      <Message>
-                        Not registered? <Link to='/users/register'>Sign up</Link>
+                        Not registered? <span className="link-text" onClick={this.props.toggleLoginRegister}>Sign up</span>
                      </Message>
              
                   </Segment>
