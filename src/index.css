@@ -14,7 +14,13 @@ code {
 
 body {
 	background-color: lavender;
+  margin: auto 0;
 }
+
+.card {
+  margin: 5%;
+}
+
 
 .message.good {
 	background-color: lightgreen;

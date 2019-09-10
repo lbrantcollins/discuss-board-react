@@ -92,22 +92,14 @@ class ShowSnippet extends React.Component {
    
    render() {
 
-      console.log("this.state.snippet.student_id", this.state.snippet.student_id);
-         console.log("userId:", this.props.userId);
-         console.log("loggedIn:", this.props.loggedIn);
-         console.log("is_teacher:", this.props.is_teacher);
-
-
-      // instead of "ShowRemark" below, will show the list of comments
-      // each of which is a "ShowRemark" generated here by a map method on all remarks
+      // Show the list of student comments (and accompanying teacher observations)
+      // each of which is a "ShowRemark" generated here by a map method on all comments
 
       const commentList = this.state.comments.map( (comment) => {
 
          return (
 
-            <div key={comment.id}>
-
-               <h2>This is a pair of remarks</h2>
+            <div key={comment.id} className="ui two cards">
 
                <ShowRemark className="student-remark"
                   userId={this.props.userId}
@@ -125,7 +117,6 @@ class ShowSnippet extends React.Component {
                {comment.observation
                   ?
                      <div>
-                        <p>This is ShowRemark for a teacher observation</p>
 
                         <ShowRemark className="teacher-remark"
                            userId={this.props.userId}
@@ -142,24 +133,19 @@ class ShowSnippet extends React.Component {
                      </div>
                   : 
                      <div>
+                        {this.props.is_teacher
+                           ?
+                              <div>
+                                 <AddRemark 
+                                    userId={this.props.userId}
+                                    elementId={comment.id}
+                                    elementType="comment"
+                                 />
 
-                     {this.props.is_teacher
-                        ?
-                           <div>
-                              <p>This is AddRemark for a new teacher observation</p>
+                              </div>
 
-                              <AddRemark 
-                                 userId={this.props.userId}
-                                 loggedIn={this.props.loggedIn}
-                                 is_teacher={this.props.is_teacher}
-                                 elementId={comment.id}
-                                 elementType="comment"
-                              />
-
-                           </div>
-
-                        : null
-                     }
+                           : null
+                        }
                      </div>
 
                            
@@ -183,7 +169,7 @@ class ShowSnippet extends React.Component {
             <br/>
             
 
-            {this.props.loggedIn && (this.state.snippet.student_id === this.props.userId)
+            {this.state.snippet.student_id === this.props.userId
                ?
                   <form onSubmit={this.editSnippet}>
            
@@ -213,13 +199,15 @@ class ShowSnippet extends React.Component {
                {commentList}
             </div>
 
-            <AddRemark 
-               userId={this.props.userId}
-               loggedIn={this.props.loggedIn}
-               is_teacher={this.props.is_teacher}
-               elementId={this.props.snippet_id}
-               elementType="snippet"
-            />
+            {this.props.is_teacher
+               ? null
+               :
+                  <AddRemark 
+                     userId={this.props.userId}
+                     elementId={this.props.snippet_id}
+                     elementType="snippet"
+                  />
+            }
 
    		</div>
 

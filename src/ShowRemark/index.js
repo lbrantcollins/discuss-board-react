@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+// import { Link } from 'react-router-dom';
+
 // use the API url from environment if it exists
 // const API_URL = process.env.REACT_APP_API_URL || ''; 
 
@@ -15,6 +18,7 @@ class ShowRemark extends React.Component {
 
       this.state = {
          remark: this.props.remark,
+         label: '',
       }
 
    }
@@ -22,8 +26,35 @@ class ShowRemark extends React.Component {
    // pre-processing for this component
    componentDidMount = async () => {
 
+      // provide a label (a remark title) customized for the specific component
+      let label;
+       
+      switch (this.props.elementType) {
+
+          case 'challenge':
+            label = "Student question:";
+            break;
+
+         case 'snippet':
+            label = "Student comment:";
+            break;
+
+         case 'question':
+            label = "Instructor response:";
+            break;
+
+         case 'comment':
+             label = "Instructor observation:";
+            break;
+
+         default:
+            console.log("Remarks are only for a challenge, snippet, question, or comment")
+      }
+
+
       this.setState({
          remark: this.props.remark,
+         label: label,
       })
       
    }
@@ -41,14 +72,21 @@ class ShowRemark extends React.Component {
          <div>
 
             <div className={this.props.is_teacher ? "teacher-remark" : "student-remark"}>
-
-            <h4>Inside of ShowRemark</h4>
-
-               
-               {
-                  this.props.loggedIn && this.props.remarkUserId === this.props.userId
-                     ?  
-                        <div>
+             
+               {this.props.remarkUserId === this.props.userId
+                  ?  
+                     <Card>
+                        <Card.Header>{this.state.label}</Card.Header>
+                        <Card.Content>
+                           <Form reply>
+          <Form.TextArea />
+          <Button
+            content='Add Reply'
+            labelPosition='left'
+            icon='edit'
+            primary
+          />
+        </Form>
                            <textarea 
                               rows="8"
                               name="remark" 
@@ -58,18 +96,22 @@ class ShowRemark extends React.Component {
                            ></textarea>
                            <br/>
                            <button onClick={this.props.editRemark.bind(null,
-                                 this.props.elementType,
-                                 this.props.parentId,
-                                 this.props.remarkId,
-                                 this.props.remarkUserId,
-                                 this.state.remark,
-                                 this.props.substantial
-                              )}
-                           >
+                              this.props.elementType,
+                              this.props.parentId,
+                              this.props.remarkId,
+                              this.props.remarkUserId,
+                              this.state.remark,
+                              this.props.substantial
+                           )}>
                               Submit Changes
                            </button>
-                        </div>
-                     : this.state.remark
+                        </Card.Content>
+                     </Card>
+                  : 
+                     <Card>
+                        <Card.Header>{this.state.label}</Card.Header>
+                        <Card.Content>{this.state.remark}</Card.Content>
+                     </Card>
                }
 
             </div>
@@ -84,3 +126,18 @@ class ShowRemark extends React.Component {
 }
 
 export default ShowRemark;
+
+// <Card>
+//          <Card.Content>
+//             <Card.Header id="comment-header">{props.comment.user_id.username}</Card.Header>
+//             <Card.Meta>{date}</Card.Meta>
+//             <Card.Description>{props.comment.content}</Card.Description>
+//             {(props.comment.user_id.id === props.userId) && (props.loggedIn)
+//                ?
+//                   <Button onClick={props.deleteComment.bind(null, props.comment.id)}>
+//                      Delete
+//                   </Button>
+//                : null
+//             }  
+//          </Card.Content>
+//       </Card>

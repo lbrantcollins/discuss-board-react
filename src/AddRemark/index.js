@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+// import { Link } from 'react-router-dom';
+
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
@@ -188,25 +191,32 @@ class AddRemark extends React.Component {
 
       return (
 
-         <div>
-
-            <h3>This is "AddRemark"</h3>
-
-            <form onSubmit={this.handleSubmit}>
-               <label>{this.state.label}:</label>
-               <br/>
-               <textarea
-                  rows="8" 
-                  type="text" 
-                  name="content" 
-                  placeholder={this.state.placeholder} 
-                  onChange={this.handleChange}
-               ></textarea>
-               <br/>
-               <button>Submit</button>
-            </form>
-
-         </div>
+         <Card>
+            <Card.Header>{this.state.label}:</Card.Header>
+            <Card.Content>
+            <Form>
+                  <Form.TextArea />
+          <Button
+            content='Add Reply'
+            labelPosition='left'
+            icon='edit'
+            primary
+          />
+        </Form>
+               <form onSubmit={this.handleSubmit}>
+                  <br/>
+                  <textarea
+                     rows="8" 
+                     type="text" 
+                     name="content" 
+                     placeholder={this.state.placeholder} 
+                     onChange={this.handleChange}
+                  ></textarea>
+                  <br/>
+                  <button>Submit</button>
+               </form>
+            </Card.Content>
+         </Card>
            
       );
 

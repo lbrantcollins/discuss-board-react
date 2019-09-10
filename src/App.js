@@ -54,8 +54,6 @@ class App extends React.Component {
          })
          const user = await response.json();
 
-         console.log("USER ------>", user);
-
          // set state so that user is considered "loggedIn"
          this.setState({
             id: user.id,
@@ -86,6 +84,28 @@ class App extends React.Component {
             credentials: 'include',
          })
          const user = await response.json();
+
+         // add new user to either the student or teachers table
+         if (user.is_teacher) {
+            await fetch(API_URL + '/teachers', {
+               method: 'POST',
+               body: JSON.stringify({
+                  user_id: user.id,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            })
+         } else {
+            await fetch(API_URL + '/students', {
+               method: 'POST',
+               body: JSON.stringify({
+                  user_id: user.id,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            })
+
+         }
 
          // set state so that user is considered "loggedIn"
          this.setState({
@@ -336,25 +356,27 @@ class App extends React.Component {
                         // />
 
 
-            
+
+
+                           // <Register register={this.register}/>
+
 
    render() {
-
-      console.log("this.state -------->\n", this.state);
-
 
       return (
          <div className="App">
 
             <h2>This is "App"</h2>
             <Router>
-               <Login login={this.login}/>
+                           <Login login={this.login}/>
+
 
                {this.state.loggedIn
                   ?
                      <div>
                         <h4>User is logged in.</h4>
 
+                        
                         <ShowSnippet
                            userId={this.state.id}
                            loggedIn={this.state.loggedIn}
@@ -362,7 +384,6 @@ class App extends React.Component {
                            snippet_id={1} 
                            editRemark={this.editRemark}
                         />
-
                         
                      </div>
 
