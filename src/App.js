@@ -26,6 +26,7 @@ class App extends React.Component {
       super();
 
       this.state = {
+         id: null,
          username: '',
          password: '',
          is_teacher: false,
@@ -53,8 +54,11 @@ class App extends React.Component {
          })
          const user = await response.json();
 
+         console.log("USER ------>", user);
+
          // set state so that user is considered "loggedIn"
          this.setState({
+            id: user.id,
             username: user.username,
             password: user.password,
             is_teacher: user.is_teacher,
@@ -85,6 +89,7 @@ class App extends React.Component {
 
          // set state so that user is considered "loggedIn"
          this.setState({
+            id: user.id,
             username: user.username,
             password: user.password,
             is_teacher: user.is_teacher,
@@ -182,8 +187,6 @@ class App extends React.Component {
 
    editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
 
-      console.log("-----> inside editRemark function <-----");
-
       // variables to hold response from the database PUT
       let putResponse;
       let returnRemark;
@@ -217,8 +220,6 @@ class App extends React.Component {
             break;
 
          case 'snippet':
-
-            console.log("----------->  in the snippet case writing to DB <---------");
             
             // update database
             try {
@@ -339,6 +340,7 @@ class App extends React.Component {
 
    render() {
 
+      console.log("this.state -------->\n", this.state);
 
 
       return (
@@ -354,9 +356,9 @@ class App extends React.Component {
                         <h4>User is logged in.</h4>
 
                         <ShowSnippet
-                           userId={5}
-                           loggedIn={true}
-                           is_teacher={false}
+                           userId={this.state.id}
+                           loggedIn={this.state.loggedIn}
+                           is_teacher={this.state.is_teacher}
                            snippet_id={1} 
                            editRemark={this.editRemark}
                         />

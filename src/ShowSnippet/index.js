@@ -51,6 +51,7 @@ class ShowSnippet extends React.Component {
             comments: comments,
          })
 
+         
       } catch(err) {
          console.log(err);
       }
@@ -90,6 +91,12 @@ class ShowSnippet extends React.Component {
 
    
    render() {
+
+      console.log("this.state.snippet.student_id", this.state.snippet.student_id);
+         console.log("userId:", this.props.userId);
+         console.log("loggedIn:", this.props.loggedIn);
+         console.log("is_teacher:", this.props.is_teacher);
+
 
       // instead of "ShowRemark" below, will show the list of comments
       // each of which is a "ShowRemark" generated here by a map method on all remarks
@@ -133,7 +140,29 @@ class ShowSnippet extends React.Component {
                            editRemark={this.props.editRemark}
                         />
                      </div>
-                  : null
+                  : 
+                     <div>
+
+                     {this.props.is_teacher
+                        ?
+                           <div>
+                              <p>This is AddRemark for a new teacher observation</p>
+
+                              <AddRemark 
+                                 userId={this.props.userId}
+                                 loggedIn={this.props.loggedIn}
+                                 is_teacher={this.props.is_teacher}
+                                 elementId={comment.id}
+                                 elementType="comment"
+                              />
+
+                           </div>
+
+                        : null
+                     }
+                     </div>
+
+                           
                }
 
             </div> 
