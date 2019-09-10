@@ -18,7 +18,8 @@ body {
 }
 
 .link-text {
-  color: lightblue;
+  color: steelblue;
+  cursor: pointer;
 }
 
 .card {
