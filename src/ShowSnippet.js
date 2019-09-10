@@ -3,8 +3,8 @@ import React from 'react';
 import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 
 
-import AddRemark from '../AddRemark';
-import ShowRemark from '../ShowRemark';
+import AddRemark from './AddRemark';
+import ShowRemark from './ShowRemark';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 

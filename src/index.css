@@ -37,3 +37,16 @@ body {
 .message.neutral {
 	background-color: lightblue;
 }
+
+/*.keyword-selection {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: left;
+}
+
+.keyword-selections {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: left;
+  flex-wrap: wrap;
+}*/

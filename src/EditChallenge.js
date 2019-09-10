@@ -1,8 +1,8 @@
 import React from 'react';
 import './index.css'
 
-import SelectKeywords from '../SelectKeywords';
-import SelectLanguages from '../SelectLanguages';
+import SelectKeywords from './SelectKeywords';
+import SelectLanguages from './SelectLanguages';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 

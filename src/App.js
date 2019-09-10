@@ -3,15 +3,15 @@ import React from 'react';
 // import './App.css';
 // require('./index.css'); 
 
-// import AddChallenge from './AddChallenge';
-// import EditChallenge from './EditChallenge';
+import AddChallenge from './AddChallenge';
+import EditChallenge from './EditChallenge';
 
 // just temporary to test component functionality
-// import AddRemark from './AddRemark';
-// import AddSnippet from './AddSnippet';
-// import EditSnippet from './EditSnippet';
+import AddRemark from './AddRemark';
+import AddSnippet from './AddSnippet';
+import EditSnippet from './EditSnippet';
 import ShowSnippet from './ShowSnippet';
-// import ShowRemark from './ShowRemark';
+import ShowRemark from './ShowRemark';
 import Register from './Register';
 import Login from './Login';
 
@@ -397,6 +397,10 @@ class App extends React.Component {
                   <div>
                      <h4>User is logged in.</h4>
 
+                     <AddChallenge 
+                        teacher_id={1} 
+                        addChallenge={this.addChallenge}
+                     />  
 
                      <ShowSnippet
                         userId={this.state.id}

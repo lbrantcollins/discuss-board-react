@@ -1,7 +1,7 @@
 import React from 'react';
 
-import SelectKeywords from '../SelectKeywords';
-import SelectLanguages from '../SelectLanguages';
+import SelectKeywords from './SelectKeywords';
+import SelectLanguages from './SelectLanguages';
 
 class AddChallenge extends React.Component {
    // props: challenge_id
