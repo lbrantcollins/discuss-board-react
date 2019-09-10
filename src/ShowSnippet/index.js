@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+
+
 import AddRemark from '../AddRemark';
 import ShowRemark from '../ShowRemark';
 
@@ -99,7 +102,8 @@ class ShowSnippet extends React.Component {
 
          return (
 
-            <div key={comment.id} className="ui two cards">
+            <Container key={comment.id} className="ui two cards">
+               <Segment border stacked textAlign='left'>
 
                <ShowRemark className="student-remark"
                   userId={this.props.userId}
@@ -150,8 +154,8 @@ class ShowSnippet extends React.Component {
 
                            
                }
-
-            </div> 
+               </Segment>
+            </Container> 
          )
          
       })
@@ -195,9 +199,9 @@ class ShowSnippet extends React.Component {
             }
 
 
-            <div>
+            <Card.Group>
                {commentList}
-            </div>
+            </Card.Group>
 
             {this.props.is_teacher
                ? null

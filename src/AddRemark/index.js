@@ -35,22 +35,22 @@ class AddRemark extends React.Component {
          // set a placeholder for the add-remark text box
 
          case 'challenge':
-            label = "Ask a Question";
+            label = "Ask a Question:";
             placeholder = "...about the challenge your instructor posed.";
             break;
 
          case 'snippet':
-            label = "Leave a Comment";
+            label = "Leave a Comment:";
             placeholder = "...about your fellow student's suggested code snippet.";
             break;
 
          case 'question':
-            label = "Give a Response";
+            label = "Give a Response:";
             placeholder = "...to your student's question about the challenge posed.";
             break;
 
          case 'comment':
-             label = "Make an Observation";
+             label = "Give a Response:";
              placeholder = "...about your student's comment on the code snippet.";
             break;
 
@@ -187,34 +187,36 @@ class AddRemark extends React.Component {
       // this.props.history.push('/media/' + newMedia.data.id). ?????
    }
 
+   // <form onSubmit={this.handleSubmit}>
+                  // <br/>
+                  // <textarea
+                     // rows="8" 
+                     // type="text" 
+                     // name="content" 
+                     // placeholder={this.state.placeholder} 
+                     // onChange={this.handleChange}
+                  // ></textarea>
+                  // <br/>
+                  // <button>Submit</button>
+               // </form>
+
    render() {
+      
 
       return (
 
          <Card>
             <Card.Header>{this.state.label}:</Card.Header>
             <Card.Content>
-            <Form>
-                  <Form.TextArea />
-          <Button
-            content='Add Reply'
-            labelPosition='left'
-            icon='edit'
-            primary
-          />
-        </Form>
-               <form onSubmit={this.handleSubmit}>
-                  <br/>
-                  <textarea
-                     rows="8" 
-                     type="text" 
-                     name="content" 
-                     placeholder={this.state.placeholder} 
+               <Form>
+                  <Form.TextArea 
+                     name="content"
+                     placeholder={this.state.placeholder}
                      onChange={this.handleChange}
-                  ></textarea>
-                  <br/>
-                  <button>Submit</button>
-               </form>
+                  />
+                     <Button content='Submit'/>
+               </Form>
+               
             </Card.Content>
          </Card>
            

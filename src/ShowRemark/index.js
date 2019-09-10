@@ -44,7 +44,7 @@ class ShowRemark extends React.Component {
             break;
 
          case 'comment':
-             label = "Instructor observation:";
+             label = "Instructor response:";
             break;
 
          default:
@@ -75,38 +75,32 @@ class ShowRemark extends React.Component {
              
                {this.props.remarkUserId === this.props.userId
                   ?  
+                     
                      <Card>
                         <Card.Header>{this.state.label}</Card.Header>
                         <Card.Content>
-                           <Form reply>
-          <Form.TextArea />
-          <Button
-            content='Add Reply'
-            labelPosition='left'
-            icon='edit'
-            primary
-          />
-        </Form>
-                           <textarea 
-                              rows="8"
-                              name="remark" 
-                              value={this.state.remark}
-                              placeholder={this.state.remark}
-                              onChange={this.handleChange}
-                           ></textarea>
-                           <br/>
-                           <button onClick={this.props.editRemark.bind(null,
-                              this.props.elementType,
-                              this.props.parentId,
-                              this.props.remarkId,
-                              this.props.remarkUserId,
-                              this.state.remark,
-                              this.props.substantial
-                           )}>
-                              Submit Changes
-                           </button>
+                           <Form>
+                              <Form.TextArea 
+                                 name="remark" 
+                                 value={this.state.remark}
+                                 placeholder={this.state.remark}
+                                 onChange={this.handleChange}
+                              />
+                              <Button 
+                                 content='Submit Changes'
+                                 onClick={this.props.editRemark.bind(null,
+                                 this.props.elementType,
+                                 this.props.parentId,
+                                 this.props.remarkId,
+                                 this.props.remarkUserId,
+                                 this.state.remark,
+                                 this.props.substantial
+                              )}/>
+                           </Form>
+                           
                         </Card.Content>
                      </Card>
+                     
                   : 
                      <Card>
                         <Card.Header>{this.state.label}</Card.Header>
@@ -141,3 +135,26 @@ export default ShowRemark;
 //             }  
 //          </Card.Content>
 //       </Card>
+
+
+// <textarea 
+//                               rows="8"
+//                               name="remark" 
+//                               value={this.state.remark}
+//                               placeholder={this.state.remark}
+//                               onChange={this.handleChange}
+//                            ></textarea>
+//                            <br/>
+//                            <button onClick={this.props.editRemark.bind(null,
+//                               this.props.elementType,
+//                               this.props.parentId,
+//                               this.props.remarkId,
+//                               this.props.remarkUserId,
+//                               this.state.remark,
+//                               this.props.substantial
+//                            )}>
+//                               Submit Changes
+//                            </button>
+
+
+
