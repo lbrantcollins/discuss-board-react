@@ -33,6 +33,9 @@ class App extends React.Component {
          goToLogin: true,
          message: '',
          challenges: [],
+         addChallenge: false,
+         editChallenge: false,
+         challengeToBeEdited: '',
 
       }
    }
@@ -160,7 +163,12 @@ class App extends React.Component {
       }
    }
 
-   
+   showAddChallenge = () => {
+      this.setState({
+         addChallenge: true
+      })
+      
+   }
 
    addChallenge = async (data) => {
  
@@ -184,7 +192,8 @@ class App extends React.Component {
          newList.push(newChallenge)
          // set state to the local list (includes new challenge)
          this.setState({
-            challenges: newList
+            challenges: newList,
+            addChallenge: false
          })
 
          // return the new challenge in case call needs the return
@@ -193,6 +202,14 @@ class App extends React.Component {
       } catch (err) {
          console.log(err)
       }
+   }
+
+   showEditChallenge = (challengeToBeEdited) => {
+      this.setState({
+         challengeToBeEdited: challengeToBeEdited,
+         editChallenge: true
+      })
+      
    }
 
    editChallenge = async (id, data) => {
@@ -211,6 +228,11 @@ class App extends React.Component {
 
          // return the new challenge in case call needs the return
          const editedChallenge = await response.json();
+
+         this.setState({
+            editChallenge: false,
+            challengeToBeEdited: ''
+         })
 
          return editedChallenge;
 
@@ -413,6 +435,7 @@ class App extends React.Component {
    render() {
 
       console.log("message:", this.state.message);
+      console.log("is_teacher", this.state.is_teacher);
 
       return (
          <div>
@@ -421,11 +444,36 @@ class App extends React.Component {
                   <div>
                      <h4>User is logged in.</h4>
 
-                     <ChallengeList 
-                        challenges={this.state.challenges}
-                        addChallenge={this.addChallenge}
-                        editChallenge={this.editChallenge}
-                     />
+                     
+
+                     {this.state.editChallenge
+                        ?                               
+                           <EditChallenge 
+                              challenge_id={this.state.challengeToBeEdited}
+                              editChallenge={this.editChallenge}
+                           />
+                        :  
+                           <div>
+                              {this.state.addChallenge
+                                 ?
+                                    <AddChallenge 
+                                       teacher_id={this.state.id}
+                                       addChallenge={this.addChallenge}
+
+                                    />
+                                 :
+
+                                    <ChallengeList 
+                                       userId={this.state.id}
+                                       is_teacher={this.state.is_teacher}
+                                       challenges={this.state.challenges}
+                                       showAddChallenge={this.showAddChallenge}
+                                       showEditChallenge={this.showEditChallenge}
+                                    />
+                              }
+                           </div>
+                        }
+                     }
 
                      
                      

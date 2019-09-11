@@ -9,7 +9,7 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 
 class EditChallenge extends React.Component {
-   // props: challenge_id
+   // props: challenge_id, editChallenge (function)
    constructor(props) {
       super(props);
 
@@ -63,10 +63,11 @@ class EditChallenge extends React.Component {
             description: this.state.description
          }
       )
+      const challenge = editedChallenge.json();
 
       this.setState({
-         title: editedChallenge.title,
-         description: editedChallenge.description
+         title: challenge.title,
+         description: challenge.description
       })
 
       //////////////////////////////
@@ -91,7 +92,7 @@ class EditChallenge extends React.Component {
                   type="text" 
                   name="title" 
                   placeholder={this.state.title}
-                  value={this.state.title} 
+                  // value={this.state.title} 
                   onChange={this.handleChange}
                />
                <br/>

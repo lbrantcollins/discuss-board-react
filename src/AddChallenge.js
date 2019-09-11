@@ -4,7 +4,7 @@ import SelectKeywords from './SelectKeywords';
 import SelectLanguages from './SelectLanguages';
 
 class AddChallenge extends React.Component {
-   // props: challenge_id
+   // props: teacher_id (user_id), addChallenge (function)
    constructor() {
       super();
 
@@ -60,7 +60,7 @@ class AddChallenge extends React.Component {
 
          <div>
 
-            <h2>This is "EditChallenge"</h2>
+            <h2>This is "AddChallenge"</h2>
 
             <form onSubmit={this.handleSubmit}>
                <label>Title:</label>
@@ -85,7 +85,7 @@ class AddChallenge extends React.Component {
             </form>
 
             {/* Allow keyword selection after challenge created */}
-            {this.state.newChallengeCreated ? <SelectKeywords challenge_id={this.props.challenge_id} /> : null}
+            {this.state.newChallengeCreated ? <SelectKeywords challenge_id={this.state.id} /> : null}
             
 
          </div>
