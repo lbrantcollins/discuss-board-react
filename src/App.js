@@ -3,6 +3,7 @@ import React from 'react';
 // import './App.css';
 // require('./index.css'); 
 
+import ChallengeList from './ChallengeList';
 import AddChallenge from './AddChallenge';
 import EditChallenge from './EditChallenge';
 
@@ -38,7 +39,17 @@ class App extends React.Component {
    
    componentDidMount = async () => {
 
-      // we may want to do something when the app first starts"
+      // retrieve all existing challenges
+      const response = await fetch(API_URL + '/challenges', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         const challenges = await response.json();
+
+         this.setState({
+            challenges: challenges
+         })
 
    }
 
@@ -383,7 +394,20 @@ class App extends React.Component {
 
 
 
-                           // <Register register={this.register}/>
+
+
+                           // <AddChallenge 
+                        // teacher_id={1} 
+                        // addChallenge={this.addChallenge}
+                     // />  
+
+                     // <ShowSnippet
+                        // userId={this.state.id}
+                        // loggedIn={this.state.loggedIn}
+                        // is_teacher={this.state.is_teacher}
+                        // snippet_id={1} 
+                        // editRemark={this.editRemark}
+                     // />
 
 
    render() {
@@ -397,18 +421,13 @@ class App extends React.Component {
                   <div>
                      <h4>User is logged in.</h4>
 
-                     <AddChallenge 
-                        teacher_id={1} 
+                     <ChallengeList 
+                        challenges={this.state.challenges}
                         addChallenge={this.addChallenge}
-                     />  
-
-                     <ShowSnippet
-                        userId={this.state.id}
-                        loggedIn={this.state.loggedIn}
-                        is_teacher={this.state.is_teacher}
-                        snippet_id={1} 
-                        editRemark={this.editRemark}
+                        editChallenge={this.editChallenge}
                      />
+
+                     
                      
                   </div>
                :

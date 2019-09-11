@@ -95,6 +95,8 @@ class ShowSnippet extends React.Component {
    
    render() {
 
+      console.log(this.state.challenges);
+
       // Show the list of student comments (and accompanying teacher observations)
       // each of which is a "ShowRemark" generated here by a map method on all comments
 
@@ -165,63 +167,64 @@ class ShowSnippet extends React.Component {
    		<div>
 
    			<Card>
-            <Card.Content>
+               <Card.Content>
                         
-                           <Form>
-                              <Form.TextArea 
-                                 name="remark" 
-                                 value={this.state.remark}
-                                 placeholder={this.state.remark}
-                                 onChange={this.handleChange}
-                              />
-                              <Button 
-                                 content='Submit Changes'
-                                 onClick={this.props.editRemark.bind(null,
-                                 this.props.elementType,
-                                 this.props.parentId,
-                                 this.props.remarkId,
-                                 this.props.remarkUserId,
-                                 this.state.remark,
-                                 this.props.substantial
-                              )}/>
-                           </Form>
-                           
-                        </Card.Content>
-                     </Card>
-
-
-
-            Language: {this.state.snippet.language}
-            <br/>
-
-            Code Snippet:
-            <br/>
-            
-
-            {this.state.snippet.student_id === this.props.userId
-               ?
-                  <form onSubmit={this.editSnippet}>
-           
-                     <h4>You can edit your code snippet here:</h4>
-
-                     <br/>
-                     <textarea 
-                        rows="8"
-                        name="snippetText" 
-                        value={this.state.snippetText}
-                        placeholder={this.state.snippetText}
+                  <Form>
+                     <Form.TextArea 
+                        name="remark" 
+                        value={this.state.remark}
+                        placeholder={this.state.remark}
                         onChange={this.handleChange}
-                     ></textarea>
-                     <br/> 
+                     />
+                     <Button 
+                        content='Submit Changes'
+                        onClick={this.props.editRemark.bind(null,
+                        this.props.elementType,
+                        this.props.parentId,
+                        this.props.remarkId,
+                        this.props.remarkUserId,
+                        this.state.remark,
+                        this.props.substantial
+                     )}/>
+                  </Form>
+                           
+               </Card.Content>
+            </Card>
 
-                     <button>Submit Changes</button>
-                  </form>
-               : 
-                  <pre><code>
-                     {this.state.snippetText}
-                  </code></pre>
+            <Card>
 
-            }
+               <Card.Header>
+                  Language: {this.state.snippet.language}
+               </Card.Header>
+
+               <Card.Meta>
+                  Code Snippet:
+               </Card.Meta>
+            
+               <Card.Content>
+                  {this.state.snippet.student_id === this.props.userId
+                     ?
+                        <Form>
+                           <Form.TextArea 
+                              name="snippetText" 
+                              value={this.state.snippetText}
+                              placeholder={this.state.snippetText}
+                              onChange={this.handleChange}
+                           />
+                           <Button 
+                              content='Submit Changes'
+                              onClick={this.editSnippet}/>
+                        </Form>
+
+                        
+                     : 
+                        <pre><code>
+                           {this.state.snippetText}
+                        </code></pre>
+
+                  }
+               </Card.Content>
+            </Card>
 
 
             <Card.Group>
@@ -245,3 +248,10 @@ class ShowSnippet extends React.Component {
 }
 
 export default ShowSnippet;
+
+
+                        
+
+
+
+
