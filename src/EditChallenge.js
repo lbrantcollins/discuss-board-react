@@ -56,16 +56,16 @@ class EditChallenge extends React.Component {
       e.preventDefault();
 
       // send edited challenge data to database and lift up state
-      const editedChallenge = await this.props.editChallenge(this.props.challenge_id, 
+      const challenge = await this.props.editChallenge(this.props.challenge_id, 
          {
             teacher_id: this.state.teacher_id,
             title: this.state.title,
             description: this.state.description
          }
       )
-      const challenge = editedChallenge.json();
 
       this.setState({
+         teacher_id: challenge.teacher_id,
          title: challenge.title,
          description: challenge.description
       })
@@ -78,6 +78,9 @@ class EditChallenge extends React.Component {
   }
    
    render() {
+
+      console.log("this.state");
+      console.log(this.state);
 
       return (
 

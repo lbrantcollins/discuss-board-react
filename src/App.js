@@ -1,4 +1,5 @@
 import React from 'react';
+import { Menu, Icon, Button } from 'semantic-ui-react';
 
 // import './App.css';
 // require('./index.css'); 
@@ -15,6 +16,7 @@ import ShowSnippet from './ShowSnippet';
 import ShowRemark from './ShowRemark';
 import Register from './Register';
 import Login from './Login';
+import Header from './Header';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -36,6 +38,9 @@ class App extends React.Component {
          addChallenge: false,
          editChallenge: false,
          challengeToBeEdited: '',
+         challengeSnippets: false,
+         challengeToBeShown: '',
+         activeItem: 'show-challenges'
 
       }
    }
@@ -199,6 +204,9 @@ class App extends React.Component {
          // return the new challenge in case call needs the return
          return newChallenge;
 
+         // a little cheating:
+         this.componentDidMount();
+
       } catch (err) {
          console.log(err)
       }
@@ -233,6 +241,9 @@ class App extends React.Component {
             editChallenge: false,
             challengeToBeEdited: ''
          })
+
+         // a little cheating:
+         this.componentDidMount();
 
          return editedChallenge;
 
@@ -378,6 +389,26 @@ class App extends React.Component {
 
    }
 
+   showSnippets = async (challenge_id) => {
+
+      const response = await fetch(API_URL + '/challenges', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         const challenges = await response.json();
+
+         this.setState({
+            challenges: challenges
+         })
+
+      this.setState({
+         challengeSnippets: true,
+         challengeToBeShown: challenge_id,
+      })
+      
+   }
+
 
             
             // <AddChallenge 
@@ -439,10 +470,51 @@ class App extends React.Component {
 
       return (
          <div>
+
+         <Menu className='nav'>
+
+               <Menu.Item
+                  className='Link'
+                  name='show-challenges'
+                  active={this.state.activeItem === 'show-challenges'}
+                  onClick={this.handleItemClick}>
+                  Challenges
+               </Menu.Item>
+
+               
+                     <Menu.Item
+                        className='Link'
+                        name='my-media'
+                        active={this.state.activeItem === 'myMedia'}
+                        onClick={this.handleItemClick}>
+                     </Menu.Item>
+                     <Menu.Item
+                        className='Link'
+                        name='my-favorites'
+                        active={this.state.activeItem === 'myFavorites'}
+                        onClick={this.handleItemClick}>
+                     </Menu.Item>
+               
+                     <Menu.Item
+                        className='Link'
+                        name='login'
+                        active={this.state.activeItem === 'login'}
+                        onClick={this.handleItemClick}>
+                     </Menu.Item>
+                     <Menu.Item
+                        className='Link'
+                        name='register'
+                        active={this.state.activeItem === 'register'}
+                        onClick={this.handleItemClick}>
+                     </Menu.Item>
+               
+            </Menu>
+
+
+
             {this.state.loggedIn
                ?
                   <div>
-                     <h4>User is logged in.</h4>
 
                      
 
@@ -456,20 +528,26 @@ class App extends React.Component {
                            <div>
                               {this.state.addChallenge
                                  ?
-                                    <AddChallenge 
-                                       teacher_id={this.state.id}
-                                       addChallenge={this.addChallenge}
+                                    <div>
+                                       <AddChallenge 
+                                          teacher_id={this.state.id}
+                                          addChallenge={this.addChallenge}
 
-                                    />
+                                       />
+                                       <App />
+                                    </div>
                                  :
-
-                                    <ChallengeList 
-                                       userId={this.state.id}
-                                       is_teacher={this.state.is_teacher}
-                                       challenges={this.state.challenges}
-                                       showAddChallenge={this.showAddChallenge}
-                                       showEditChallenge={this.showEditChallenge}
-                                    />
+                                    <div>
+                                       
+                                             <ChallengeList 
+                                                userId={this.state.id}
+                                                is_teacher={this.state.is_teacher}
+                                                challenges={this.state.challenges}
+                                                showAddChallenge={this.showAddChallenge}
+                                                showEditChallenge={this.showEditChallenge}
+                                                showSnippets={this.showSnippets}
+                                             />
+                                   </div>
                               }
                            </div>
                         }

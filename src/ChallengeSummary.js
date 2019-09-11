@@ -13,8 +13,10 @@ const ChallengeSummary = (props) => {
 
 		<Card>
 			<Card.Content>
-				<Card.Header>Title: {props.challenge.title}</Card.Header>
+				<Card.Header>Title: <span className="link-text" onClick={props.showSnippets.bind(null, props.challenge.id)}>{props.challenge.title}</span></Card.Header>
 				<Card.Description>{props.challenge.description}</Card.Description>
+
+
 				{props.is_teacher
 					?
 						<Button 

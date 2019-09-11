@@ -8,15 +8,16 @@ const ChallengeList = (props) => {
 	// props: userId, is_teacher, challenges (incl keywords, langs, snippet_ids)
 	//        addChallenge (function), editChallenge (function)
  
- 	const challengeList = props.challenges.map( challenge => {
+ 	const challengeList = props.challenges.map( (challenge, i) => {
 
 		return (
 
 			<ChallengeSummary 
-				key={challenge.id} 
+				key={i} 
 				is_teacher={props.is_teacher}
 				challenge={challenge} 
 				showEditChallenge={props.showEditChallenge.bind(null, challenge.id)}
+				showSnippets={props.showSnippets}
 			/>
 		)
 	})
