@@ -5,18 +5,18 @@ import { Menu, Icon, Button } from 'semantic-ui-react';
 // require('./index.css'); 
 
 import ChallengeList from './ChallengeList';
-import AddChallenge from './AddChallenge';
-import EditChallenge from './EditChallenge';
+// import AddChallenge from './AddChallenge';
+// import EditChallenge from './EditChallenge';
 
-// just temporary to test component functionality
-import AddRemark from './AddRemark';
-import AddSnippet from './AddSnippet';
-import EditSnippet from './EditSnippet';
-import ShowSnippet from './ShowSnippet';
-import ShowRemark from './ShowRemark';
+// // just temporary to test component functionality
+// import AddRemark from './AddRemark';
+// import AddSnippet from './AddSnippet';
+// import EditSnippet from './EditSnippet';
+// import ShowSnippet from './ShowSnippet';
+// import ShowRemark from './ShowRemark';
 import Register from './Register';
 import Login from './Login';
-import Header from './Header';
+// import Header from './Header';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -27,48 +27,53 @@ class App extends React.Component {
       super();
 
       this.state = {
-         id: null,
          username: '',
          password: '',
-         is_teacher: false,
+         goToLoginPage: true,
          loggedIn: false,
-         goToLogin: true,
-         message: '',
-         challenges: [],
-         addChallenge: false,
-         editChallenge: false,
-         challengeToBeEdited: '',
-         challengeSnippets: false,
-         challengeToBeShown: '',
-         activeItem: 'show-challenges'
+         // challenge_index: null,
+         // challenges: [],
+         // id: null,
+         // is_teacher: false,
+         // message: '',
+         // addChallenge: false,
+         // editChallenge: false,
+         // challengeToBeEdited: '',
+         // challengeSnippets: false,
+         // challengeToBeShown: '',
+         // activeItem: 'show-challenges'
 
       }
    }
    
-   componentDidMount = async () => {
+   // componentDidMount = async () => {
 
-      // retrieve all existing challenges
-      const response = await fetch(API_URL + '/challenges', {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
-         const challenges = await response.json();
+   //    // retrieve all existing challenges
+   //    const response = await fetch(API_URL + '/challenges', {
+   //          method: 'GET',
+   //          headers: {'Content-Type': 'application/json'},
+   //          credentials: 'include',
+   //       })
+   //       const challenges = await response.json();
 
-         this.setState({
-            challenges: challenges
-         })
+   //       this.setState({
+   //          challenges: challenges
+   //       })
 
-   }
+   // }
 
    toggleLoginRegister = () => {
 
+      console.log("inside toggleLoginRegister function");
+
       this.setState({
-         goToLogin: !this.state.goToLogin
+         goToLoginPage: !this.state.goToLoginPage
       })
    }
 
    login = async (data) => {
+
+      console.log("inside login function");
 
       try {
 
@@ -81,25 +86,29 @@ class App extends React.Component {
          })
          const user = await response.json();
 
+         console.log("user information inside login function");
+         console.log(user);
+
          if (user.success) {
 
          // set state so that user is considered "loggedIn"
             this.setState({
-               id: user.id,
-               username: user.username,
-               is_teacher: user.is_teacher,
+               // id: user.id,
+               // username: user.username,
+               // is_teacher: user.is_teacher,
                loggedIn: true,
-               message: user.message,
+               // message: user.message,
             })
-         } else {
+         } 
+         // else {
 
-            this.setState({
-               message: user.message
-            })
-         }
+         //    this.setState({
+         //       message: user.message
+         //    })
+         // }
          
       // return just in case call needs a return
-         return user;
+         // return user;
 
       } catch (err) {
          console.log(err)
@@ -472,167 +481,28 @@ class App extends React.Component {
 
    render() {
 
-      console.log("message:", this.state.message);
-      console.log("is_teacher", this.state.is_teacher);
+      // console.log("message:", this.state.message);
+      // console.log("is_teacher", this.state.is_teacher);
+
+      console.log("render -------->");
+      console.log("loggedIn: ", this.state.loggedIn);
+      console.log("goToLoginPage", this.state.goToLoginPage);
 
       return (
+         
          <div>
-
-         <Menu className='nav'>
-
-               <Menu.Item
-                  className='Link'
-                  name='show-challenges'
-                  active={this.state.activeItem === 'show-challenges'}
-                  onClick={this.handleItemClick}>
-                  Challenges
-               </Menu.Item>
-
-               
-                     {this.state.is_teacher ?
-                     <Menu.Item
-                        className='Link'
-                        name='edit-challenge2'
-                        active={this.state.activeItem === 'edit-challenge2'}
-                        onClick={this.handleItemClick}>
-                        Edit Challenge
-                     </Menu.Item>
-                     : null}
-                     {false ?
-                     <Menu.Item
-                        className='Link'
-                        name='edit-challenge5'
-                        active={this.state.activeItem === 'edit-challenge5'}
-                        onClick={this.handleItemClick}>
-                        Edit Another
-                     </Menu.Item>
-                     : null}
-                     {this.state.is_teacher ?
-
-                     <Menu.Item
-                        className='Link'
-                        name='add-challenge'
-                        active={this.state.activeItem === 'add-challenge'}
-                        onClick={this.handleItemClick}>
-                        Add Challenge
-                     </Menu.Item>
-                     : null}
-                     <Menu.Item
-                        className='Link'
-                        name='show-snippet'
-                        active={this.state.activeItem === 'show-snippet'}
-                        onClick={this.handleItemClick}>
-                        Show Snippet
-                     </Menu.Item>
-                     <Menu.Item
-                        className='Link'
-                        name='add-snippet'
-                        active={this.state.activeItem === 'add-snippet'}
-                        onClick={this.handleItemClick}>
-                        Add Snippet
-                     </Menu.Item>
-                     {false ?
-                     <Menu.Item
-                        className='Link'
-                        name='show-snippet-new'
-                        active={this.state.activeItem === 'show-snippet-new'}
-                        onClick={this.handleItemClick}>
-                        Show New Snippet
-                     </Menu.Item>
-                     : null}
-                                    
-                                    
-            </Menu>
-
-
 
             {this.state.loggedIn
                ?
                   <div>
 
-                  {this.state.activeItem === 'show-challenges'
-                     ?
-                        <ChallengeList 
-                           userId={this.state.id}
-                           is_teacher={this.state.is_teacher}
-                           challenges={this.state.challenges}
-                           showAddChallenge={this.showAddChallenge}
-                           showEditChallenge={this.showEditChallenge}
-                           showSnippets={this.showSnippets}
-                        />
-                     : null
-                  }
-
-                  {this.state.activeItem === 'edit-challenge2'
-                     ?
-                        <EditChallenge
-                           challenge_id={2}
-                           editChallenge={this.editChallenge}
-                        />
-                     : null
-                  }
-
-                  {this.state.activeItem === 'edit-challenge5'
-                     ?
-                        <EditChallenge
-                           challenge_id={5}
-                           editChallenge={this.editChallenge}
-                        />
-                     : null
-                  }
-
-                                      
-                  {this.state.activeItem === 'add-challenge'
-                     ?
-                        <AddChallenge 
-                           teacher_id={this.state.id} 
-                           addChallenge={this.addChallenge}
-                        />
-                     : null
-                  }
-                     
-                  {this.state.activeItem === 'show-snippet'
-                     ?
-                        <ShowSnippet
-                           userId={this.state.id}
-                           loggedIn={this.state.loggedIn}
-                           is_teacher={this.state.is_teacher}
-                           snippet_id={2} 
-                           editRemark={this.editRemark}
-                        />
-                     : null
-                  }
-
-                  {this.state.activeItem === 'add-snippet'
-                     ?
-                        <AddSnippet
-                           userId={this.state.id}
-                           loggedIn={this.state.loggedIn}
-                           is_teacher={this.state.is_teacher}
-                           editRemark={this.editRemark}
-                           challenge_id={2} 
-                           student_id={this.state.id}
-                        />
-                     : null
-                  }
-
-                  {this.state.activeItem === 'show-snippet-new'
-                     ?
-                        <ShowSnippet
-                           userId={this.state.id}
-                           loggedIn={this.state.loggedIn}
-                           is_teacher={this.state.is_teacher}
-                           snippet_id={9} 
-                           editRemark={this.editRemark}
-                        />
-                     : null
-                  }
-                                   
+                  <ChallengeList />
 
                   </div>
                :
                   <div>
-                     {this.state.goToLogin 
+
+                     {this.state.goToLoginPage 
                         ? 
                            <Login 
                               toggleLoginRegister={this.toggleLoginRegister}
@@ -644,9 +514,11 @@ class App extends React.Component {
                               register={this.register}
                            />
                      }
+
                   </div>
             }
-            </div>
+
+         </div>
       );
 
    }
@@ -655,3 +527,70 @@ class App extends React.Component {
 
 
 export default App;
+
+
+// <Menu className='nav'>
+
+               // <Menu.Item
+         //          className='Link'
+         //          name='show-challenges'
+         //          active={this.state.activeItem === 'show-challenges'}
+         //          onClick={this.handleItemClick}>
+         //          Challenges
+               // </Menu.Item>
+
+               
+         //             {this.state.is_teacher ?
+         //             <Menu.Item
+         //                className='Link'
+         //                name='edit-challenge2'
+         //                active={this.state.activeItem === 'edit-challenge2'}
+         //                onClick={this.handleItemClick}>
+         //                Edit Challenge
+         //             </Menu.Item>
+         //             : null}
+         //             {false ?
+         //             <Menu.Item
+         //                className='Link'
+         //                name='edit-challenge5'
+         //                active={this.state.activeItem === 'edit-challenge5'}
+         //                onClick={this.handleItemClick}>
+         //                Edit Another
+         //             </Menu.Item>
+         //             : null}
+         //             {this.state.is_teacher ?
+
+         //             <Menu.Item
+         //                className='Link'
+         //                name='add-challenge'
+         //                active={this.state.activeItem === 'add-challenge'}
+         //                onClick={this.handleItemClick}>
+         //                Add Challenge
+         //             </Menu.Item>
+         //             : null}
+         //             <Menu.Item
+         //                className='Link'
+         //                name='show-snippet'
+         //                active={this.state.activeItem === 'show-snippet'}
+         //                onClick={this.handleItemClick}>
+         //                Show Snippet
+         //             </Menu.Item>
+         //             <Menu.Item
+         //                className='Link'
+         //                name='add-snippet'
+         //                active={this.state.activeItem === 'add-snippet'}
+         //                onClick={this.handleItemClick}>
+         //                Add Snippet
+         //             </Menu.Item>
+         //             {false ?
+         //             <Menu.Item
+         //                className='Link'
+         //                name='show-snippet-new'
+         //                active={this.state.activeItem === 'show-snippet-new'}
+         //                onClick={this.handleItemClick}>
+         //                Show New Snippet
+         //             </Menu.Item>
+         //             : null}
+                                    
+                                    
+            // </Menu>

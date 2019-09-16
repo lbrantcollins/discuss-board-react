@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class Register extends React.Component {
-	// props: lregister (function), toggleLoginRegister (function)
+	// props: register (function), toggleLoginRegister (function)
    constructor(){
       super();
 
