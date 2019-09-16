@@ -25,15 +25,15 @@ class ChallengeList extends React.Component {
 
       // retrieve all existing challenges
       const response = await fetch(API_URL + '/challenges', {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
-         const parsedResponse = await response.json();
+         method: 'GET',
+         headers: {'Content-Type': 'application/json'},
+         credentials: 'include',
+      })
+      const parsedResponse = await response.json();
 
-         this.setState({
-            challenges: parsedResponse.challenges
-         })
+      this.setState({
+         challenges: parsedResponse.challenges
+      })
 
    }
 
@@ -46,9 +46,6 @@ class ChallengeList extends React.Component {
    }
 
    showChallenge = (i) => {
-
-   	console.log("inside showChallenge");
-
    	this.setState({
    		index: i,
    	})
@@ -65,7 +62,11 @@ class ChallengeList extends React.Component {
 						<Card.Header> {challenge.title} </Card.Header>
 						<Card.Description> {challenge.description} </Card.Description>
 						<Card.Meta>	
-							<Button onClick={() => this.showChallenge(i)}> View </Button>
+							<Button 
+								size="mini" 
+								onClick={() => this.showChallenge(i)}> 
+								View 
+							</Button>
 						</Card.Meta>				
 					</Card.Content>
 				</Card>
@@ -79,7 +80,10 @@ class ChallengeList extends React.Component {
 
 				{this.state.index
 					?
-						<ShowChallenge challenge={this.state.challenges[this.state.index]}/>
+						<ShowChallenge 
+							user={this.state.user}
+							challenge={this.state.challenges[this.state.index]}
+						/>
 					:
 						<Card.Group>
 							{challengeList}
