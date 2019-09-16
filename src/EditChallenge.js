@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+
 import './index.css'
 
 import SelectKeywords from './SelectKeywords';
@@ -86,12 +89,10 @@ class EditChallenge extends React.Component {
 
          <div>
 
-            <h3>This is "EditChallenge"</h3>
-
-            <form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit}>
                <label>Title:</label>
                <br/>
-               <input 
+               <Form.Input 
                   type="text" 
                   name="title" 
                   placeholder={this.state.title}
@@ -101,16 +102,15 @@ class EditChallenge extends React.Component {
                <br/>
                <label>Description:</label>
                <br/>
-               <textarea 
-                  rows="8"
+               <Form.TextArea 
                   name="description" 
                   placeholder={this.state.description}
                   value={this.state.description}
                   onChange={this.handleChange}
-               ></textarea>
+               ></Form.TextArea>
                <br/>
-               <button>Submit Challenge</button>
-            </form>
+               <Button>Submit Changes</Button>
+            </Form>
 
             <SelectKeywords challenge_id={this.props.challenge_id} />
 

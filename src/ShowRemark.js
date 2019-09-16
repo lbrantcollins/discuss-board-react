@@ -75,8 +75,7 @@ class ShowRemark extends React.Component {
              
                {this.props.remarkUserId === this.props.userId
                   ?  
-                     
-                     <Card>
+                     <div>
                         <Card.Header>{this.state.label}</Card.Header>
                         <Card.Content>
                            <Form>
@@ -99,13 +98,13 @@ class ShowRemark extends React.Component {
                            </Form>
                            
                         </Card.Content>
-                     </Card>
+                        </div>
                      
                   : 
-                     <Card>
+                  <div>
                         <Card.Header>{this.state.label}</Card.Header>
                         <Card.Content>{this.state.remark}</Card.Content>
-                     </Card>
+                        </div>
                }
 
             </div>

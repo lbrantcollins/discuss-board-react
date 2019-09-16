@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+
 import SelectKeywords from './SelectKeywords';
 import SelectLanguages from './SelectLanguages';
 
@@ -63,12 +65,12 @@ class AddChallenge extends React.Component {
 
          <div>
 
-            <h2>This is "AddChallenge"</h2>
+            <h2>Add a challenge:</h2>
 
-            <form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit}>
                <label>Title:</label>
                <br/>
-               <input 
+               <Form.Input 
                   type="text" 
                   name="title" 
                   placeholder="Challenge Title" 
@@ -77,15 +79,15 @@ class AddChallenge extends React.Component {
                <br/>
                <label>Description:</label>
                <br/>
-               <textarea 
+               <Form.TextArea 
                   rows="8"
                   name="description" 
                   placeholder="Challenge Description"
                   onChange={this.handleChange}
-               ></textarea>
+               />
                <br/>
-               <button>Submit Challenge</button>
-            </form>
+               <Button>Submit Challenge</Button>
+            </Form>
 
             {/* Allow keyword selection after challenge created */}
             {this.state.newChallengeCreated ? <SelectKeywords challenge_id={this.state.id} /> : null}

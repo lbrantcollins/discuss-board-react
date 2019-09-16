@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+
+import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+
+
 import './index.css'
 
 // use the API url from environment if it exists
@@ -51,7 +55,7 @@ class SelectKeywords extends Component {
 
          // create a boolean array to indicate which keywords
          // are already associated with this challenge_id
-         // (use this array to populate checkboxes in a form)
+         // (use this array to populate checkboxes in a Form)
          const currentKeywordSelections = keywords.map( (keyword) => {
             return challengeKeywordIds.includes(keyword.id);
          })
@@ -131,7 +135,7 @@ class SelectKeywords extends Component {
          credentials: 'include',
       })
 
-      // reset newKeyword to blank (to blank out the input form)
+      // reset newKeyword to blank (to blank out the input Form)
       this.setState({
          newKeyword: ''
       })
@@ -263,32 +267,29 @@ class SelectKeywords extends Component {
 
          <div>
 
-            <h3>This is "SelectKeywords"</h3>
-
             {this.state.keywordEditListToggle 
                ? 
                   <div>
-
-                     <h4>Edit Keyword List</h4>
+                  <h4>Edit Keyword List</h4>
 
                      {blankBoxKeywordList}
 
-                     <form className="checkbox-selections" onSubmit={this.deleteKeywords}>
-                        <button>Delete All Checked Keywords</button>
-                     </form>
+                     <Form className="checkbox-selections" onSubmit={this.deleteKeywords}>
+                        <Button>Delete All Checked Keywords</Button>
+                     </Form>
                      <br/>
                      <p>CAUTION: Deleting a keyword deletes it from all existing challenges.</p>
 
-                     <form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
-                        <input 
+                     <Form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
+                        <Form.Input 
                            type="text"
                            name="newKeyword"
                            value={this.state.newKeyword}
                            placeholder="Enter a new keyword"
                            onChange={this.handleChange}
                         />
-                        <button>Add New Keyword</button>
-                     </form>
+                        <Button>Add New Keyword</Button>
+                     </Form>
 
                   </div>   
                :
@@ -299,13 +300,13 @@ class SelectKeywords extends Component {
                      
                      {keywordList}
 
-               		<form className="checkbox-selections" onSubmit={this.updateKeywordSelections}>
-                     	<button>Submit Keywords</button>
-                     </form>
+               		<Form className="checkbox-selections" onSubmit={this.updateKeywordSelections}>
+                     	<Button>Submit Keywords</Button>
+                     </Form>
 
-                     <form onSubmit={this.toggleKeywordEditList}>
-                        <button>Edit List of Available Keywords</button>
-                     </form>
+                     <Form onSubmit={this.toggleKeywordEditList}>
+                        <Button>Edit List of Available Keywords</Button>
+                     </Form>
 
                   </div>
             }  

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
@@ -127,10 +129,8 @@ class AddSnippet extends React.Component {
             		
    		<div>
 
-   			<h3>This is "AddSnippet"</h3>
-
 				<div>                   
-               <form onSubmit={this.addSnippet}>
+               <Form onSubmit={this.addSnippet}>
 
             	<h4>What language are you submitting for this challenge?</h4>
 
@@ -139,17 +139,17 @@ class AddSnippet extends React.Component {
                <h4>Copy/paste your code snippet here:</h4>
 
                	<br/>
-	               <textarea 
+	               <Form.TextArea 
 	                  rows="8"
 	                  name="snippet" 
 	                  value={this.state.snippet}
 	                  placeholder="Remember to indent using tabs!"
 	                  onChange={this.handleChange}
-	               ></textarea>
+	               />
 	               <br/> 
 
-                  <button>Submit</button>
-               </form>
+                  <Button>Submit</Button>
+               </Form>
             </div>
    		</div>
 

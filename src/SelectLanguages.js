@@ -1,4 +1,8 @@
 import React from 'react';
+
+import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
+
+
 import './index.css'
 
 // use the API url from environment if it exists
@@ -51,7 +55,7 @@ class SelectLanguages extends React.Component {
 
          // create a boolean array to indicate which languages
          // are already associated with this challenge_id
-         // (use this array to populate checkboxes in a form)
+         // (use this array to populate checkboxes in a Form)
          const currentLanguageSelections = languages.map( (language) => {
             return challengeLanguageIds.includes(language.id);
          })
@@ -131,7 +135,7 @@ class SelectLanguages extends React.Component {
          credentials: 'include',
       })
 
-      // reset newLanguage to blank (to blank out the input form)
+      // reset newLanguage to blank (to blank out the input Form)
       this.setState({
          newLanguage: ''
       })
@@ -263,8 +267,6 @@ class SelectLanguages extends React.Component {
 
          <div>
 
-            <h3>This is "SelectLanguages"</h3>
-
             {this.state.languageEditListToggle 
                ? 
                   <div>
@@ -273,22 +275,22 @@ class SelectLanguages extends React.Component {
 
                      {blankBoxLanguageList}
 
-                     <form className="checkbox-selections" onSubmit={this.deleteLanguages}>
-                        <button>Delete All Checked Languages</button>
-                     </form>
+                     <Form className="checkbox-selections" onSubmit={this.deleteLanguages}>
+                        <Button>Delete All Checked Languages</Button>
+                     </Form>
                      <br/>
                      <p>CAUTION: Deleting a language deletes it from all existing challenges.</p>
 
-                     <form className="add-a-new-checkbox-item" onSubmit={this.addLanguage}>
-                        <input 
+                     <Form className="add-a-new-checkbox-item" onSubmit={this.addLanguage}>
+                        <Form.Input 
                            type="text"
                            name="newLanguage"
                            value={this.state.newLanguage}
                            placeholder="Enter a new language"
                            onChange={this.handleChange}
                         />
-                        <button>Add New Language</button>
-                     </form>
+                        <Button>Add New Language</Button>
+                     </Form>
 
                   </div>   
                :
@@ -299,13 +301,13 @@ class SelectLanguages extends React.Component {
 
                      {languageList}
 
-               		<form className="checkbox-selections" onSubmit={this.updateLanguageSelections}>
-                     	<button>Submit Languages</button>
-                     </form>
+               		<Form className="checkbox-selections" onSubmit={this.updateLanguageSelections}>
+                     	<Button>Submit Languages</Button>
+                     </Form>
 
-                     <form onSubmit={this.toggleLanguageEditList}>
-                        <button>Edit List of Available Languages</button>
-                     </form>
+                     <Form onSubmit={this.toggleLanguageEditList}>
+                        <Button>Edit List of Available Languages</Button>
+                     </Form>
 
                   </div>
             }  

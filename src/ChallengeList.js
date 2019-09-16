@@ -18,6 +18,7 @@ const ChallengeList = (props) => {
 				challenge={challenge} 
 				showEditChallenge={props.showEditChallenge.bind(null, challenge.id)}
 				showSnippets={props.showSnippets}
+				// onClick={() => this.showChallenge(i) } // added by Reuben as a brainstorming idea
 			/>
 		)
 	})

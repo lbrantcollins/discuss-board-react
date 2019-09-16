@@ -462,6 +462,13 @@ class App extends React.Component {
                         // editRemark={this.editRemark}
                      // />
 
+   handleItemClick = (e, { name }) => {
+
+      console.log(name);
+
+      this.setState({ activeItem: name })
+
+   }
 
    render() {
 
@@ -482,32 +489,59 @@ class App extends React.Component {
                </Menu.Item>
 
                
+                     {this.state.is_teacher ?
                      <Menu.Item
                         className='Link'
-                        name='my-media'
-                        active={this.state.activeItem === 'myMedia'}
+                        name='edit-challenge2'
+                        active={this.state.activeItem === 'edit-challenge2'}
                         onClick={this.handleItemClick}>
+                        Edit Challenge
+                     </Menu.Item>
+                     : null}
+                     {false ?
+                     <Menu.Item
+                        className='Link'
+                        name='edit-challenge5'
+                        active={this.state.activeItem === 'edit-challenge5'}
+                        onClick={this.handleItemClick}>
+                        Edit Another
+                     </Menu.Item>
+                     : null}
+                     {this.state.is_teacher ?
+
+                     <Menu.Item
+                        className='Link'
+                        name='add-challenge'
+                        active={this.state.activeItem === 'add-challenge'}
+                        onClick={this.handleItemClick}>
+                        Add Challenge
+                     </Menu.Item>
+                     : null}
+                     <Menu.Item
+                        className='Link'
+                        name='show-snippet'
+                        active={this.state.activeItem === 'show-snippet'}
+                        onClick={this.handleItemClick}>
+                        Show Snippet
                      </Menu.Item>
                      <Menu.Item
                         className='Link'
-                        name='my-favorites'
-                        active={this.state.activeItem === 'myFavorites'}
+                        name='add-snippet'
+                        active={this.state.activeItem === 'add-snippet'}
                         onClick={this.handleItemClick}>
+                        Add Snippet
                      </Menu.Item>
-               
+                     {false ?
                      <Menu.Item
                         className='Link'
-                        name='login'
-                        active={this.state.activeItem === 'login'}
+                        name='show-snippet-new'
+                        active={this.state.activeItem === 'show-snippet-new'}
                         onClick={this.handleItemClick}>
+                        Show New Snippet
                      </Menu.Item>
-                     <Menu.Item
-                        className='Link'
-                        name='register'
-                        active={this.state.activeItem === 'register'}
-                        onClick={this.handleItemClick}>
-                     </Menu.Item>
-               
+                     : null}
+                                    
+                                    
             </Menu>
 
 
@@ -516,45 +550,85 @@ class App extends React.Component {
                ?
                   <div>
 
-                     
+                  {this.state.activeItem === 'show-challenges'
+                     ?
+                        <ChallengeList 
+                           userId={this.state.id}
+                           is_teacher={this.state.is_teacher}
+                           challenges={this.state.challenges}
+                           showAddChallenge={this.showAddChallenge}
+                           showEditChallenge={this.showEditChallenge}
+                           showSnippets={this.showSnippets}
+                        />
+                     : null
+                  }
 
-                     {this.state.editChallenge
-                        ?                               
-                           <EditChallenge 
-                              challenge_id={this.state.challengeToBeEdited}
-                              editChallenge={this.editChallenge}
-                           />
-                        :  
-                           <div>
-                              {this.state.addChallenge
-                                 ?
-                                    <div>
-                                       <AddChallenge 
-                                          teacher_id={this.state.id}
-                                          addChallenge={this.addChallenge}
+                  {this.state.activeItem === 'edit-challenge2'
+                     ?
+                        <EditChallenge
+                           challenge_id={2}
+                           editChallenge={this.editChallenge}
+                        />
+                     : null
+                  }
 
-                                       />
-                                       <App />
-                                    </div>
-                                 :
-                                    <div>
-                                       
-                                             <ChallengeList 
-                                                userId={this.state.id}
-                                                is_teacher={this.state.is_teacher}
-                                                challenges={this.state.challenges}
-                                                showAddChallenge={this.showAddChallenge}
-                                                showEditChallenge={this.showEditChallenge}
-                                                showSnippets={this.showSnippets}
-                                             />
-                                   </div>
-                              }
-                           </div>
-                        }
-                     }
+                  {this.state.activeItem === 'edit-challenge5'
+                     ?
+                        <EditChallenge
+                           challenge_id={5}
+                           editChallenge={this.editChallenge}
+                        />
+                     : null
+                  }
 
+                                      
+                  {this.state.activeItem === 'add-challenge'
+                     ?
+                        <AddChallenge 
+                           teacher_id={this.state.id} 
+                           addChallenge={this.addChallenge}
+                        />
+                     : null
+                  }
                      
-                     
+                  {this.state.activeItem === 'show-snippet'
+                     ?
+                        <ShowSnippet
+                           userId={this.state.id}
+                           loggedIn={this.state.loggedIn}
+                           is_teacher={this.state.is_teacher}
+                           snippet_id={2} 
+                           editRemark={this.editRemark}
+                        />
+                     : null
+                  }
+
+                  {this.state.activeItem === 'add-snippet'
+                     ?
+                        <AddSnippet
+                           userId={this.state.id}
+                           loggedIn={this.state.loggedIn}
+                           is_teacher={this.state.is_teacher}
+                           editRemark={this.editRemark}
+                           challenge_id={2} 
+                           student_id={this.state.id}
+                        />
+                     : null
+                  }
+
+                  {this.state.activeItem === 'show-snippet-new'
+                     ?
+                        <ShowSnippet
+                           userId={this.state.id}
+                           loggedIn={this.state.loggedIn}
+                           is_teacher={this.state.is_teacher}
+                           snippet_id={9} 
+                           editRemark={this.editRemark}
+                        />
+                     : null
+                  }
+                                   
+
                   </div>
                :
                   <div>
@@ -572,7 +646,7 @@ class App extends React.Component {
                      }
                   </div>
             }
-         </div>
+            </div>
       );
 
    }

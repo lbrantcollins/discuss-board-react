@@ -104,9 +104,7 @@ class ShowSnippet extends React.Component {
 
          return (
 
-            <Container key={comment.id} className="ui two cards">
-               <Segment stacked textAlign='left'>
-
+            <Card>
                <ShowRemark className="student-remark"
                   userId={this.props.userId}
                   loggedIn={this.props.loggedIn}
@@ -156,8 +154,7 @@ class ShowSnippet extends React.Component {
 
                            
                }
-               </Segment>
-            </Container> 
+               </Card>
          )
          
       })
@@ -166,31 +163,10 @@ class ShowSnippet extends React.Component {
             		
    		<div>
 
-   			<Card>
-               <Card.Content>
-                        
-                  <Form>
-                     <Form.TextArea 
-                        name="remark" 
-                        value={this.state.remark}
-                        placeholder={this.state.remark}
-                        onChange={this.handleChange}
-                     />
-                     <Button 
-                        content='Submit Changes'
-                        onClick={this.props.editRemark.bind(null,
-                        this.props.elementType,
-                        this.props.parentId,
-                        this.props.remarkId,
-                        this.props.remarkUserId,
-                        this.state.remark,
-                        this.props.substantial
-                     )}/>
-                  </Form>
-                           
-               </Card.Content>
-            </Card>
+   			
+<Card.Group>
 
+            
             <Card>
 
                <Card.Header>
@@ -218,18 +194,19 @@ class ShowSnippet extends React.Component {
 
                         
                      : 
-                        <pre><code>
+                        <div>
                            {this.state.snippetText}
-                        </code></pre>
+                        </div>
+                        
 
                   }
                </Card.Content>
             </Card>
 
 
-            <Card.Group>
+            
                {commentList}
-            </Card.Group>
+</Card.Group>
 
             {this.props.is_teacher
                ? null
@@ -250,7 +227,30 @@ class ShowSnippet extends React.Component {
 export default ShowSnippet;
 
 
+    // <Card>
+               // <Card.Content>
                         
+               //    <Form>
+               //       <Form.TextArea 
+               //          name="remark" 
+               //          value={this.state.remark}
+               //          placeholder={this.state.remark}
+               //          onChange={this.handleChange}
+               //       />
+               //       <Button 
+               //          content='Submit Changes'
+               //          onClick={this.props.editRemark.bind(null,
+               //          this.props.elementType,
+               //          this.props.parentId,
+               //          this.props.remarkId,
+               //          this.props.remarkUserId,
+               //          this.state.remark,
+               //          this.props.substantial
+               //       )}/>
+               //    </Form>
+                           
+               // </Card.Content>
+            // </Card>                   
 
 
 
