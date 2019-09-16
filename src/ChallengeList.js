@@ -2,6 +2,8 @@ import React from 'react';
 import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 
 import ChallengeSummary from './ChallengeSummary'
+import ShowChallenge from './ShowChallenge'
+
 // import AddChallenge from './AddChallenge'
 
 // use the API url from environment if it exists
@@ -29,8 +31,6 @@ class ChallengeList extends React.Component {
          })
          const parsedResponse = await response.json();
 
-         console.log("message from componentDidMount: ", parsedResponse.message);
-
          this.setState({
             challenges: parsedResponse.challenges
          })
@@ -45,20 +45,31 @@ class ChallengeList extends React.Component {
       
    }
 
+   showChallenge = (i) => {
+
+   	console.log("inside showChallenge");
+
+   	this.setState({
+   		index: i,
+   	})
+   }
+
 	render() {
 
 		const challengeList = this.state.challenges.map( (challenge, i) => {
 
 			return (
 
-				<ChallengeSummary 
-					key={i} 
-					user={this.props.user}
-					challenge={challenge} 
-					// showEditChallenge={this.showEditChallenge(challenge.id)}
-					// showSnippets={this.props.showSnippets}
-					// onClick={() => this.showChallenge(i) } // added by Reuben as a brainstorming idea
-				/>
+				<Card key={i}>
+					<Card.Content>
+						<Card.Header> {challenge.title} </Card.Header>
+						<Card.Description> {challenge.description} </Card.Description>
+						<Card.Meta>	
+							<Button onClick={() => this.showChallenge(i)}> View </Button>
+						</Card.Meta>				
+					</Card.Content>
+				</Card>
+				
 			)
 		})
 
@@ -66,9 +77,14 @@ class ChallengeList extends React.Component {
 
 			<div>
 
-				<Card.Group>
-					{challengeList}
-				</Card.Group>
+				{this.state.index
+					?
+						<ShowChallenge challenge={this.state.challenges[this.state.index]}/>
+					:
+						<Card.Group>
+							{challengeList}
+						</Card.Group>
+				}
 				
 			</div>
 		)
@@ -77,6 +93,16 @@ class ChallengeList extends React.Component {
 }
 
 export default ChallengeList;
+
+
+				// <ChallengeSummary 
+					// key={i} 
+					// user={this.props.user}
+					// challenge={challenge} 
+					// onClick={() => this.showChallenge(i) } // added by Reuben as a brainstorming idea
+				// />
+
+
 
 // <h1>Current Challenges</h1>
 
