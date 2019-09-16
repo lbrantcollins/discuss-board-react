@@ -1,6 +1,5 @@
 import React from 'react';
 import { Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -17,13 +16,14 @@ class Register extends React.Component {
       }
    }
 
-   
+   // keep state up-to-date with what user is typing (username/password)
    handleChange = (e) => {
       this.setState({
         [e.target.name]: e.target.value
       });
    }
 
+   // keep state up-to-date with user click on checkbox (is teacher or not)
    toggleTeacher = (e) => {
       e.preventDefault();
 
@@ -32,32 +32,18 @@ class Register extends React.Component {
       })
    }
 
+   // send user data along to create a new user in the database
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      // send new user data to database
       const user = await this.props.register({
       	username: this.state.username,
          password: this.state.password,
          is_teacher: this.state.is_teacher,
       })
-
-      // redirect somewhere
-      // this.props.history.push('/browse-media')
-      
-      // just in case this call needs a return
-      return user;
   	}
 
    render() {
-
-   	// console.log("this.state.is_teacher", this.state.is_teacher);
-
-   	// <input 
-         					// type="checkbox" 
-         					// onChange={this.toggleTeacher} 
-         					// checked={this.state.is_teacher}
-      					// />  
 
       return (
       
@@ -94,3 +80,5 @@ class Register extends React.Component {
 }
 
 export default Register;
+
+

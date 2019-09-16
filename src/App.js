@@ -27,14 +27,11 @@ class App extends React.Component {
       super();
 
       this.state = {
-         username: '',
-         password: '',
-         goToLoginPage: true,
+         useLoginPage: true,
          loggedIn: false,
+         user: {}
          // challenge_index: null,
          // challenges: [],
-         // id: null,
-         // is_teacher: false,
          // message: '',
          // addChallenge: false,
          // editChallenge: false,
@@ -46,28 +43,10 @@ class App extends React.Component {
       }
    }
    
-   // componentDidMount = async () => {
-
-   //    // retrieve all existing challenges
-   //    const response = await fetch(API_URL + '/challenges', {
-   //          method: 'GET',
-   //          headers: {'Content-Type': 'application/json'},
-   //          credentials: 'include',
-   //       })
-   //       const challenges = await response.json();
-
-   //       this.setState({
-   //          challenges: challenges
-   //       })
-
-   // }
-
    toggleLoginRegister = () => {
 
-      console.log("inside toggleLoginRegister function");
-
       this.setState({
-         goToLoginPage: !this.state.goToLoginPage
+         useLoginPage: !this.state.useLoginPage
       })
    }
 
@@ -86,29 +65,16 @@ class App extends React.Component {
          })
          const user = await response.json();
 
-         console.log("user information inside login function");
-         console.log(user);
-
          if (user.success) {
 
          // set state so that user is considered "loggedIn"
             this.setState({
-               // id: user.id,
-               // username: user.username,
-               // is_teacher: user.is_teacher,
                loggedIn: true,
-               // message: user.message,
+               user: user
             })
-         } 
-         // else {
-
-         //    this.setState({
-         //       message: user.message
-         //    })
-         // }
-         
-      // return just in case call needs a return
-         // return user;
+         } else {
+            this.toggleLoginRegister();
+         }
 
       } catch (err) {
          console.log(err)
@@ -134,11 +100,8 @@ class App extends React.Component {
 
             // set state so that user is considered "loggedIn"
             this.setState({
-               id: user.id,
-               username: user.username,
-               is_teacher: user.is_teacher,
                loggedIn: true,
-               message: user.message,
+               user: user
             })
 
             // add new user to either the student or teachers table
@@ -163,14 +126,7 @@ class App extends React.Component {
 
             }
 
-         } else {
-            this.setState({
-               message: user.message
-            })
-         }
- 
-         // return just in case call needs a return
-         return user;
+         } 
 
       } catch (err) {
          console.log(err)
@@ -221,13 +177,13 @@ class App extends React.Component {
       }
    }
 
-   showEditChallenge = (challengeToBeEdited) => {
-      this.setState({
-         challengeToBeEdited: challengeToBeEdited,
-         editChallenge: true
-      })
+   // showEditChallenge = (challengeToBeEdited) => {
+   //    this.setState({
+   //       challengeToBeEdited: challengeToBeEdited,
+   //       editChallenge: true
+   //    })
       
-   }
+   // }
 
    editChallenge = async (id, data) => {
  
@@ -481,12 +437,8 @@ class App extends React.Component {
 
    render() {
 
-      // console.log("message:", this.state.message);
-      // console.log("is_teacher", this.state.is_teacher);
-
-      console.log("render -------->");
-      console.log("loggedIn: ", this.state.loggedIn);
-      console.log("goToLoginPage", this.state.goToLoginPage);
+      console.log("this.state.user in App.js");
+      console.log(this.state.user);
 
       return (
          
@@ -496,13 +448,13 @@ class App extends React.Component {
                ?
                   <div>
 
-                  <ChallengeList />
+                  <ChallengeList user={this.state.user}/>
 
                   </div>
                :
                   <div>
 
-                     {this.state.goToLoginPage 
+                     {this.state.useLoginPage 
                         ? 
                            <Login 
                               toggleLoginRegister={this.toggleLoginRegister}

@@ -1,12 +1,11 @@
 import React from 'react';
 import { Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class Login extends React.Component {
-	// props: login (function), register (function)
+	// props: login (function), toggleLoginRegister (function)
    constructor(){
       super();
 
@@ -16,6 +15,7 @@ class Login extends React.Component {
       }
    }
    
+   // keep state up-to-date with what user is typing (username/password)
    handleChange = (e) => {
       this.setState({
         [e.target.name]: e.target.value
@@ -25,17 +25,12 @@ class Login extends React.Component {
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      // send new user data to database
+      // send user data to function that check if user exists in DB
       const user = await this.props.login({
       	username: this.state.username,
          password: this.state.password,
       })
 
-      // redirect somewhere
-      // this.props.history.push('/browse-media')
-      
-      // just in case this call needs a return
-      return user;
   	}
 
    render() {

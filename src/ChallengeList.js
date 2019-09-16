@@ -1,13 +1,15 @@
 import React from 'react';
 import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 
+import ChallengeSummary from './ChallengeSummary'
+// import AddChallenge from './AddChallenge'
+
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
-// import ChallengeSummary from './ChallengeSummary'
-// import AddChallenge from './AddChallenge'
 
 class ChallengeList extends React.Component {
+	// props: user (user info)
 	constructor() {
 		super();
 
@@ -17,14 +19,57 @@ class ChallengeList extends React.Component {
 		}
 	}
 
+	componentDidMount = async () => {
+
+      // retrieve all existing challenges
+      const response = await fetch(API_URL + '/challenges', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         const parsedResponse = await response.json();
+
+         console.log("message from componentDidMount: ", parsedResponse.message);
+
+         this.setState({
+            challenges: parsedResponse.challenges
+         })
+
+   }
+
+   showEditChallenge = (challengeToBeEdited) => {
+      this.setState({
+         challengeToBeEdited: challengeToBeEdited,
+         editChallenge: true
+      })
+      
+   }
+
 	render() {
+
+		const challengeList = this.state.challenges.map( (challenge, i) => {
+
+			return (
+
+				<ChallengeSummary 
+					key={i} 
+					user={this.props.user}
+					challenge={challenge} 
+					// showEditChallenge={this.showEditChallenge(challenge.id)}
+					// showSnippets={this.props.showSnippets}
+					// onClick={() => this.showChallenge(i) } // added by Reuben as a brainstorming idea
+				/>
+			)
+		})
 
 		return (
 
 			<div>
 
-			<p> This is the ChallengeList component. </p>
-			
+				<Card.Group>
+					{challengeList}
+				</Card.Group>
+				
 			</div>
 		)
 
@@ -35,19 +80,16 @@ export default ChallengeList;
 
 // <h1>Current Challenges</h1>
 
-			// {props.is_teacher 
+			// {this.props.user.is_teacher 
 			// 	?
 			// 		<Button
 			// 			content="Add Challenge"
-			// 			onClick={props.showAddChallenge}
+			// 			onClick={this.props.showAddChallenge}
 			// 		/>
 			// 	:
 			// 		null
 			// }
 
-			// <Card.Group>
-			// 	{challengeList}
-			// </Card.Group>
 
 
 	// props: userId, is_teacher, challenges (incl keywords, langs, snippet_ids)
@@ -69,18 +111,5 @@ export default ChallengeList;
 
  //   }
  
- // 	const challengeList = props.challenges.map( (challenge, i) => {
-
-	// 	return (
-
-	// 		<ChallengeSummary 
-	// 			key={i} 
-	// 			is_teacher={props.is_teacher}
-	// 			challenge={challenge} 
-	// 			showEditChallenge={props.showEditChallenge.bind(null, challenge.id)}
-	// 			showSnippets={props.showSnippets}
-	// 			// onClick={() => this.showChallenge(i) } // added by Reuben as a brainstorming idea
-	// 		/>
-	// 	)
-	// })
+ 
 

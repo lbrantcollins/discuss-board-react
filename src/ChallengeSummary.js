@@ -4,34 +4,43 @@ import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment
 import EditChallenge from './EditChallenge';
 
 const ChallengeSummary = (props) => {
+	// props: challenge, user
 
 	// include a link to this.props.editChallenge (if user is a teacher)
 
-	console.log("props.is_teacher\n", props.is_teacher);
+	// show snippets if challenge is clicked
+	// <Card.Header>Title: <span className="link-text" onClick={props.showSnippets.bind(null, props.challenge.id)}></span></Card.Header>
 
 	return(
 
 		<Card>
 			<Card.Content>
-				<Card.Header>Title: <span className="link-text" onClick={props.showSnippets.bind(null, props.challenge.id)}>{props.challenge.title}</span></Card.Header>
-				<Card.Description>{props.challenge.description}</Card.Description>
+				<Card.Header>Title: {props.challenge.title} </Card.Header>
+				<Card.Description> {props.challenge.description} </Card.Description>
 
 
-				{props.is_teacher
-					?
-						<Button 
-							content="Edit"
-							onClick={props.showEditChallenge}					
-						/>
-						
-					: null
-				}
+				
 			</Card.Content>
 		</Card>
 	)
 }
 
 export default ChallengeSummary;
+
+
+
+// {props.is_teacher
+// 					?
+// 						<Button 
+// 							content="Edit"
+// 							onClick={props.showEditChallenge}					
+// 						/>
+						
+// 					: null
+// 				}
+
+
+
 
 // {(props.comment.user_id.id === props.userId) && (props.loggedIn)
 					// ?
