@@ -4,7 +4,7 @@ import { Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'sem
 // import { Link } from 'react-router-dom';
 
 // use the API url from environment if it exists
-// const API_URL = process.env.REACT_APP_API_URL || ''; 
+const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class ShowRemark extends React.Component {
    // props: userID, loggedIn, is_teacher,
@@ -13,11 +13,11 @@ class ShowRemark extends React.Component {
    //        elementType ("challenge", "snippet", "question", "comment"),
    //        remarkUserId, remark, substantial
    //        editRemark (a function at top level, App.js)
-   constructor(props) {
-      super(props);
+   constructor() {
+      super();
 
       this.state = {
-         remark: this.props.remark,
+         remark: '',
          label: '',
       }
 
@@ -27,33 +27,38 @@ class ShowRemark extends React.Component {
    componentDidMount = async () => {
 
       // provide a label (a remark title) customized for the specific component
+      // and set the remark and remark user id according to the remark type
       let label;
+      let remark;
        
       switch (this.props.elementType) {
 
           case 'challenge':
             label = "Student question:";
+            remark = this.props.remark.question;
             break;
 
          case 'snippet':
             label = "Student comment:";
+            remark = this.props.remark.comment;
             break;
 
          case 'question':
             label = "Instructor response:";
+            remark = this.props.remark.response;
             break;
 
          case 'comment':
              label = "Instructor response:";
+             remark = this.props.remark.observation;
             break;
 
          default:
             console.log("Remarks are only for a challenge, snippet, question, or comment")
       }
 
-
       this.setState({
-         remark: this.props.remark,
+         remark: remark,
          label: label,
       })
       
@@ -64,16 +69,141 @@ class ShowRemark extends React.Component {
         [e.target.name]: e.target.value
       });
    }
+
+   editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
+
+      // variables to hold response from the database PUT
+      let putResponse;
+      let returnRemark;
+
+      switch (elementType) {
+
+         // Set a label to title the remark box
+
+         case 'challenge':
+            
+            // update database
+            try {
+
+               putResponse = await fetch(API_URL + '/questions/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     challenge_id: parentId,
+                     student_id: remarkUserId,
+                     question: remark,
+                     substantial: substantial,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
+
+            break;
+
+         case 'snippet':
+            
+            // update database
+            try {
+
+               putResponse = await fetch(API_URL + '/comments/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     snippet_id: parentId,
+                     student_id: remarkUserId,
+                     comment: remark,
+                     substantial: substantial,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
+
+            break;
+
+         case 'question':
+                       
+            // update database
+            try {
+
+               putResponse = await fetch(API_URL + '/responses/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     comment_id: parentId,
+                     teacher_id: remarkUserId,
+                     response: remark,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
+
+            break;
+
+         case 'comment':
+            
+            // update database
+            try {
+
+               putResponse = await fetch(API_URL + '/observations/' + remarkId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                     comment_id: parentId,
+                     teacher_id: remarkUserId,
+                     observation: remark,
+                  }),
+                  headers: {'Content-Type': 'application/json'},
+                  credentials: 'include',
+               }) 
+               returnRemark = await putResponse.json();
+
+            } catch(err) {
+               console.log(err);
+            }
+
+            break;
+
+         default:
+            console.log("Remarks are only for a challenge, snippet, question, or comment")
+      }
+
+      // just in case the call needs a return
+      return returnRemark;
+
+
+
+   }
      
    render() {
+
+      const remarkUserId = this.props.remark.teacher_id;
+      
+      // const remarkUserId = 
+      //    {this.props.user.is_teacher 
+      //       ? this.props.remark.teacher_id 
+      //       : this.props.remark.student_id
+      //    })
+
+
 
       return (
 
          <div>
 
-            <div className={this.props.is_teacher ? "teacher-remark" : "student-remark"}>
+            <div className={this.props.user.is_teacher ? "teacher-remark" : "student-remark"}>
              
-               {this.props.remarkUserId === this.props.userId
+               {remarkUserId === this.props.user.id
                   ?  
                      <div>
                         <Card.Header>{this.state.label}</Card.Header>
