@@ -7,18 +7,16 @@ import { Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'sem
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class ShowRemark extends React.Component {
-   // props: userID, loggedIn, is_teacher,
-   //        remarkId (id of question, comment, response, observation),
-   //        parentId (id of challenge, snippet, question, comment),
-   //        elementType ("challenge", "snippet", "question", "comment"),
-   //        remarkUserId, remark, substantial
-   //        editRemark (a function at top level, App.js)
+   // props: user, remark (student and teacher remarks and info), 
+   //        elementType (challenge, question, snippet, comment),
+   //        userType (the remark is written by a "student" or "teacher")
    constructor() {
       super();
 
       this.state = {
          remark: '',
          label: '',
+         loaded: false,
       }
 
    }
@@ -35,12 +33,12 @@ class ShowRemark extends React.Component {
 
           case 'challenge':
             label = "Student question:";
-            remark = this.props.remark.question;
+            remark = this.props.remark.remark;
             break;
 
          case 'snippet':
             label = "Student comment:";
-            remark = this.props.remark.comment;
+            remark = this.props.remark.remark;
             break;
 
          case 'question':
@@ -50,7 +48,7 @@ class ShowRemark extends React.Component {
 
          case 'comment':
              label = "Instructor response:";
-             remark = this.props.remark.observation;
+             remark = this.props.remark.response;
             break;
 
          default:
@@ -60,6 +58,7 @@ class ShowRemark extends React.Component {
       this.setState({
          remark: remark,
          label: label,
+         loaded: true,
       })
       
    }
@@ -70,33 +69,32 @@ class ShowRemark extends React.Component {
       });
    }
 
-   editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
+   editRemark = async () => {
 
       // variables to hold response from the database PUT
-      let putResponse;
-      let returnRemark;
+      let remark;
+      let parsedRemark;
 
-      switch (elementType) {
+      switch (this.props.elementType) {
 
          // Set a label to title the remark box
 
          case 'challenge':
             
-            // update database
+            // update database for a student's question about a challenge
             try {
 
-               putResponse = await fetch(API_URL + '/questions/' + remarkId, {
+               await fetch(API_URL + '/questions/' + this.props.remark.remark_id, {
                   method: 'PUT',
                   body: JSON.stringify({
-                     challenge_id: parentId,
-                     student_id: remarkUserId,
-                     question: remark,
-                     substantial: substantial,
+                     challenge_id: this.props.remark.parent_id,
+                     student_id: this.props.remark.student_id,
+                     question: this.state.remark,
+                     substantial: this.props.remark.substantial,
                   }),
                   headers: {'Content-Type': 'application/json'},
                   credentials: 'include',
                }) 
-               returnRemark = await putResponse.json();
 
             } catch(err) {
                console.log(err);
@@ -106,21 +104,20 @@ class ShowRemark extends React.Component {
 
          case 'snippet':
             
-            // update database
+            // update database for a student's comment about a snippet
             try {
 
-               putResponse = await fetch(API_URL + '/comments/' + remarkId, {
+               await fetch(API_URL + '/comments/' + this.props.remark.remark_id, {
                   method: 'PUT',
                   body: JSON.stringify({
-                     snippet_id: parentId,
-                     student_id: remarkUserId,
-                     comment: remark,
-                     substantial: substantial,
+                     snippet_id: this.props.remark.parent_id,
+                     student_id: this.props.remark.student_id,
+                     comment: this.state.remark,
+                     substantial: this.props.remark.substantial,
                   }),
                   headers: {'Content-Type': 'application/json'},
                   credentials: 'include',
                }) 
-               returnRemark = await putResponse.json();
 
             } catch(err) {
                console.log(err);
@@ -130,20 +127,19 @@ class ShowRemark extends React.Component {
 
          case 'question':
                        
-            // update database
+            // update database for teacher response to a student Q about challenge
             try {
 
-               putResponse = await fetch(API_URL + '/responses/' + remarkId, {
+               await fetch(API_URL + '/responses/' + this.props.remark.response_id, {
                   method: 'PUT',
                   body: JSON.stringify({
-                     comment_id: parentId,
-                     teacher_id: remarkUserId,
-                     response: remark,
+                     question_id: this.props.remark.remark_id,
+                     teacher_id: this.props.remark.teacher_id,
+                     response: this.state.remark,
                   }),
                   headers: {'Content-Type': 'application/json'},
                   credentials: 'include',
                }) 
-               returnRemark = await putResponse.json();
 
             } catch(err) {
                console.log(err);
@@ -153,20 +149,19 @@ class ShowRemark extends React.Component {
 
          case 'comment':
             
-            // update database
+            // update database for teacher response to a student comment about snippet
             try {
 
-               putResponse = await fetch(API_URL + '/observations/' + remarkId, {
+               await fetch(API_URL + '/observations/' + this.props.remark.response_id, {
                   method: 'PUT',
                   body: JSON.stringify({
-                     comment_id: parentId,
-                     teacher_id: remarkUserId,
-                     observation: remark,
+                     comment_id: this.props.remark.remark_id,
+                     teacher_id: this.props.remark.teacher_id,
+                     observation: this.state.remark,
                   }),
                   headers: {'Content-Type': 'application/json'},
                   credentials: 'include',
                }) 
-               returnRemark = await putResponse.json();
 
             } catch(err) {
                console.log(err);
@@ -178,67 +173,85 @@ class ShowRemark extends React.Component {
             console.log("Remarks are only for a challenge, snippet, question, or comment")
       }
 
-      // just in case the call needs a return
-      return returnRemark;
-
-
-
    }
      
    render() {
 
-      const remarkUserId = this.props.remark.teacher_id;
-      
-      // const remarkUserId = 
-      //    {this.props.user.is_teacher 
-      //       ? this.props.remark.teacher_id 
-      //       : this.props.remark.student_id
-      //    })
+      if (this.state.loaded) {
+
+         console.log("this.props.user inside ShowRemark");
+         console.log(this.props.user);
+
+         console.log("this.props.remark inside ShowRemark");
+         console.log(this.props.remark);
 
 
+         // const remarkUserId = 
+         //    {this.props.user.is_teacher 
+         //       ? this.props.remark.teacher_id 
+         //       : this.props.remark.student_id
+         //    })
+      }
 
       return (
 
          <div>
 
             <div className={this.props.user.is_teacher ? "teacher-remark" : "student-remark"}>
-             
-               {remarkUserId === this.props.user.id
-                  ?  
+
+               {this.props.userType === "teacher"
+                  ?
                      <div>
-                        <Card.Header>{this.state.label}</Card.Header>
+                        <Card.Header>Hello {this.state.label}</Card.Header>
                         <Card.Content>
-                           <Form>
+                           <Form>                          
                               <Form.TextArea 
                                  name="remark" 
-                                 value={this.state.remark}
-                                 placeholder={this.state.remark}
+                                 value={this.props.remark.response}
+                                 placeholder={this.props.remark.response}
                                  onChange={this.handleChange}
                               />
                               <Button 
                                  content='Submit Changes'
-                                 onClick={this.props.editRemark.bind(null,
-                                 this.props.elementType,
-                                 this.props.parentId,
-                                 this.props.remarkId,
-                                 this.props.remarkUserId,
-                                 this.state.remark,
-                                 this.props.substantial
-                              )}/>
+                                 onClick={this.editRemark}
+                              />
                            </Form>
                            
                         </Card.Content>
-                        </div>
-                     
-                  : 
-                  <div>
-                        <Card.Header>{this.state.label}</Card.Header>
-                        <Card.Content>{this.state.remark}</Card.Content>
-                        </div>
+                     </div>
+                  :
+                     <div>
+                        {this.props.user.id === this.props.remark.student_id
+                           ?  
+                              <div>
+                                 <Card.Header>{this.state.label}</Card.Header>
+                                 <Card.Content>
+                                    <Form>
+                                       <Form.TextArea 
+                                          name="remark" 
+                                          value={this.props.remark.remark}
+                                          placeholder={this.props.remark.remark}
+                                          onChange={this.handleChange}
+                                       />
+                                       <Button 
+                                          content='Submit Changes'
+                                          onClick={this.editRemark}
+                                       />
+                                    </Form>
+                                    
+                                 </Card.Content>
+                              </div>
+                              
+                           : 
+                              <div>
+                                 <Card.Header>{this.state.label}</Card.Header>
+                                 <Card.Content>{this.state.remark}</Card.Content>
+                              </div>
+                        }
+                     </div>
                }
-
+             
             </div>
-
             
          </div>
            

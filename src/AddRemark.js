@@ -7,15 +7,16 @@ import { Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'sem
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class AddRemark extends React.Component {
-   // props: userId, elementtId (id of challenge, question, snippet, comment)
+   // props: user, remark (lots of info, including the teacher remark)
    //        elementType ("challenge", "question", "snippet", "comment")
    constructor() {
       super();
 
       this.state = {
-      	content: '',
+      	remark: '',
          label: '',
          placeholder: '',
+
       }
 
    }
@@ -45,13 +46,13 @@ class AddRemark extends React.Component {
             break;
 
          case 'question':
-            label = "Give a Response:";
-            placeholder = "...to your student's question about the challenge posed.";
+            label = "Respond to the student:";
+            placeholder = "Answer your student's question about the challenge posed.";
             break;
 
          case 'comment':
-             label = "Give a Response:";
-             placeholder = "...about your student's comment on the code snippet.";
+             label = "Respond to the student:";
+             placeholder = "Respond to your student's comment on the code snippet.";
             break;
 
          default:
@@ -106,55 +107,61 @@ class AddRemark extends React.Component {
       });
    }
 
-   // add the content as a remark on the relevant component
+   // add the remark as a remark on the relevant component
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      // return data: the remark content and accompanying fields
+      // return data: the remark and accompanying fields
       let data;
       // route for posting the remark to the database
       let remarkRoute;
 
       switch (this.props.elementType) {
 
-         // the content is a student question about a challenge
+         // the remark is a student question about a challenge
+         // this.props.remark.id = challenge id
          case 'challenge':
             data = {
-               challenge_id: this.props.elementId,
-               student_id: this.props.userId,
-               question: this.state.content,
+               challenge_id: this.props.remark.id,
+               student_id: this.props.user.id,
+               question: this.state.remark,
                substantial: false
             }
             remarkRoute = "questions"
             break;
 
-         // the content is a student comment about a snippet
+         // the remark is a student comment about a snippet
+         // this.props.remark.id = snippet id
          case 'snippet':
             data = {
-               snippet_id: this.props.elementId,
-               student_id: this.props.userId,
-               comment: this.state.content,
+               snippet_id: this.props.remark.id,
+               student_id: this.props.user.id,
+               comment: this.state.remark,
                substantial: false
             }
             remarkRoute = "comments"
             break;
 
-         // the content is a teacher response to a student question about a challenge
+         // the remark is a teacher response to a student question about a challenge
+         // the response is associated with the teacher id of the first responding teacher
+         // but, all teachers can later edit the response
          case 'question':
             data = {
-               question_id: this.props.elementId,
-               teacher_id: this.props.userId,
-               response: this.state.content,
+               question_id: this.props.remark.parent_id,
+               teacher_id: this.props.remark.teacher_id,
+               response: this.state.remark,
             }
             remarkRoute = "responses"
             break;
 
-         // the content is a teacher response to a student comment about a snippet
+         // the remark is a teacher observation on a student comment about a snippet
+         // the observation is associated with the teacher id of the first responding teacher
+         // but, all teachers can later edit the observation
          case 'comment':
             data = {
-               comment_id: this.props.elementId,
-               teacher_id: this.props.userId,
-               observation: this.state.content,
+               comment_id: this.props.remark.parent_id,
+               teacher_id: this.props.remark.teacher_id,
+               observation: this.state.remark,
             }
             remarkRoute = "observations"
             break;
@@ -163,25 +170,19 @@ class AddRemark extends React.Component {
             console.log("Remarks are only for a challenge, snippet, question, or comment");
       }
 
-      // const remark = this.addRemark(remarkRoute, data);
-
       // add the remark to the database for the relevant component
-      const response = await fetch(API_URL + '/' + remarkRoute, {
+      await fetch(API_URL + '/' + remarkRoute, {
          method: 'POST',
          body: JSON.stringify(data),
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
       })
-      const remark = await response.json();
 
       // blank out the form for adding another remark on the relevant component
       this.initializeFormPlaceholder();
       this.setState({
-         content: '',
+         remark: '',
       })
-
-      // return the remark in case we need a return from the function call
-      return remark;
 
       // redirect back to the relevant component
       // this.props.history.push('/media/' + newMedia.data.id). ?????
@@ -206,7 +207,7 @@ class AddRemark extends React.Component {
       return (
 
          <Card>
-            <Card.Header>{this.state.label}:</Card.Header>
+            <Card.Header>Howdy!  {this.state.label}</Card.Header>
             <Card.Content>
                <Form>
                   <Form.TextArea 
@@ -214,7 +215,10 @@ class AddRemark extends React.Component {
                      placeholder={this.state.placeholder}
                      onChange={this.handleChange}
                   />
-                     <Button content='Submit'/>
+                     <Button 
+                        content='Submit'
+                        onSubmit={this.handleSubmit}
+                     />
                </Form>
                
             </Card.Content>

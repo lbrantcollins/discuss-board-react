@@ -65,9 +65,9 @@ class ChallengeList extends React.Component {
 						<Card.Description> {challenge.description} </Card.Description>
 						<Card.Meta>	
 							<Button 
+								content="View Details"
 								size="mini" 
-								onClick={() => this.showChallenge(i)}> 
-								View 
+								onClick={() => this.showChallenge(i)}>  
 							</Button>
 						</Card.Meta>				
 					</Card.Content>

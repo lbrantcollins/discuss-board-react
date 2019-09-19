@@ -71,13 +71,13 @@ class ShowChallenge extends React.Component {
 		   	console.log("question 2 in ShowChallenge.js");
 				console.log(this.state.questions[1]);
 
-
 		   	questionList = this.state.questions.map( (question, i) => {
 
 					return (
 
 		   	////////////////////////////
 		   	// use ShowRemark here (twice: question and response)
+		   	// see the code in ShowSnippet 
 		   	////////////////////////////
 
 						<Card key={i}>
@@ -87,7 +87,7 @@ class ShowChallenge extends React.Component {
 								{this.props.user.is_teacher
 									?
 										<Card.Meta>	
-											<Button> 
+											<Button>
 												Respond (make this a textarea field)
 											</Button>
 										</Card.Meta>				
@@ -117,14 +117,16 @@ class ShowChallenge extends React.Component {
 						<Card key={i}>
 							<Card.Content>
 								<Card.Header> Student answer: </Card.Header>
-								<Card.Description> {snippet.snippet} </Card.Description>
-									<Card.Meta>	
-										<Button 
-											size="mini" 
-											onClick={() => this.showSnippet(i)}> 
-											View Student Comments 
-										</Button>
-									</Card.Meta>						
+								<Card.Description> 
+									<pre><code> {snippet.snippet}</code></pre>
+								</Card.Description>
+								<Card.Meta>	
+									<Button 
+										content="View Student Comments"
+										size="mini" 
+										onClick={() => this.showSnippet(i)}
+									/> 
+								</Card.Meta>						
 							</Card.Content>
 						</Card>
 						
