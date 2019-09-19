@@ -111,6 +111,13 @@ class AddRemark extends React.Component {
    handleSubmit = async (e) => {
       e.preventDefault();
 
+      console.log("********************");
+      console.log("remark in handleSubmit in AddRemark");
+      console.log(this.props.remark);
+      console.log("this.state.remark");
+      console.log(this.state.remark);
+
+
       // return data: the remark and accompanying fields
       let data;
       // route for posting the remark to the database
@@ -145,10 +152,11 @@ class AddRemark extends React.Component {
          // the remark is a teacher response to a student question about a challenge
          // the response is associated with the teacher id of the first responding teacher
          // but, all teachers can later edit the response
+         // this.props.remark.remark_id = question id
          case 'question':
             data = {
-               question_id: this.props.remark.parent_id,
-               teacher_id: this.props.remark.teacher_id,
+               question_id: this.props.remark.remark_id,
+               teacher_id: this.props.user.id,
                response: this.state.remark,
             }
             remarkRoute = "responses"
@@ -157,10 +165,11 @@ class AddRemark extends React.Component {
          // the remark is a teacher observation on a student comment about a snippet
          // the observation is associated with the teacher id of the first responding teacher
          // but, all teachers can later edit the observation
+         // this.props.remark.remark_id = comment id
          case 'comment':
             data = {
-               comment_id: this.props.remark.parent_id,
-               teacher_id: this.props.remark.teacher_id,
+               comment_id: this.props.remark.remark_id,
+               teacher_id: this.props.user.id,
                observation: this.state.remark,
             }
             remarkRoute = "observations"
@@ -169,6 +178,12 @@ class AddRemark extends React.Component {
          default:
             console.log("Remarks are only for a challenge, snippet, question, or comment");
       }
+
+      console.log("**********************************");
+      console.log("route in AddRemark");
+      console.log(remarkRoute);
+      console.log("data in AddRemark");
+      console.log(data);
 
       // add the remark to the database for the relevant component
       await fetch(API_URL + '/' + remarkRoute, {
@@ -179,13 +194,14 @@ class AddRemark extends React.Component {
       })
 
       // blank out the form for adding another remark on the relevant component
-      this.initializeFormPlaceholder();
+      // this.initializeFormPlaceholder();
       this.setState({
-         remark: '',
+         placeholder: this.state.remark,
       })
 
       // redirect back to the relevant component
       // this.props.history.push('/media/' + newMedia.data.id). ?????
+      this.props.addRemark();
    }
 
    // <form onSubmit={this.handleSubmit}>
@@ -202,8 +218,7 @@ class AddRemark extends React.Component {
                // </form>
 
    render() {
-      
-
+       
       return (
 
          <Card>
@@ -211,13 +226,13 @@ class AddRemark extends React.Component {
             <Card.Content>
                <Form>
                   <Form.TextArea 
-                     name="content"
+                     name="remark"
                      placeholder={this.state.placeholder}
                      onChange={this.handleChange}
                   />
                      <Button 
                         content='Submit'
-                        onSubmit={this.handleSubmit}
+                        onClick={this.handleSubmit}
                      />
                </Form>
                

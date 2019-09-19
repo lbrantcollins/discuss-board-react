@@ -212,7 +212,7 @@ class ShowRemark extends React.Component {
                                  onChange={this.handleChange}
                               />
                               <Button 
-                                 content='Submit Changes'
+                                 content='Edit Remark'
                                  onClick={this.editRemark}
                               />
                            </Form>
@@ -234,7 +234,7 @@ class ShowRemark extends React.Component {
                                           onChange={this.handleChange}
                                        />
                                        <Button 
-                                          content='Submit Changes'
+                                          content='Edit Remark'
                                           onClick={this.editRemark}
                                        />
                                     </Form>

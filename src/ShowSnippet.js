@@ -80,6 +80,13 @@ class ShowSnippet extends React.Component {
   
    }
 
+   // reload the page after a remark is added
+   addRemark = () => {
+
+      this.componentDidMount();
+
+   }
+
    
    render() {
 
@@ -105,7 +112,7 @@ class ShowSnippet extends React.Component {
                      elementType="snippet"
                   />
 
-                  {comment.observation
+                  {comment.response
                      ?
                         <div>
                            <ShowRemark className="teacher-remark"
@@ -124,6 +131,7 @@ class ShowSnippet extends React.Component {
                                        user={this.props.user}
                                        remark={comment}
                                        elementType="comment"
+                                       addRemark={this.addRemark}
                                     />
                                  </div>
                               : 
