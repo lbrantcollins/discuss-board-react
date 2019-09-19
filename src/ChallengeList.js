@@ -76,17 +76,17 @@ class ChallengeList extends React.Component {
 			)
 		})
 
-		console.log("challenge #" + this.state.index + 1);
+		console.log("challenge #" + (this.state.index + 1));
 		console.log(this.state.challenges[this.state.index]);
 
 		return (
 
 			<div>
 
-				{(this.state.index + 1)
+				{this.state.index || this.state.index === 0
 					?
 						<ShowChallenge 
-							user={this.state.user}
+							user={this.props.user}
 							challenge={this.state.challenges[this.state.index]}
 						/>
 					:

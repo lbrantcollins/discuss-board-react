@@ -14,9 +14,8 @@ class ShowChallenge extends React.Component {
 		super();
 
 		this.state = {
-			questionIndex: null,
 			questions: [],
-			snippetIndex: null,
+			index: null,
 			snippets: [],
 			loaded: false,
 		}
@@ -51,15 +50,9 @@ class ShowChallenge extends React.Component {
       })
    }
 
-   showQuestion = (i) => {
-   	this.setState({
-   		questionIndex: i,
-   	})
-   }
-
    showSnippet = (i) => {
    	this.setState({
-   		snippetIndex: i,
+   		index: i,
    	})
    }
 
@@ -94,10 +87,8 @@ class ShowChallenge extends React.Component {
 								{this.props.user.is_teacher
 									?
 										<Card.Meta>	
-											<Button 
-												size="mini" 
-												onClick={() => this.showQuestion(i)}> 
-												Respond 
+											<Button> 
+												Respond (make this a textarea field)
 											</Button>
 										</Card.Meta>				
 									:
@@ -148,7 +139,29 @@ class ShowChallenge extends React.Component {
 
 			<div>
 
-				<p> This is the ShowChallenge component </p>
+				<p> The Challenge: </p>
+
+				<div>
+					<Card>
+						<Card.Content>
+							<Card.Header> {this.props.challenge.title} </Card.Header>
+							<Card.Description> {this.props.challenge.description} </Card.Description>
+							<Card.Meta>	
+								{this.props.user.is_teacher
+									?
+										<Button 
+											size="mini" 
+											onClick={this.editChallenge}
+										> 
+											Edit 
+										</Button>
+									:
+										null
+								}
+							</Card.Meta>				
+						</Card.Content>
+					</Card>
+				</div>
 
 
 				{questionList === null
@@ -165,12 +178,22 @@ class ShowChallenge extends React.Component {
 				{snippetList === null
 					? null
  					: 
-						<div>
- 							<h2>Student answers to this challenge:</h2>
- 							<Card.Group>
- 								{snippetList}
- 							</Card.Group>
- 						</div>
+ 						<div>
+	 					   {this.state.index || this.state.index === 0
+								?
+									<ShowSnippet 
+										user={this.props.user}
+										snippet={this.state.snippets[this.state.index]}
+									/>
+								:
+									<div>
+			 							<h2>Student answers to this challenge:</h2>
+			 							<Card.Group>
+			 								{snippetList}
+			 							</Card.Group>
+			 						</div>
+							}
+						</div>
 				}
 
 								
@@ -202,11 +225,11 @@ export default ShowChallenge;
 						// </div>
 // 				}
 
-// 				{this.state.snippetIndex
+// 				{this.state.index
 // 					?
 // 						<ShowSnippet 
 // 							user={this.props.user}
-// 							question={this.state.snippets[this.state.snippetIndex]}
+// 							question={this.state.snippets[this.state.index]}
 // 						/>
 // 					:
 // 						<div>
