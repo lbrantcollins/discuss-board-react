@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 
+import EditChallenge from './EditChallenge'
 import AddRemark from './AddRemark';
 import ShowRemark from './ShowRemark'
 import ShowSnippet from './ShowSnippet'
@@ -18,6 +19,7 @@ class ShowChallenge extends React.Component {
 			questions: [],
 			index: null,
 			snippets: [],
+			editChallenge: false,
 			loaded: false,
 		}
 	}
@@ -44,6 +46,7 @@ class ShowChallenge extends React.Component {
 	      const parsedResponse2 = await response2.json();
 
 	      this.setState({
+	      	...this.state,
 	         questions: parsedResponse1.questions,
 	         snippets: parsedResponse2.snippets,
 	         loaded: true,
@@ -56,7 +59,15 @@ class ShowChallenge extends React.Component {
 
    showSnippet = (i) => {
    	this.setState({
+   		...this.state,
    		index: i,
+   	})
+   }
+
+    editChallenge = () => {
+   	this.setState({
+   		...this.state,
+   		editChallenge: true,
    	})
    }
 
@@ -161,59 +172,65 @@ class ShowChallenge extends React.Component {
 
 				<h2> The Challenge: </h2>
 
-				<div>
-					<Card>
-						<Card.Content>
-							<Card.Header> {this.props.challenge.title} </Card.Header>
-							<Card.Description> {this.props.challenge.description} </Card.Description>
-							<Card.Meta>	
-								{this.props.user.is_teacher
-									?
-										<Button 
-											size="mini" 
-											onClick={this.editChallenge}
-										> 
-											Edit 
-										</Button>
-									:
-										null
-								}
-							</Card.Meta>				
-						</Card.Content>
-					</Card>
-				</div>
-
-
-				{questionList === null
-					? null
-					: 
+				{this.state.editChallenge
+					?
+					 	<EditChallenge challenge={this.props.challenge}/>
+					:
 						<div>
-							<Card.Group>
-								{questionList}
-							</Card.Group>
-						</div>
-				}
 
-				{snippetList === null
-					? null
- 					: 
- 						<div>
-	 					   {this.state.index || this.state.index === 0
-								?
-									<ShowSnippet 
-										user={this.props.user}
-										snippet={this.state.snippets[this.state.index]}
-									/>
-								:
+							<div>
+								<Card>
+									<Card.Content>
+										<Card.Header> {this.props.challenge.title} </Card.Header>
+										<Card.Description> {this.props.challenge.description} </Card.Description>
+										<Card.Meta>	
+											{this.props.user.is_teacher
+												?
+													<Button 
+														content="Edit"
+														onClick={this.editChallenge}
+													/> 
+												:
+													null
+											}
+										</Card.Meta>				
+									</Card.Content>
+								</Card>
+							</div>
+
+
+							{questionList === null
+								? null
+								: 
 									<div>
-			 							<Card.Group>
-			 								{snippetList}
-			 							</Card.Group>
-			 						</div>
+										<Card.Group>
+											{questionList}
+										</Card.Group>
+									</div>
 							}
+
+							{snippetList === null
+								? null
+			 					: 
+			 						<div>
+				 					   {this.state.index || this.state.index === 0
+											?
+												<ShowSnippet 
+													user={this.props.user}
+													snippet={this.state.snippets[this.state.index]}
+												/>
+											:
+												<div>
+						 							<Card.Group>
+						 								{snippetList}
+						 							</Card.Group>
+						 						</div>
+										}
+									</div>
+							}
+
 						</div>
 				}
-
 								
 			</div>
 		)

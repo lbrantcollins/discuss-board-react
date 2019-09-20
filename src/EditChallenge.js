@@ -12,42 +12,20 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 
 class EditChallenge extends React.Component {
-   // props: challenge_id, editChallenge (function)
+   // props: challenge
    constructor(props) {
       super(props);
 
       this.state = {
-         teacher_id: null,
       	title: '',
       	description: '',
       }
 
    }
    
-   componentDidMount = async () => {
-
-      try {
-
-         // retrieve the challenge to be edited
-         const response = await fetch(API_URL + '/challenges/' + this.props.challenge_id, {
-            method: 'GET',
-            headers: {
-               'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-         })
-         const challenge = await response.json();
-        
-         this.setState({
-            teacher_id: challenge.teacher_id,
-            title: challenge.title,
-            description: challenge.description
-         })
-
-      } catch (err) {
-         console.log(err);
-      }
-   }
+   // May need to do something prior to page load
+   // componentDidMount = async () => {
+   // }
 
    handleChange = (e) => {
       this.setState({
@@ -55,22 +33,49 @@ class EditChallenge extends React.Component {
       });
    }
 
+// editChallenge = async (id, data) => {
+ 
+   //    try {
+
+   //       // update the title, description for a challenge
+   //       // using data from EditChallenge component input form
+   //       // (keywords/languages are updated from EditChallenge component)
+   //       const response = await fetch(API_URL + '/challenges/' + id, {
+   //          method: 'PUT',
+   //          body: JSON.stringify(data),
+   //          headers: {'Content-Type': 'application/json'},
+   //          credentials: 'include',
+   //       })
+
+   //       // return the new challenge in case call needs the return
+   //       const editedChallenge = await response.json();
+
+   //       this.setState({
+   //          editChallenge: false,
+   //          challengeToBeEdited: ''
+   //       })
+
+   //       // a little cheating:
+   //       this.componentDidMount();
+
+   //       return editedChallenge;
+
+   //    } catch (err) {
+   //       console.log(err)
+   //    }
+   // }
+
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      // send edited challenge data to database and lift up state
-      const challenge = await this.props.editChallenge(this.props.challenge_id, 
-         {
-            teacher_id: this.state.teacher_id,
+      const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
+         method: 'PUT',
+         body: JSON.stringify({
             title: this.state.title,
-            description: this.state.description
-         }
-      )
-
-      this.setState({
-         teacher_id: challenge.teacher_id,
-         title: challenge.title,
-         description: challenge.description
+            description: this.state.description,
+         }),
+         headers: {'Content-Type': 'application/json'},
+         credentials: 'include',
       })
 
       //////////////////////////////
@@ -85,6 +90,16 @@ class EditChallenge extends React.Component {
       console.log("this.state");
       console.log(this.state);
 
+      // set up an edit toggle for each of the three elements below:
+      // title/description, keywords, and languages
+
+      // display each as is (when it's edit toggle is false), but with a button for toggling
+      // once changes are submitted for that element, return to the display as is (toggle=false)
+
+      // put the toggle variables in state so that we get a re-render when elements change
+
+      // Need overall "changes complete" button (and that should send us back to showChallenge)
+
       return (
 
          <div>
@@ -96,7 +111,7 @@ class EditChallenge extends React.Component {
                   type="text" 
                   name="title" 
                   placeholder={this.state.title}
-                  // value={this.state.title} 
+                  value={this.state.title} 
                   onChange={this.handleChange}
                />
                <br/>
@@ -114,9 +129,7 @@ class EditChallenge extends React.Component {
 
             <SelectKeywords challenge_id={this.props.challenge_id} />
 
-            <SelectLanguages challenge_id={this.props.challenge_id} />
-
-            
+            <SelectLanguages challenge_id={this.props.challenge_id} />      
 
          </div>
            
