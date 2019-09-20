@@ -46,8 +46,6 @@ class ChallengeList extends React.Component {
    }
 
    showChallenge = (i) => {
-   	console.log("----> index inside showChallenge() in ChallengeList");
-   	console.log("index: ", i);
    	this.setState({
    		index: i,
    	})
@@ -76,9 +74,6 @@ class ChallengeList extends React.Component {
 			)
 		})
 
-		console.log("challenge #" + (this.state.index + 1));
-		console.log(this.state.challenges[this.state.index]);
-
 		return (
 
 			<div>
@@ -104,47 +99,8 @@ class ChallengeList extends React.Component {
 export default ChallengeList;
 
 
-				// <ChallengeSummary 
-					// key={i} 
-					// user={this.props.user}
-					// challenge={challenge} 
-					// onClick={() => this.showChallenge(i) } // added by Reuben as a brainstorming idea
-				// />
 
 
-
-// <h1>Current Challenges</h1>
-
-			// {this.props.user.is_teacher 
-			// 	?
-			// 		<Button
-			// 			content="Add Challenge"
-			// 			onClick={this.props.showAddChallenge}
-			// 		/>
-			// 	:
-			// 		null
-			// }
-
-
-
-	// props: userId, is_teacher, challenges (incl keywords, langs, snippet_ids)
-	//        addChallenge (function), editChallenge (function)
-
-	// componentDidMount = async () => {
-
- //      // retrieve all existing challenges
- //      const response = await fetch(API_URL + '/challenges', {
- //            method: 'GET',
- //            headers: {'Content-Type': 'application/json'},
- //            credentials: 'include',
- //         })
- //         const challenges = await response.json();
-
- //         this.setState({
- //            challenges: challenges
- //         })
-
- //   }
  
  
 

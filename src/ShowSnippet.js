@@ -33,9 +33,6 @@ class ShowSnippet extends React.Component {
          })
          const parsedResponse = await response.json();
 
-         console.log("Comments inside ShowSnippet component");
-         console.log(parsedResponse);
-
          this.setState({
             snippetText: this.props.snippet.snippet,
             comments: parsedResponse.comments,
@@ -55,44 +52,27 @@ class ShowSnippet extends React.Component {
       });
    }
 
-   editSnippet = async (e) => {
+   // save the updated snippet text to the database
+   saveSnippet = async (e) => {
       e.preventDefault();
 
-      // add the snippet to the database
-      const response = await fetch(API_URL + '/snippets/' + this.props.snippet_id, {
+      await fetch(API_URL + '/snippets/' + this.props.snippet.id, {
          method: 'PUT',
-         body: JSON.stringify({
-            challenge_id: this.props.snippet.challenge_id,
-            language_id: this.props.snippet.language_id,
-            student_id: this.props.snippet.student_id,
-            snippet: this.props.snippetText,
-            substantial: this.props.snippet.substantial,
-         }),
+         body: JSON.stringify({snippet: this.state.snippetText}),
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
-      })
-
-      // return the new snippet in case the call needs a return
-      const snippet = await response.json();
-
-      // just in case the call needs a return
-      return snippet;
-  
+      }) 
    }
 
    // reload the page after a remark is added
    addRemark = () => {
-
       this.componentDidMount();
-
    }
 
    
    render() {
 
       let commentList = null;
-
-      console.log(this.state.challenges);
 
       // Show the list of student comments (and accompanying teacher observations)
       // each of which is a "ShowRemark" generated here by a map method on all comments
@@ -151,20 +131,8 @@ class ShowSnippet extends React.Component {
     	return (
             		
    		<div>
-
-            {this.props.user.is_teacher
-               ? null
-               :
-                  <AddRemark 
-                     user={this.props.user}
-                     remark={this.props.snippet}
-                     elementType="snippet"
-                     addRemark={this.AddRemark}
-                  />
-            }
    			
             <Card.Group>
-
             
                <Card>
                   <Card.Content>
@@ -175,37 +143,45 @@ class ShowSnippet extends React.Component {
                         Language: {this.props.snippet.language}
                   
                      <Card.Description>
-                        {this.props.snippet.student_id === this.props.user.id
+
+                        {this.props.user.is_teacher || this.props.snippet.student_id === this.props.user.id
                            ?
                               <Form>
                                  <Form.TextArea 
                                     name="snippetText" 
-                                    value={this.props.snippet.snippet}
+                                    value={this.state.snippetText}
                                     placeholder={this.props.snippet.snippet}
                                     onChange={this.handleChange}
                                  />
                                  <Button 
-                                    content="Submit Changes"
-                                    onClick={this.editSnippet}
+                                    content={this.props.user.is_teacher ? "Submit Corrections" : "Submit Changes"}
+                                    onClick={this.saveSnippet}
                                  />
-                              </Form>
-
-                              
+                              </Form>                             
                            : 
                               <div>
                                  <pre><code> {this.props.snippet.snippet}</code></pre>
                               </div>                       
-
                         }
+
                      </Card.Description>
                   </Card.Content>
                </Card>
            
+            {this.props.user.is_teacher
+               ? null
+               :
+                  <AddRemark 
+                     user={this.props.user}
+                     remark={this.props.snippet}
+                     elementType="snippet"
+                     addRemark={this.addRemark}
+                  />
+            }
+
                {commentList}
 
-            </Card.Group>
-
-            
+            </Card.Group>         
 
    		</div>
 
@@ -216,30 +192,6 @@ class ShowSnippet extends React.Component {
 export default ShowSnippet;
 
 
-    // <Card>
-               // <Card.Content>
-                        
-               //    <Form>
-               //       <Form.TextArea 
-               //          name="remark" 
-               //          value={this.state.remark}
-               //          placeholder={this.state.remark}
-               //          onChange={this.handleChange}
-               //       />
-               //       <Button 
-               //          content='Submit Changes'
-               //          onClick={this.props.editRemark.bind(null,
-               //          this.props.elementType,
-               //          this.props.parentId,
-               //          this.props.remarkId,
-               //          this.props.remarkUserId,
-               //          this.state.remark,
-               //          this.props.substantial
-               //       )}/>
-               //    </Form>
-                           
-               // </Card.Content>
-            // </Card>                   
 
 
 

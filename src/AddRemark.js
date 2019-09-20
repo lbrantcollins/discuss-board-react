@@ -39,25 +39,25 @@ class AddRemark extends React.Component {
 
          case 'challenge':
             label = "Ask a Question:";
-            buttonText = "Add a Question";
+            buttonText = "Submit Question";
             placeholder = "...about the challenge your instructor posed.";
             break;
 
          case 'snippet':
-            label = "Leave a Comment:";
-            buttonText = "Add a Comment";
+            label = "Add a Comment:";
+            buttonText = "Submit Comment";
             placeholder = "...about your fellow student's suggested code snippet.";
             break;
 
          case 'question':
             label = "Respond to student:";
-            buttonText = "Add a Response";
+            buttonText = "Submit Response";
             placeholder = "Answer your student's question about the challenge posed.";
             break;
 
          case 'comment':
              label = "Respond to student:";
-             buttonText = "Add a Response";
+             buttonText = "Submit Response";
              placeholder = "Respond to your student's comment on the code snippet.";
             break;
 
@@ -121,13 +121,6 @@ class AddRemark extends React.Component {
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      console.log("********************");
-      console.log("remark in handleSubmit in AddRemark");
-      console.log(this.props.remark);
-      console.log("this.state.remark");
-      console.log(this.state.remark);
-
-
       // return data: the remark and accompanying fields
       let data;
       // route for posting the remark to the database
@@ -189,12 +182,6 @@ class AddRemark extends React.Component {
             console.log("Remarks are only for a challenge, snippet, question, or comment");
       }
 
-      console.log("**********************************");
-      console.log("route in AddRemark");
-      console.log(remarkRoute);
-      console.log("data in AddRemark");
-      console.log(data);
-
       // add the remark to the database for the relevant component
       await fetch(API_URL + '/' + remarkRoute, {
          method: 'POST',
@@ -214,18 +201,6 @@ class AddRemark extends React.Component {
       this.props.addRemark();
    }
 
-   // <form onSubmit={this.handleSubmit}>
-                  // <br/>
-                  // <textarea
-                     // rows="8" 
-                     // type="text" 
-                     // name="content" 
-                     // placeholder={this.state.placeholder} 
-                     // onChange={this.handleChange}
-                  // ></textarea>
-                  // <br/>
-                  // <button>Submit</button>
-               // </form>
 
    render() {
        
@@ -258,3 +233,5 @@ class AddRemark extends React.Component {
 }
 
 export default AddRemark;
+
+

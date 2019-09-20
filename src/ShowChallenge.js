@@ -25,30 +25,33 @@ class ShowChallenge extends React.Component {
 	// retrieve all existing questions and snippets for this challenge
 	componentDidMount = async () => {
 
-		console.log("this.props.challenge.id in ShowChallenge");
-		console.log(this.props.challenge.id);
+		try {
 
-		// retrieve all existing questions for this challenge
-		const response1 = await fetch(API_URL + '/questions/challenge/' + this.props.challenge.id, {
-         method: 'GET',
-         headers: {'Content-Type': 'application/json'},
-         credentials: 'include',
-      })
-      const parsedResponse1 = await response1.json();
+			// retrieve all existing questions for this challenge
+			const response1 = await fetch(API_URL + '/questions/challenge/' + this.props.challenge.id, {
+	         method: 'GET',
+	         headers: {'Content-Type': 'application/json'},
+	         credentials: 'include',
+	      })
+	      const parsedResponse1 = await response1.json();
 
-      // retrieve all existing snippets for this challenge
-		const response2 = await fetch(API_URL + '/snippets/challenge/' + this.props.challenge.id, {
-         method: 'GET',
-         headers: {'Content-Type': 'application/json'},
-         credentials: 'include',
-      })
-      const parsedResponse2 = await response2.json();
+	      // retrieve all existing snippets for this challenge
+			const response2 = await fetch(API_URL + '/snippets/challenge/' + this.props.challenge.id, {
+	         method: 'GET',
+	         headers: {'Content-Type': 'application/json'},
+	         credentials: 'include',
+	      })
+	      const parsedResponse2 = await response2.json();
 
-      this.setState({
-         questions: parsedResponse1.questions,
-         snippets: parsedResponse2.snippets,
-         loaded: true,
-      })
+	      this.setState({
+	         questions: parsedResponse1.questions,
+	         snippets: parsedResponse2.snippets,
+	         loaded: true,
+	      })
+
+	   } catch(err) {
+	   	console.log(err);
+	   }
    }
 
    showSnippet = (i) => {
@@ -121,12 +124,6 @@ class ShowChallenge extends React.Component {
 
 
 			if (this.state.snippets) {
-
-				console.log("this.state.snippets inside ShowChallenge");
-		   	console.log(this.state.snippets);
-
-				console.log("snippet 1 inside ShowChallenge");
-				console.log(this.state.snippets[0]);
 
 				snippetList = this.state.snippets.map( (snippet, i) => {
 
@@ -225,47 +222,6 @@ class ShowChallenge extends React.Component {
 }
 
 export default ShowChallenge;
-
-
-
-
-
-// {this.state.questionIndex
-// 					?
-// 						<ShowRemark 
-// 							elementType="challenge"
-// 							user={this.props.user}
-// 							remark={this.state.questions[this.state.questionIndex]}
-// 						/>
-// 					:
-						// <div>
-							// <h2>Student questions about this challenge:</h2>
-							// <Card.Group>
-								// {questionList}
-							// </Card.Group>
-						// </div>
-// 				}
-
-// 				{this.state.index
-// 					?
-// 						<ShowSnippet 
-// 							user={this.props.user}
-// 							question={this.state.snippets[this.state.index]}
-// 						/>
-// 					:
-// 						<div>
-// 							<h2>Student answers to this challenge:</h2>
-// 							<Card.Group>
-// 								{snippetList}
-// 							</Card.Group>
-// 						</div>
-// 				}
-
-
-
-
-
-
 
 
 

@@ -52,8 +52,6 @@ class App extends React.Component {
 
    login = async (data) => {
 
-      console.log("inside login function");
-
       try {
 
          // create a new user in the database
@@ -185,194 +183,194 @@ class App extends React.Component {
       
    // }
 
-   editChallenge = async (id, data) => {
+   // editChallenge = async (id, data) => {
  
-      try {
+   //    try {
 
-         // update the title, description for a challenge
-         // using data from EditChallenge component input form
-         // (keywords/languages are updated from EditChallenge component)
-         const response = await fetch(API_URL + '/challenges/' + id, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
+   //       // update the title, description for a challenge
+   //       // using data from EditChallenge component input form
+   //       // (keywords/languages are updated from EditChallenge component)
+   //       const response = await fetch(API_URL + '/challenges/' + id, {
+   //          method: 'PUT',
+   //          body: JSON.stringify(data),
+   //          headers: {'Content-Type': 'application/json'},
+   //          credentials: 'include',
+   //       })
 
-         // return the new challenge in case call needs the return
-         const editedChallenge = await response.json();
+   //       // return the new challenge in case call needs the return
+   //       const editedChallenge = await response.json();
 
-         this.setState({
-            editChallenge: false,
-            challengeToBeEdited: ''
-         })
+   //       this.setState({
+   //          editChallenge: false,
+   //          challengeToBeEdited: ''
+   //       })
 
-         // a little cheating:
-         this.componentDidMount();
+   //       // a little cheating:
+   //       this.componentDidMount();
 
-         return editedChallenge;
+   //       return editedChallenge;
 
-      } catch (err) {
-         console.log(err)
-      }
-   }
+   //    } catch (err) {
+   //       console.log(err)
+   //    }
+   // }
 
-   addRemark = async (remarkRoute, data) => {
+   // addRemark = async (remarkRoute, data) => {
       
-      try {
+   //    try {
 
-         const response = await fetch(API_URL + '/' + remarkRoute, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })    
+   //       const response = await fetch(API_URL + '/' + remarkRoute, {
+   //          method: 'POST',
+   //          body: JSON.stringify(data),
+   //          headers: {'Content-Type': 'application/json'},
+   //          credentials: 'include',
+   //       })    
 
-         // return the new remark in case call needs the return
-         const newRemark = await response.json();
+   //       // return the new remark in case call needs the return
+   //       const newRemark = await response.json();
 
-         return newRemark;
+   //       return newRemark;
 
-      } catch (err) {
-         console.log(err)
-      }        
+   //    } catch (err) {
+   //       console.log(err)
+   //    }        
       
-   }
+   // }
 
-   editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
+   // editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
 
-      // variables to hold response from the database PUT
-      let putResponse;
-      let returnRemark;
+   //    // variables to hold response from the database PUT
+   //    let putResponse;
+   //    let returnRemark;
 
-      switch (elementType) {
+   //    switch (elementType) {
 
-         // Set a label to title the remark box
+   //       // Set a label to title the remark box
 
-         case 'challenge':
+   //       case 'challenge':
             
-            // update database
-            try {
+   //          // update database
+   //          try {
 
-               putResponse = await fetch(API_URL + '/questions/' + remarkId, {
-                  method: 'PUT',
-                  body: JSON.stringify({
-                     challenge_id: parentId,
-                     student_id: remarkUserId,
-                     question: remark,
-                     substantial: substantial,
-                  }),
-                  headers: {'Content-Type': 'application/json'},
-                  credentials: 'include',
-               }) 
-               returnRemark = await putResponse.json();
+   //             putResponse = await fetch(API_URL + '/questions/' + remarkId, {
+   //                method: 'PUT',
+   //                body: JSON.stringify({
+   //                   challenge_id: parentId,
+   //                   student_id: remarkUserId,
+   //                   question: remark,
+   //                   substantial: substantial,
+   //                }),
+   //                headers: {'Content-Type': 'application/json'},
+   //                credentials: 'include',
+   //             }) 
+   //             returnRemark = await putResponse.json();
 
-            } catch(err) {
-               console.log(err);
-            }
+   //          } catch(err) {
+   //             console.log(err);
+   //          }
 
-            break;
+   //          break;
 
-         case 'snippet':
+   //       case 'snippet':
             
-            // update database
-            try {
+   //          // update database
+   //          try {
 
-               putResponse = await fetch(API_URL + '/comments/' + remarkId, {
-                  method: 'PUT',
-                  body: JSON.stringify({
-                     snippet_id: parentId,
-                     student_id: remarkUserId,
-                     comment: remark,
-                     substantial: substantial,
-                  }),
-                  headers: {'Content-Type': 'application/json'},
-                  credentials: 'include',
-               }) 
-               returnRemark = await putResponse.json();
+   //             putResponse = await fetch(API_URL + '/comments/' + remarkId, {
+   //                method: 'PUT',
+   //                body: JSON.stringify({
+   //                   snippet_id: parentId,
+   //                   student_id: remarkUserId,
+   //                   comment: remark,
+   //                   substantial: substantial,
+   //                }),
+   //                headers: {'Content-Type': 'application/json'},
+   //                credentials: 'include',
+   //             }) 
+   //             returnRemark = await putResponse.json();
 
-            } catch(err) {
-               console.log(err);
-            }
+   //          } catch(err) {
+   //             console.log(err);
+   //          }
 
-            break;
+   //          break;
 
-         case 'question':
+   //       case 'question':
                        
-            // update database
-            try {
+   //          // update database
+   //          try {
 
-               putResponse = await fetch(API_URL + '/responses/' + remarkId, {
-                  method: 'PUT',
-                  body: JSON.stringify({
-                     comment_id: parentId,
-                     teacher_id: remarkUserId,
-                     response: remark,
-                  }),
-                  headers: {'Content-Type': 'application/json'},
-                  credentials: 'include',
-               }) 
-               returnRemark = await putResponse.json();
+   //             putResponse = await fetch(API_URL + '/responses/' + remarkId, {
+   //                method: 'PUT',
+   //                body: JSON.stringify({
+   //                   comment_id: parentId,
+   //                   teacher_id: remarkUserId,
+   //                   response: remark,
+   //                }),
+   //                headers: {'Content-Type': 'application/json'},
+   //                credentials: 'include',
+   //             }) 
+   //             returnRemark = await putResponse.json();
 
-            } catch(err) {
-               console.log(err);
-            }
+   //          } catch(err) {
+   //             console.log(err);
+   //          }
 
-            break;
+   //          break;
 
-         case 'comment':
+   //       case 'comment':
             
-            // update database
-            try {
+   //          // update database
+   //          try {
 
-               putResponse = await fetch(API_URL + '/observations/' + remarkId, {
-                  method: 'PUT',
-                  body: JSON.stringify({
-                     comment_id: parentId,
-                     teacher_id: remarkUserId,
-                     observation: remark,
-                  }),
-                  headers: {'Content-Type': 'application/json'},
-                  credentials: 'include',
-               }) 
-               returnRemark = await putResponse.json();
+   //             putResponse = await fetch(API_URL + '/observations/' + remarkId, {
+   //                method: 'PUT',
+   //                body: JSON.stringify({
+   //                   comment_id: parentId,
+   //                   teacher_id: remarkUserId,
+   //                   observation: remark,
+   //                }),
+   //                headers: {'Content-Type': 'application/json'},
+   //                credentials: 'include',
+   //             }) 
+   //             returnRemark = await putResponse.json();
 
-            } catch(err) {
-               console.log(err);
-            }
+   //          } catch(err) {
+   //             console.log(err);
+   //          }
 
-            break;
+   //          break;
 
-         default:
-            console.log("Remarks are only for a challenge, snippet, question, or comment")
-      }
+   //       default:
+   //          console.log("Remarks are only for a challenge, snippet, question, or comment")
+   //    }
 
-      // just in case the call needs a return
-      return returnRemark;
+   //    // just in case the call needs a return
+   //    return returnRemark;
 
 
 
-   }
+   // }
 
-   showSnippets = async (challenge_id) => {
+   // showSnippets = async (challenge_id) => {
 
-      const response = await fetch(API_URL + '/challenges', {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
-         const challenges = await response.json();
+   //    const response = await fetch(API_URL + '/challenges', {
+   //          method: 'GET',
+   //          headers: {'Content-Type': 'application/json'},
+   //          credentials: 'include',
+   //       })
+   //       const challenges = await response.json();
 
-         this.setState({
-            challenges: challenges
-         })
+   //       this.setState({
+   //          challenges: challenges
+   //       })
 
-      this.setState({
-         challengeSnippets: true,
-         challengeToBeShown: challenge_id,
-      })
+   //    this.setState({
+   //       challengeSnippets: true,
+   //       challengeToBeShown: challenge_id,
+   //    })
       
-   }
+   // }
 
 
             
@@ -427,18 +425,15 @@ class App extends React.Component {
                         // editRemark={this.editRemark}
                      // />
 
-   handleItemClick = (e, { name }) => {
+   // handleItemClick = (e, { name }) => {
 
-      console.log(name);
+   //    console.log(name);
 
-      this.setState({ activeItem: name })
+   //    this.setState({ activeItem: name })
 
-   }
+   // }
 
    render() {
-
-      console.log("this.state.user in App.js");
-      console.log(this.state.user);
 
       return (
          

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
-// import { Link } from 'react-router-dom';
 
 // use the API url from environment if it exists
 const API_URL = process.env.REACT_APP_API_URL || ''; 
@@ -184,22 +183,6 @@ class ShowRemark extends React.Component {
      
    render() {
 
-      if (this.state.loaded) {
-
-         console.log("this.props.user inside ShowRemark");
-         console.log(this.props.user);
-
-         console.log("this.props.remark inside ShowRemark");
-         console.log(this.props.remark);
-
-
-         // const remarkUserId = 
-         //    {this.props.user.is_teacher 
-         //       ? this.props.remark.teacher_id 
-         //       : this.props.remark.student_id
-         //    })
-      }
-
       return (
 
          <div>
@@ -214,18 +197,25 @@ class ShowRemark extends React.Component {
 
                               <Card.Header>{this.state.label}</Card.Header>
 
-                              <Form>                          
-                                 <Form.TextArea 
-                                    name="remark" 
-                                    value={this.props.remark.response}
-                                    placeholder={this.state.remark}
-                                    onChange={this.handleChange}
-                                 />
-                                 <Button 
-                                    content={this.state.buttonText}
-                                    onClick={this.editRemark}
-                                 />
-                              </Form>
+                              {this.props.user.is_teacher
+                                 ?
+                                    <Form>                          
+                                       <Form.TextArea 
+                                          name="remark" 
+                                          value={this.props.remark.response}
+                                          placeholder={this.state.remark}
+                                          onChange={this.handleChange}
+                                       />
+                                       <Button 
+                                          content={this.state.buttonText}
+                                          onClick={this.editRemark}
+                                       />
+                                    </Form>
+                                 :
+                                    <div>
+                                       <Card.Description>{this.state.remark}</Card.Description>
+                                    </div>
+                              }
                                  
                            </Card.Content>
                         </Card>
@@ -284,41 +274,5 @@ class ShowRemark extends React.Component {
 }
 
 export default ShowRemark;
-
-// <Card>
-//          <Card.Content>
-//             <Card.Header id="comment-header">{props.comment.user_id.username}</Card.Header>
-//             <Card.Meta>{date}</Card.Meta>
-//             <Card.Description>{props.comment.content}</Card.Description>
-//             {(props.comment.user_id.id === props.userId) && (props.loggedIn)
-//                ?
-//                   <Button onClick={props.deleteComment.bind(null, props.comment.id)}>
-//                      Delete
-//                   </Button>
-//                : null
-//             }  
-//          </Card.Content>
-//       </Card>
-
-
-// <textarea 
-//                               rows="8"
-//                               name="remark" 
-//                               value={this.state.remark}
-//                               placeholder={this.state.remark}
-//                               onChange={this.handleChange}
-//                            ></textarea>
-//                            <br/>
-//                            <button onClick={this.props.editRemark.bind(null,
-//                               this.props.elementType,
-//                               this.props.parentId,
-//                               this.props.remarkId,
-//                               this.props.remarkUserId,
-//                               this.state.remark,
-//                               this.props.substantial
-//                            )}>
-//                               Submit Changes
-//                            </button>
-
 
 
