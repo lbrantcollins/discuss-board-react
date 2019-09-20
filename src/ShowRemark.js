@@ -16,6 +16,7 @@ class ShowRemark extends React.Component {
       this.state = {
          remark: '',
          label: '',
+         buttonText: '',
          loaded: false,
       }
 
@@ -24,31 +25,36 @@ class ShowRemark extends React.Component {
    // pre-processing for this component
    componentDidMount = async () => {
 
-      // provide a label (a remark title) customized for the specific component
-      // and set the remark and remark user id according to the remark type
+      // provide a label (a remark title) and button text customized 
+      // for the specific component and grab the remark text from props
       let label;
+      let buttonText;
       let remark;
        
       switch (this.props.elementType) {
 
           case 'challenge':
-            label = "Student question:";
             remark = this.props.remark.remark;
+            label = "Student question:";
+            buttonText = 'Edit Question';
             break;
 
          case 'snippet':
-            label = "Student comment:";
             remark = this.props.remark.remark;
+            label = "Student comment:";
+            buttonText = 'Edit Comment';
             break;
 
          case 'question':
-            label = "Instructor response:";
             remark = this.props.remark.response;
+            label = "Instructor response:";
+            buttonText = 'Edit Response';
             break;
 
          case 'comment':
-             label = "Instructor response:";
              remark = this.props.remark.response;
+             label = "Instructor response:";
+             buttonText = 'Edit Response';
             break;
 
          default:
@@ -58,6 +64,7 @@ class ShowRemark extends React.Component {
       this.setState({
          remark: remark,
          label: label,
+         buttonText: buttonText,
          loaded: true,
       })
       
@@ -202,50 +209,65 @@ class ShowRemark extends React.Component {
                {this.props.userType === "teacher"
                   ?
                      <div>
-                        <Card.Header>Hello {this.state.label}</Card.Header>
-                        <Card.Content>
-                           <Form>                          
-                              <Form.TextArea 
-                                 name="remark" 
-                                 value={this.props.remark.response}
-                                 placeholder={this.props.remark.response}
-                                 onChange={this.handleChange}
-                              />
-                              <Button 
-                                 content='Edit Remark'
-                                 onClick={this.editRemark}
-                              />
-                           </Form>
-                           
-                        </Card.Content>
+                        <Card>
+                           <Card.Content>
+
+                              <Card.Header>{this.state.label}</Card.Header>
+
+                              <Form>                          
+                                 <Form.TextArea 
+                                    name="remark" 
+                                    value={this.props.remark.response}
+                                    placeholder={this.state.remark}
+                                    onChange={this.handleChange}
+                                 />
+                                 <Button 
+                                    content={this.state.buttonText}
+                                    onClick={this.editRemark}
+                                 />
+                              </Form>
+                                 
+                           </Card.Content>
+                        </Card>
                      </div>
                   :
                      <div>
                         {this.props.user.id === this.props.remark.student_id
                            ?  
                               <div>
-                                 <Card.Header>{this.state.label}</Card.Header>
-                                 <Card.Content>
-                                    <Form>
-                                       <Form.TextArea 
-                                          name="remark" 
-                                          value={this.props.remark.remark}
-                                          placeholder={this.props.remark.remark}
-                                          onChange={this.handleChange}
-                                       />
-                                       <Button 
-                                          content='Edit Remark'
-                                          onClick={this.editRemark}
-                                       />
-                                    </Form>
-                                    
-                                 </Card.Content>
+                                 <Card>
+                                    <Card.Content>
+
+                                       <Card.Header>{this.state.label}</Card.Header>
+
+                                       <Form>
+                                          <Form.TextArea 
+                                             name="remark" 
+                                             value={this.props.remark.remark}
+                                             placeholder={this.state.remark}
+                                             onChange={this.handleChange}
+                                          />
+                                          <Button 
+                                             content={this.state.buttonText}
+                                             onClick={this.editRemark}
+                                          />
+                                       </Form>
+                                       
+                                    </Card.Content>
+                                 </Card>
                               </div>
                               
                            : 
                               <div>
-                                 <Card.Header>{this.state.label}</Card.Header>
-                                 <Card.Content>{this.state.remark}</Card.Content>
+                                 <Card>
+                                    <Card.Content>
+
+                                       <Card.Header>{this.state.label}</Card.Header>
+
+                                       <Card.Description>{this.state.remark}</Card.Description>
+
+                                    </Card.Content>
+                                 </Card>
                               </div>
                         }
                      </div>

@@ -15,6 +15,7 @@ class AddRemark extends React.Component {
       this.state = {
       	remark: '',
          label: '',
+         buttonText: '',
          placeholder: '',
 
       }
@@ -25,9 +26,10 @@ class AddRemark extends React.Component {
    componentDidMount = () => {
 
       // provide a label to the add-remark title 
-      // and provide placeholder text
+      // and provide button and placeholder text
       // (customized for the specific component)
       let label;
+      let buttonText;
       let placeholder;
        
       switch (this.props.elementType) {
@@ -37,21 +39,25 @@ class AddRemark extends React.Component {
 
          case 'challenge':
             label = "Ask a Question:";
+            buttonText = "Add a Question";
             placeholder = "...about the challenge your instructor posed.";
             break;
 
          case 'snippet':
             label = "Leave a Comment:";
+            buttonText = "Add a Comment";
             placeholder = "...about your fellow student's suggested code snippet.";
             break;
 
          case 'question':
-            label = "Respond to the student:";
+            label = "Respond to student:";
+            buttonText = "Add a Response";
             placeholder = "Answer your student's question about the challenge posed.";
             break;
 
          case 'comment':
-             label = "Respond to the student:";
+             label = "Respond to student:";
+             buttonText = "Add a Response";
              placeholder = "Respond to your student's comment on the code snippet.";
             break;
 
@@ -61,11 +67,15 @@ class AddRemark extends React.Component {
 
       this.setState({
          label: label,
+         buttonText: buttonText,
          placeholder: placeholder,
       })
    
    }
 
+   ///////////////////////////////////////////////////////////////////
+   // THIS FUNCTION IS LIKELY NOT NEEDED
+   ///////////////////////////////////////////////////////////////////
    initializeFormPlaceholder = () => {
 
       // set a placeholder for the add-remark text box
@@ -222,8 +232,10 @@ class AddRemark extends React.Component {
       return (
 
          <Card>
-            <Card.Header>Howdy!  {this.state.label}</Card.Header>
             <Card.Content>
+
+               <Card.Header>{this.state.label}</Card.Header>
+
                <Form>
                   <Form.TextArea 
                      name="remark"
@@ -231,7 +243,7 @@ class AddRemark extends React.Component {
                      onChange={this.handleChange}
                   />
                      <Button 
-                        content='Submit'
+                        content={this.state.buttonText}
                         onClick={this.handleSubmit}
                      />
                </Form>

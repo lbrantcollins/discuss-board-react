@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 
+import AddRemark from './AddRemark';
 import ShowRemark from './ShowRemark'
 import ShowSnippet from './ShowSnippet'
 
@@ -63,44 +64,61 @@ class ShowChallenge extends React.Component {
 
    	if (this.state.loaded) {
 
-   		if (this.state.questions) {
+   		let questionList = null;
 
-		   	console.log("this.state.questions inside ShowChallenge");
-		   	console.log(this.state.questions);
+	      // Show the list of student questions (and accompanying teacher responses)
+	      // each of which is a "ShowRemark" generated here by a map method on all questions
 
-		   	console.log("question 2 in ShowChallenge.js");
-				console.log(this.state.questions[1]);
+	      if (this.state.questions) {
 
-		   	questionList = this.state.questions.map( (question, i) => {
+	         // for each question, create an entry to render (with it's teacher response)
+	         questionList = this.state.questions.map( (question, i) => {
 
-					return (
+	            return (
 
-		   	////////////////////////////
-		   	// use ShowRemark here (twice: question and response)
-		   	// see the code in ShowSnippet 
-		   	////////////////////////////
+	               <Card key={i}>
+	                  <ShowRemark className="student-remark"
+	                     user={this.props.user}
+	                     remark={question}
+	                     userType="student"
+	                     elementType="challenge"
+	                  />
 
-						<Card key={i}>
-							<Card.Content>
-								<Card.Header> Student question: </Card.Header>
-								<Card.Description> {question.remark} </Card.Description>
-								{this.props.user.is_teacher
-									?
-										<Card.Meta>	
-											<Button>
-												Respond (make this a textarea field)
-											</Button>
-										</Card.Meta>				
-									:
-										null
-								}
-							</Card.Content>
-						</Card>
-						
-					)
-				})
+	                  {question.response
+	                     ?
+	                        <div>
+	                           <ShowRemark className="teacher-remark"
+	                              user={this.props.user}
+	                              remark={question}
+	                              userType="teacher"
+	                              elementType="question"
+	                           />
+	                        </div>
+	                     : 
+	                        <div>
+	                           {this.props.user.is_teacher
+	                              ?
+	                                 <div>
+	                                    <AddRemark 
+	                                       user={this.props.user}
+	                                       remark={question}
+	                                       elementType="question"
+	                                       addRemark={this.addRemark}
+	                                    />
+	                                 </div>
+	                              : 
+	                                 null
+	                           }
+	                        </div>                           
+	                  }
+	               </Card>
 
-   		}
+	            )
+	            
+	         })
+
+	      }
+
 
 			if (this.state.snippets) {
 
@@ -116,17 +134,20 @@ class ShowChallenge extends React.Component {
 
 						<Card key={i}>
 							<Card.Content>
+
 								<Card.Header> Student answer: </Card.Header>
+
 								<Card.Description> 
 									<pre><code> {snippet.snippet}</code></pre>
 								</Card.Description>
+
 								<Card.Meta>	
 									<Button 
 										content="View Student Comments"
-										size="mini" 
 										onClick={() => this.showSnippet(i)}
 									/> 
-								</Card.Meta>						
+								</Card.Meta>	
+
 							</Card.Content>
 						</Card>
 						
@@ -141,7 +162,7 @@ class ShowChallenge extends React.Component {
 
 			<div>
 
-				<p> The Challenge: </p>
+				<h2> The Challenge: </h2>
 
 				<div>
 					<Card>
@@ -170,7 +191,6 @@ class ShowChallenge extends React.Component {
 					? null
 					: 
 						<div>
-							<h2>Student questions about this challenge:</h2>
 							<Card.Group>
 								{questionList}
 							</Card.Group>
@@ -189,7 +209,6 @@ class ShowChallenge extends React.Component {
 									/>
 								:
 									<div>
-			 							<h2>Student answers to this challenge:</h2>
 			 							<Card.Group>
 			 								{snippetList}
 			 							</Card.Group>

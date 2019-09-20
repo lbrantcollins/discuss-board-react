@@ -99,7 +99,7 @@ class ShowSnippet extends React.Component {
 
       if (this.state.loaded && this.state.comments) {
 
-         // create an entry to render for each comment (with it's teacher observation)
+         // for each comment, create an entry to render (with it's teacher observation)
          commentList = this.state.comments.map( (comment, i) => {
 
             return (
@@ -159,6 +159,7 @@ class ShowSnippet extends React.Component {
                      user={this.props.user}
                      remark={this.props.snippet}
                      elementType="snippet"
+                     addRemark={this.AddRemark}
                   />
             }
    			
@@ -166,38 +167,37 @@ class ShowSnippet extends React.Component {
 
             
                <Card>
-
-                  <Card.Header>
-                     Student answer:
-                  </Card.Header>
-
-                  <Card.Meta>
-                     Language: {this.props.snippet.language}
-                  </Card.Meta>
-               
                   <Card.Content>
-                     {this.props.snippet.student_id === this.props.user.id
-                        ?
-                           <Form>
-                              <Form.TextArea 
-                                 name="snippetText" 
-                                 value={this.props.snippet.snippet}
-                                 placeholder={this.props.snippet.snippet}
-                                 onChange={this.handleChange}
-                              />
-                              <Button 
-                                 content="Submit Changes"
-                                 onClick={this.editSnippet}
-                              />
-                           </Form>
+                     <Card.Header>
+                        Student answer:
+                     </Card.Header>
 
-                           
-                        : 
-                           <div>
-                              <pre><code> {this.props.snippet.snippet}</code></pre>
-                           </div>                       
+                        Language: {this.props.snippet.language}
+                  
+                     <Card.Description>
+                        {this.props.snippet.student_id === this.props.user.id
+                           ?
+                              <Form>
+                                 <Form.TextArea 
+                                    name="snippetText" 
+                                    value={this.props.snippet.snippet}
+                                    placeholder={this.props.snippet.snippet}
+                                    onChange={this.handleChange}
+                                 />
+                                 <Button 
+                                    content="Submit Changes"
+                                    onClick={this.editSnippet}
+                                 />
+                              </Form>
 
-                     }
+                              
+                           : 
+                              <div>
+                                 <pre><code> {this.props.snippet.snippet}</code></pre>
+                              </div>                       
+
+                        }
+                     </Card.Description>
                   </Card.Content>
                </Card>
            
