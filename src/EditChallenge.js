@@ -12,7 +12,7 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 
 class EditChallenge extends React.Component {
-   // props: challenge
+   // props: challenge, returnToShowChallenge (function)
    constructor(props) {
       super(props);
 
@@ -78,17 +78,11 @@ class EditChallenge extends React.Component {
          credentials: 'include',
       })
 
-      //////////////////////////////
-      // redirect somewhere?
-      // this.props.history.push('/media/' + newMedia.data.id)
-      //////////////////////////////
+      this.props.returnToShowChallenge();
 
   }
    
    render() {
-
-      console.log("this.state");
-      console.log(this.state);
 
       // set up an edit toggle for each of the three elements below:
       // title/description, keywords, and languages
@@ -132,9 +126,9 @@ class EditChallenge extends React.Component {
 
 
             <Card.Group>
-               <SelectKeywords challenge_id={this.props.challenge_id} />
+               <SelectKeywords challenge_id={this.props.challenge.id} />
 
-               <SelectLanguages challenge_id={this.props.challenge_id} /> 
+               <SelectLanguages challenge_id={this.props.challenge.id} /> 
             </Card.Group> 
 
             <br/>
@@ -142,7 +136,7 @@ class EditChallenge extends React.Component {
             <Button 
                content="Submit Updated Challenge"
                className="secondary" 
-               onSubmit={this.handleSubmit}
+               onClick={this.handleSubmit}
             />
 
          </div>

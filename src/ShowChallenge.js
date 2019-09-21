@@ -71,6 +71,13 @@ class ShowChallenge extends React.Component {
    	})
    }
 
+   returnToShowChallenge = () => {
+  		this.setState({
+   		...this.state,
+   		editChallenge: false,
+   	})
+   }
+
    render() {
 
    	let questionList = null;
@@ -78,90 +85,91 @@ class ShowChallenge extends React.Component {
 
    	if (this.state.loaded) {
 
-   		let questionList = null;
+   		if (!this.state.editChallenge) {
 
-	      // Show the list of student questions (and accompanying teacher responses)
-	      // each of which is a "ShowRemark" generated here by a map method on all questions
+		      // Show the list of student questions (and accompanying teacher responses)
+		      // each of which is a "ShowRemark" generated here by a map method on all questions
 
-	      if (this.state.questions) {
+		      if (this.state.questions) {
 
-	         // for each question, create an entry to render (with it's teacher response)
-	         questionList = this.state.questions.map( (question, i) => {
+		         // for each question, create an entry to render (with it's teacher response)
+		         questionList = this.state.questions.map( (question, i) => {
 
-	            return (
+		            return (
 
-	               <Card key={i}>
-	                  <ShowRemark className="student-remark"
-	                     user={this.props.user}
-	                     remark={question}
-	                     userType="student"
-	                     elementType="challenge"
-	                  />
+		               <Card key={i}>
+		                  <ShowRemark className="student-remark"
+		                     user={this.props.user}
+		                     remark={question}
+		                     userType="student"
+		                     elementType="challenge"
+		                  />
 
-	                  {question.response
-	                     ?
-	                        <div>
-	                           <ShowRemark className="teacher-remark"
-	                              user={this.props.user}
-	                              remark={question}
-	                              userType="teacher"
-	                              elementType="question"
-	                           />
-	                        </div>
-	                     : 
-	                        <div>
-	                           {this.props.user.is_teacher
-	                              ?
-	                                 <div>
-	                                    <AddRemark 
-	                                       user={this.props.user}
-	                                       remark={question}
-	                                       elementType="question"
-	                                       addRemark={this.addRemark}
-	                                    />
-	                                 </div>
-	                              : 
-	                                 null
-	                           }
-	                        </div>                           
-	                  }
-	               </Card>
+		                  {question.response
+		                     ?
+		                        <div>
+		                           <ShowRemark className="teacher-remark"
+		                              user={this.props.user}
+		                              remark={question}
+		                              userType="teacher"
+		                              elementType="question"
+		                           />
+		                        </div>
+		                     : 
+		                        <div>
+		                           {this.props.user.is_teacher
+		                              ?
+		                                 <div>
+		                                    <AddRemark 
+		                                       user={this.props.user}
+		                                       remark={question}
+		                                       elementType="question"
+		                                       addRemark={this.addRemark}
+		                                    />
+		                                 </div>
+		                              : 
+		                                 null
+		                           }
+		                        </div>                           
+		                  }
+		               </Card>
 
-	            )
-	            
-	         })
+		            )
+		            
+		         })
 
-	      }
+		      }
 
 
-			if (this.state.snippets) {
+				if (this.state.snippets) {
 
-				snippetList = this.state.snippets.map( (snippet, i) => {
+					snippetList = this.state.snippets.map( (snippet, i) => {
 
-					return (
+						return (
 
-						<Card key={i}>
-							<Card.Content>
+							<Card key={i}>
+								<Card.Content>
 
-								<Card.Header> Student answer: </Card.Header>
+									<Card.Header> Student answer: </Card.Header>
 
-								<Card.Description> 
-									<pre><code> {snippet.snippet}</code></pre>
-								</Card.Description>
+									<Card.Description> 
+										<pre><code> {snippet.snippet}</code></pre>
+									</Card.Description>
 
-								<Card.Meta>	
-									<Button 
-										content="View Student Comments"
-										onClick={() => this.showSnippet(i)}
-									/> 
-								</Card.Meta>	
+									<Card.Meta>	
+										<Button 
+											content="View Student Comments"
+											onClick={() => this.showSnippet(i)}
+										/> 
+									</Card.Meta>	
 
-							</Card.Content>
-						</Card>
-						
-					)
-				})
+								</Card.Content>
+							</Card>
+							
+						)
+					})
 
+				}
 			}
 
 		}
@@ -174,7 +182,10 @@ class ShowChallenge extends React.Component {
 
 				{this.state.editChallenge
 					?
-					 	<EditChallenge challenge={this.props.challenge}/>
+					 	<EditChallenge 
+					 		challenge={this.props.challenge}
+					 		returnToShowChallenge={this.returnToShowChallenge}
+				 		/>
 					:
 						<div>
 

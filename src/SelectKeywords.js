@@ -327,7 +327,7 @@ class SelectKeywords extends React.Component {
                               <Form 
                                  className="checkbox-selections" 
                                  onSubmit={this.updateKeywordSelections}>
-                                 <Button>Submit Keywords</Button>
+                                 <Button>Submit Selected Keywords</Button>
                               </Form>
                            </Card.Meta>
                            <br/>

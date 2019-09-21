@@ -326,8 +326,11 @@ class SelectLanguages extends React.Component {
                            <br/>
 
                            <Card.Meta>
-                        		<Form className="checkbox-selections" onSubmit={this.updateLanguageSelections}>
-                              	<Button>Submit Languages</Button>
+                        		<Form 
+                                 className="checkbox-selections" 
+                                 onSubmit={this.updateLanguageSelections}
+                              >
+                              	<Button>Submit Selected Languages</Button>
                               </Form>
                            </Card.Meta>
                            <br/>
