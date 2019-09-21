@@ -127,13 +127,16 @@ class SelectLanguages extends React.Component {
    addLanguage = async (e) => {
       e.preventDefault();
 
-      // add the new language to the list of available languages
-      const response = await fetch(API_URL + '/languages', {
-         method: 'POST',
-         body: JSON.stringify( {language: this.state.newLanguage} ),
-         headers: {'Content-Type': 'application/json'},
-         credentials: 'include',
-      })
+      if (this.state.newLanguage) {
+         // add the new language to the list of available languages
+         const response = await fetch(API_URL + '/languages', {
+            method: 'POST',
+            body: JSON.stringify( {language: this.state.newLanguage} ),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })        
+      }
+
 
       // reset newLanguage to blank (to blank out the input Form)
       this.setState({
@@ -244,6 +247,7 @@ class SelectLanguages extends React.Component {
          			onChange={this.toggleLanguageSelection.bind(null, i)} 
          			checked={this.state.newLanguageSelections[i]}
       			/>
+               &nbsp;
          		{language.language}
          	</div>
 			);
@@ -257,6 +261,7 @@ class SelectLanguages extends React.Component {
                   onChange={this.toggleLanguageToBeDeleted.bind(null, i)} 
                   checked={this.state.languagesToBeDeleted[i]}
                />
+               &nbsp;
                {language.language}
             </div>
          );
@@ -271,44 +276,69 @@ class SelectLanguages extends React.Component {
                ? 
                   <div>
 
-                     <h4>Edit Language List</h4>
+                     <Card>
+                        <Card.Content>
 
-                     {blankBoxLanguageList}
+                           <Card.Header>Edit Language List</Card.Header>
+                        
+                           <Card.Description>
+                              {blankBoxLanguageList}
+                           </Card.Description>
+                           <br/>
 
-                     <Form className="checkbox-selections" onSubmit={this.deleteLanguages}>
-                        <Button>Delete All Checked Languages</Button>
-                     </Form>
-                     <br/>
-                     <p>CAUTION: Deleting a language deletes it from all existing challenges.</p>
+                           <Card.Meta>
+                              <Form className="checkbox-selections" onSubmit={this.deleteLanguages}>
+                                 <Button>Delete All Checked Languages</Button>
+                              </Form>
+                     
+                              <p>CAUTION: Deleting a language deletes it from all existing challenges.</p>
+                           </Card.Meta>
+                           <br/>
 
-                     <Form className="add-a-new-checkbox-item" onSubmit={this.addLanguage}>
-                        <Form.Input 
-                           type="text"
-                           name="newLanguage"
-                           value={this.state.newLanguage}
-                           placeholder="Enter a new language"
-                           onChange={this.handleChange}
-                        />
-                        <Button>Add New Language</Button>
-                     </Form>
+                           <Card.Meta>
+                              <Form className="add-a-new-checkbox-item" onSubmit={this.addLanguage}>
+                                 <Form.Input 
+                                    type="text"
+                                    name="newLanguage"
+                                    value={this.state.newLanguage}
+                                    placeholder="Enter a new language"
+                                    onChange={this.handleChange}
+                                 />
+                                 <Button>Submit New Language</Button>
+                              </Form>
+                           </Card.Meta>
+
+                        </Card.Content>
+                     </Card>
 
                   </div>   
                :
                   <div>
-
                      
-                  	<h4>Select Languages for the Challenge</h4>
+                     <Card>
+                        <Card.Content>
 
-                     {languageList}
+                           <Card.Header>Select Languages for the Challenge</Card.Header>
+                        
+                           <Card.Description>
+                              {languageList}
+                           </Card.Description>
+                           <br/>
 
-               		<Form className="checkbox-selections" onSubmit={this.updateLanguageSelections}>
-                     	<Button>Submit Languages</Button>
-                     </Form>
+                           <Card.Meta>
+                        		<Form className="checkbox-selections" onSubmit={this.updateLanguageSelections}>
+                              	<Button>Submit Languages</Button>
+                              </Form>
+                           </Card.Meta>
+                           <br/>
+                           <Card.Meta>
+                              <Form onSubmit={this.toggleLanguageEditList}>
+                                 <Button>Edit List of Available Languages</Button>
+                              </Form>
+                           </Card.Meta>
 
-                     <Form onSubmit={this.toggleLanguageEditList}>
-                        <Button>Edit List of Available Languages</Button>
-                     </Form>
-
+                        </Card.Content>
+                     </Card>
                   </div>
             }  
 

@@ -104,32 +104,46 @@ class EditChallenge extends React.Component {
 
          <div>
 
-            <Form onSubmit={this.handleSubmit}>
-               <label>Title:</label>
-               <br/>
-               <Form.Input 
-                  type="text" 
-                  name="title" 
-                  placeholder={this.state.title}
-                  value={this.state.title} 
-                  onChange={this.handleChange}
-               />
-               <br/>
-               <label>Description:</label>
-               <br/>
-               <Form.TextArea 
-                  name="description" 
-                  placeholder={this.state.description}
-                  value={this.state.description}
-                  onChange={this.handleChange}
-               ></Form.TextArea>
-               <br/>
-               <Button>Submit Changes</Button>
-            </Form>
+            <Card>
+               <Card.Content>
+                  <Form>
+                     <label>Title:</label>
+                     <br/>
+                     <Form.Input 
+                        type="text" 
+                        name="title" 
+                        placeholder={this.props.challenge.title}
+                        value={this.state.title} 
+                        onChange={this.handleChange}
+                     />
+                     <br/>
+                     <label>Description:</label>
+                     <br/>
+                     <Form.TextArea 
+                        name="description" 
+                        placeholder={this.props.challenge.description}
+                        value={this.state.description}
+                        onChange={this.handleChange}
+                     ></Form.TextArea>
+                     <br/>
+                  </Form>
+               </Card.Content>
+            </Card>
 
-            <SelectKeywords challenge_id={this.props.challenge_id} />
 
-            <SelectLanguages challenge_id={this.props.challenge_id} />      
+            <Card.Group>
+               <SelectKeywords challenge_id={this.props.challenge_id} />
+
+               <SelectLanguages challenge_id={this.props.challenge_id} /> 
+            </Card.Group> 
+
+            <br/>
+               
+            <Button 
+               content="Submit Updated Challenge"
+               className="secondary" 
+               onSubmit={this.handleSubmit}
+            />
 
          </div>
            

@@ -37,13 +37,13 @@ class ChallengeList extends React.Component {
 
    }
 
-   showEditChallenge = (challengeToBeEdited) => {
-      this.setState({
-         challengeToBeEdited: challengeToBeEdited,
-         editChallenge: true
-      })
+   // showEditChallenge = (challengeToBeEdited) => {
+   //    this.setState({
+   //       challengeToBeEdited: challengeToBeEdited,
+   //       editChallenge: true
+   //    })
       
-   }
+   // }
 
    showChallenge = (i) => {
    	this.setState({
