@@ -22,12 +22,17 @@ class ShowChallenge extends React.Component {
 			snippets: [],
 			editChallenge: false,
 			addSnippet: false,
+			turnOffAddSnippetButton: false,
 			loaded: false,
 		}
 	}
 
 	// retrieve all existing questions and snippets for this challenge
 	componentDidMount = async () => {
+
+		this.setState({
+			turnOffAddSnippetButton: false,
+		})
 
 		try {
 
@@ -61,32 +66,34 @@ class ShowChallenge extends React.Component {
 
    showSnippet = (i) => {
    	this.setState({
-   		...this.state,
    		index: i,
    	})
    }
 
     editChallenge = () => {
    	this.setState({
-   		...this.state,
    		editChallenge: true,
    	})
    }
 
    returnToShowChallenge = () => {
   		this.setState({
-   		...this.state,
    		editChallenge: false,
    	})
    }
 
-  	toggleAddSnippet = () => {
+  	toggleAddSnippet = async () => {
   		this.setState({
-   		...this.state,
    		addSnippet: !this.state.addSnippet,
    	})
    	// Need to re-render the snippets
    	this.componentDidMount();
+   }
+
+   turnOffAddSnippetButton = () => {
+   	this.setState({
+   		turnOffAddSnippetButton: true,
+   	})
    }
 
    render() {
@@ -212,18 +219,28 @@ class ShowChallenge extends React.Component {
 													/> 
 												:
 													<div>
-														<Button 
-															content="Contribute an Answer"
-															onClick={this.toggleAddSnippet}
-														/> 
-
-														{this.state.addSnippet
+														{this.state.showChallenge
 															?
-																<AddSnippet 
-																	challenge={this.props.challenge}
-																	student_id={this.props.user.id}
-																	toggleAddSnippet={this.toggleAddSnippet}
-																/>
+																<div>
+																
+																	<Button 
+																		content="Contribute an Answer"
+																		onClick={this.toggleAddSnippet}
+																	/> 
+
+																	{this.state.addSnippet
+																		?
+																			<AddSnippet 
+																				challenge={this.props.challenge}
+																				student_id={this.props.user.id}
+																				toggleAddSnippet={this.toggleAddSnippet}
+																				turnOffAddSnippetButton={this.turnOffAddSnippetButton}
+																			/>
+																		:
+																			null
+																	}
+
+																</div>
 															:
 																null
 														}

@@ -9,6 +9,7 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 class AddSnippet extends React.Component {
    constructor() {
    	// props: challenge, student_id, toggleAddSnippet (function)
+      //        turnOffAddSnippetButton (function)
       super();
 
       this.state = {
@@ -23,8 +24,7 @@ class AddSnippet extends React.Component {
    
    componentDidMount = async () => {
 
-      console.log("this.props.challenge.id in addSnippet");
-      console.log(this.props.challenge.id);
+      this.props.turnOffAddSnippetButton();
 
    	try {
 
@@ -112,9 +112,6 @@ class AddSnippet extends React.Component {
 
    render() {
 
-      console.log("languages in AddSnippet");
-      console.log(this.state.languages);
-
    	const languageList = this.state.languages.map( (language, i) => {
          return (
          	<div key={language.id}>
@@ -127,9 +124,6 @@ class AddSnippet extends React.Component {
          	</div>
 			);
       })
-
-      // console.log("languageList in AddSnippet");
-      // console.log(languageList);
 
    	return (
             		
