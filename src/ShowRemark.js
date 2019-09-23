@@ -24,6 +24,9 @@ class ShowRemark extends React.Component {
    // pre-processing for this component
    componentDidMount = async () => {
 
+      console.log("this.props.remark inside ShowRemark, componentDidMount");
+      console.log(this.props.remark);
+
       // provide a label (a remark title) and button text customized 
       // for the specific component and grab the remark text from props
       let label;
@@ -47,13 +50,13 @@ class ShowRemark extends React.Component {
          case 'question':
             remark = this.props.remark.response;
             label = "Instructor response:";
-            buttonText = 'Edit Response';
+            buttonText = 'Change Response';
             break;
 
          case 'comment':
              remark = this.props.remark.response;
              label = "Instructor response:";
-             buttonText = 'Edit Response';
+             buttonText = 'Change Response';
             break;
 
          default:
@@ -90,6 +93,14 @@ class ShowRemark extends React.Component {
             // update database for a student's question about a challenge
             try {
 
+               // if the remark is not changed (this.state.remark is empty), 
+               // then save original remark
+               if (!this.state.remark) {
+                  await this.setState({
+                     remark: this.props.remark.remark,
+                  })
+               }
+
                await fetch(API_URL + '/questions/' + this.props.remark.remark_id, {
                   method: 'PUT',
                   body: JSON.stringify({
@@ -112,6 +123,14 @@ class ShowRemark extends React.Component {
             
             // update database for a student's comment about a snippet
             try {
+
+               // if the remark is not changed (this.state.remark is empty), 
+               // then save original remark
+               if (!this.state.remark) {
+                  await this.setState({
+                     remark: this.props.remark.remark,
+                  })
+               }
 
                await fetch(API_URL + '/comments/' + this.props.remark.remark_id, {
                   method: 'PUT',
@@ -136,6 +155,14 @@ class ShowRemark extends React.Component {
             // update database for teacher response to a student Q about challenge
             try {
 
+               // if the response is not changed (this.state.remark is empty), 
+               // then save original response
+               if (!this.state.remark) {
+                  await this.setState({
+                     remark: this.props.remark.response,
+                  })
+               }
+
                await fetch(API_URL + '/responses/' + this.props.remark.response_id, {
                   method: 'PUT',
                   body: JSON.stringify({
@@ -157,6 +184,14 @@ class ShowRemark extends React.Component {
             
             // update database for teacher response to a student comment about snippet
             try {
+
+               // if the response is not changed (this.state.remark is empty), 
+               // then save original response
+               if (!this.state.remark) {
+                  await this.setState({
+                     remark: this.props.remark.response,
+                  })
+               }
 
                await fetch(API_URL + '/observations/' + this.props.remark.response_id, {
                   method: 'PUT',
@@ -202,7 +237,7 @@ class ShowRemark extends React.Component {
                                     <Form>                          
                                        <Form.TextArea 
                                           name="remark" 
-                                          value={this.props.remark.response}
+                                          value={this.state.remark}
                                           placeholder={this.state.remark}
                                           onChange={this.handleChange}
                                        />
@@ -233,7 +268,7 @@ class ShowRemark extends React.Component {
                                        <Form>
                                           <Form.TextArea 
                                              name="remark" 
-                                             value={this.props.remark.remark}
+                                             value={this.state.remark}
                                              placeholder={this.state.remark}
                                              onChange={this.handleChange}
                                           />
@@ -254,7 +289,7 @@ class ShowRemark extends React.Component {
 
                                        <Card.Header>{this.state.label}</Card.Header>
 
-                                       <Card.Description>{this.state.remark}</Card.Description>
+                                       <Card.Description>{this.props.remark.remark}</Card.Description>
 
                                     </Card.Content>
                                  </Card>

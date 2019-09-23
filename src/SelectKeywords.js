@@ -19,6 +19,7 @@ class SelectKeywords extends React.Component {
       	newKeywordSelections: [],
          newKeyword: '',
          keywordEditListToggle: false,
+         editKeywords: false,
       }
 
    }
@@ -86,7 +87,7 @@ class SelectKeywords extends React.Component {
       e.preventDefault();
 
       this.setState({
-         keywordEditListToggle: !this.state.keywordEditListToggle
+         keywordEditListToggle: !this.state.keywordEditListToggle,
       })
    }
 
@@ -115,11 +116,12 @@ class SelectKeywords extends React.Component {
          credentials: 'include',
       }) 
 
-      ////////////////////////////////
-      // NEED TO REDIRECT SOMEWHERE (RATHER THAN RUN THIS FUNCTION)
-      // grab the full list of keywords, sort, and display
+      this.setState({
+         editKeywords: false,
+      })
+
+      // Need to grab the full list of keywords again, sort, and display
       await this.componentDidMount();
-      ////////////////////////////////
 
    }
 
@@ -138,14 +140,12 @@ class SelectKeywords extends React.Component {
 
       // reset newKeyword to blank (to blank out the input Form)
       this.setState({
-         newKeyword: ''
+         newKeyword: '',
+         editKeywords: false,
       })
 
-      ////////////////////////////////
-      // NEED TO REDIRECT SOMEWHERE (RATHER THAN RUN THIS FUNCTION)
-      // grab the full list of keywords, sort, and display
+      // Need to grab the full list of keywords again, sort, and display
       await this.componentDidMount();
-      ////////////////////////////////
    }
 
    updateKeywordSelections = async (e) => {
@@ -215,6 +215,10 @@ class SelectKeywords extends React.Component {
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
       })	
+
+      this.setState({
+         editKeywords: false,
+      })
    }
 
 
@@ -231,6 +235,14 @@ class SelectKeywords extends React.Component {
       keywordsToBeDeleted[i] = !this.state.keywordsToBeDeleted[i];
       await this.setState({
          keywordsToBeDeleted: keywordsToBeDeleted
+      })
+   }
+
+   turnOnEditKeywords = (e) => {
+      e.preventDefault();
+
+      this.setState({
+         editKeywords: true,
       })
    }
   	
@@ -270,78 +282,98 @@ class SelectKeywords extends React.Component {
 
          <div>
 
-            {this.state.keywordEditListToggle 
-               ? 
+            {this.state.editKeywords
+               ?
                   <div>
+                     {this.state.keywordEditListToggle 
+                        ? 
 
-                     <Card>
-                        <Card.Content>
+                              <Card>
+                                 <Card.Content>
 
-                           <Card.Header>Edit Keyword List</Card.Header>
-                        
-                           <Card.Description>
-                              {blankBoxKeywordList}
-                           </Card.Description>
-                           <br/>
+                                    <Card.Header>Edit Keyword List</Card.Header>
+                                 
+                                    <Card.Description>
+                                       {blankBoxKeywordList}
+                                    </Card.Description>
+                                    <br/>
 
-                           <Card.Meta>
-                              <Form className="checkbox-selections" onSubmit={this.deleteKeywords}>
-                                 <Button>Delete All Checked Keywords</Button>
-                              </Form>
-                     
-                              <p>CAUTION: Deleting a keyword deletes it from all existing challenges.</p>
-                           </Card.Meta>
-                           <br/>
+                                    <Card.Meta>
+                                       <Form className="checkbox-selections" onSubmit={this.deleteKeywords}>
+                                          <Button>Delete All Checked Keywords</Button>
+                                       </Form>
+                              
+                                       <p>CAUTION: Deleting a keyword deletes it from all existing challenges.</p>
+                                    </Card.Meta>
+                                    <br/>
 
-                           <Card.Meta>
-                              <Form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
-                                 <Form.Input 
-                                    type="text"
-                                    name="newKeyword"
-                                    value={this.state.newKeyword}
-                                    placeholder="Enter a new keyword"
-                                    onChange={this.handleChange}
-                                 />
-                                 <Button>Submit New Keyword</Button>
-                              </Form>
-                           </Card.Meta>
+                                    <Card.Meta>
+                                       <Form className="add-a-new-checkbox-item" onSubmit={this.addKeyword}>
+                                          <Form.Input 
+                                             type="text"
+                                             name="newKeyword"
+                                             value={this.state.newKeyword}
+                                             placeholder="Enter a new keyword"
+                                             onChange={this.handleChange}
+                                          />
+                                          <Button>Submit New Keyword</Button>
+                                       </Form>
+                                    </Card.Meta>
 
-                        </Card.Content>
-                     </Card>
+                                 </Card.Content>
+                              </Card>
 
-                  </div>   
-               :
-                  <div>
+                        :
 
-                     <Card>
-                        <Card.Content>
+                              <Card>
+                                 <Card.Content>
 
-                           <Card.Header>Select Keywords for the Challenge</Card.Header>
-                        
-                           <Card.Description>
-                              {keywordList}
-                           </Card.Description>
-                           <br/>
+                                    <Card.Header>Select Keywords for this Challenge</Card.Header>
+                                 
+                                    <Card.Description>
+                                       {keywordList}
+                                    </Card.Description>
+                                    <br/>
 
-                           <Card.Meta>
-                              <Form 
-                                 className="checkbox-selections" 
-                                 onSubmit={this.updateKeywordSelections}>
-                                 <Button>Submit Selected Keywords</Button>
-                              </Form>
-                           </Card.Meta>
-                           <br/>
-                           <Card.Meta>
-                              <Form onSubmit={this.toggleKeywordEditList}>
-                                 <Button>Edit List of Available Keywords</Button>
-                              </Form>
-                           </Card.Meta>
+                                    <Card.Meta>
+                                       <Form 
+                                          className="checkbox-selections" 
+                                          onSubmit={this.updateKeywordSelections}>
+                                          <Button>Submit Selected Keywords</Button>
+                                       </Form>
+                                    </Card.Meta>
+                                    <br/>
+                                    <Card.Meta>
+                                       <Form onSubmit={this.toggleKeywordEditList}>
+                                          <Button>Edit List of Available Keywords</Button>
+                                       </Form>
+                                    </Card.Meta>
 
-                        </Card.Content>
-                     </Card>
+                                 </Card.Content>
+                              </Card>
 
+                     }  
                   </div>
-            }  
+               :
+                  <Card>
+                     <Card.Content>
+
+                        <Card.Header>Keywords for this Challenge</Card.Header>
+                     
+                        <Card.Description>
+                           {keywordList}
+                        </Card.Description>
+                        <br/>
+
+                        <Button
+                           content="Edit Keywords"
+                           onClick={this.turnOnEditKeywords}
+                        />
+
+                     </Card.Content>
+                  </Card>
+            }
+
 
          </div>
       );

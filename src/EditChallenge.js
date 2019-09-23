@@ -17,8 +17,10 @@ class EditChallenge extends React.Component {
       super(props);
 
       this.state = {
-      	title: '',
-      	description: '',
+      	title: this.props.challenge.title,
+      	description: this.props.challenge.description,
+         editTitle: false,
+         editDescription: false,
       }
 
    }
@@ -68,19 +70,71 @@ class EditChallenge extends React.Component {
    handleSubmit = async (e) => {
       e.preventDefault();
 
+      // const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
+      //    method: 'PUT',
+      //    body: JSON.stringify({
+      //       title: this.state.title,
+      //       description: this.state.description,
+      //    }),
+      //    headers: {'Content-Type': 'application/json'},
+      //    credentials: 'include',
+      // })
+
+      this.props.returnToShowChallenge();
+
+   }
+
+   handleSubmitTitle = async (e) => {
+      e.preventDefault();
+
       const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
          method: 'PUT',
          body: JSON.stringify({
             title: this.state.title,
+            description: this.props.challenge.description,
+         }),
+         headers: {'Content-Type': 'application/json'},
+         credentials: 'include',
+      })
+
+      this.setState({
+         ...this.state,
+         editTitle: false,
+      })
+   }
+
+   handleSubmitDescription = async (e) => {
+      e.preventDefault();
+
+      const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
+         method: 'PUT',
+         body: JSON.stringify({
+            title: this.props.challenge.title,
             description: this.state.description,
          }),
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
       })
 
-      this.props.returnToShowChallenge();
+      this.setState({
+         ...this.state,
+         editDescription: false,
+      })
+   }
 
-  }
+   toggleEditTitle = () => {
+      this.setState({
+         ...this.state,
+         editTitle: true,
+      })
+   }
+
+   toggleEditDescription = () => {
+      this.setState({
+         ...this.state,
+         editDescription: true,
+      })
+   }
    
    render() {
 
@@ -98,31 +152,84 @@ class EditChallenge extends React.Component {
 
          <div>
 
-            <Card>
-               <Card.Content>
-                  <Form>
-                     <label>Title:</label>
-                     <br/>
-                     <Form.Input 
-                        type="text" 
-                        name="title" 
-                        placeholder={this.props.challenge.title}
-                        value={this.state.title} 
-                        onChange={this.handleChange}
-                     />
-                     <br/>
-                     <label>Description:</label>
-                     <br/>
-                     <Form.TextArea 
-                        name="description" 
-                        placeholder={this.props.challenge.description}
-                        value={this.state.description}
-                        onChange={this.handleChange}
-                     ></Form.TextArea>
-                     <br/>
-                  </Form>
-               </Card.Content>
-            </Card>
+            <Card.Group>
+               <Card>
+                  <Card.Content>
+
+                     <Card.Header>Title:</Card.Header>
+
+                     <Card.Description>
+
+                        {this.state.editTitle
+                           ?
+                              <Form>
+                                 <Form.Input 
+                                    type="text" 
+                                    name="title" 
+                                    placeholder={this.state.title}
+                                    value={this.state.title} 
+                                    onChange={this.handleChange}
+                                 />
+                                 <Button
+                                    content="Submit Changes"
+                                    onClick={this.handleSubmitTitle}
+                                 />
+                              </Form>
+                           :
+                              <div>
+                                 {this.state.title}
+                                 <br/>
+                                 <Button
+                                    content="Edit"
+                                    onClick={this.toggleEditTitle}
+                                 />
+                              </div>
+                        }
+                     </Card.Description>
+
+                  </Card.Content>
+               </Card>
+
+               <Card>
+                  <Card.Content>
+                     
+                     <Card.Header>Description:</Card.Header>
+
+                     <Card.Description>
+
+                        {this.state.editDescription
+                           ?
+                              <Form>
+                                 <Form.TextArea 
+                                    name="description" 
+                                    placeholder={this.state.description}
+                                    value={this.state.description}
+                                    onChange={this.handleChange}
+                                 />
+                                 <Button
+                                    content="Submit Changes"
+                                    onClick={this.handleSubmitDescription}
+                                 />
+                                 <br/>
+                              </Form>
+                           :
+                              <div>
+                                 {this.state.description}
+                                 <br/>
+                                 <Button
+                                    content="Edit"
+                                    onClick={this.toggleEditDescription}
+                                 />
+                              </div>
+                        }
+
+                     </Card.Description>
+
+                  </Card.Content>
+               </Card>
+            </Card.Group>
+
+            <br/>
 
 
             <Card.Group>
@@ -131,6 +238,9 @@ class EditChallenge extends React.Component {
                <SelectLanguages challenge_id={this.props.challenge.id} /> 
             </Card.Group> 
 
+            <br/>
+            <br/>
+            <br/>
             <br/>
                
             <Button 

@@ -20,6 +20,7 @@ class SelectLanguages extends React.Component {
       	newLanguageSelections: [],
          newLanguage: '',
          languageEditListToggle: false,
+         editLanguages: false,
       }
 
    }
@@ -87,7 +88,7 @@ class SelectLanguages extends React.Component {
       e.preventDefault();
 
       this.setState({
-         languageEditListToggle: !this.state.languageEditListToggle
+         languageEditListToggle: !this.state.languageEditListToggle,
       })
    }
 
@@ -116,11 +117,12 @@ class SelectLanguages extends React.Component {
          credentials: 'include',
       }) 
 
-      ////////////////////////////////
-      // NEED TO REDIRECT SOMEWHERE (RATHER THAN RUN THIS FUNCTION)
-      // grab the full list of languages, sort, and display
+      this.setState({
+         editLanguages: false,
+      })
+
+      // Need to grab the full list of languages again, sort, and display
       await this.componentDidMount();
-      ////////////////////////////////
 
    }
 
@@ -134,20 +136,19 @@ class SelectLanguages extends React.Component {
             body: JSON.stringify( {language: this.state.newLanguage} ),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
-         })        
-      }
+         })   
 
+      }
 
       // reset newLanguage to blank (to blank out the input Form)
       this.setState({
-         newLanguage: ''
+         newLanguage: '',
+         editLanguages: false,
       })
 
-      ////////////////////////////////
-      // NEED TO REDIRECT SOMEWHERE (RATHER THAN RUN THIS FUNCTION)
-      // grab the full list of languages, sort, and display
+      
+      // Need to grab the full list of languages again, sort, and display
       await this.componentDidMount();
-      ////////////////////////////////
    }
 
    updateLanguageSelections = async (e) => {
@@ -217,6 +218,10 @@ class SelectLanguages extends React.Component {
          headers: {'Content-Type': 'application/json'},
          credentials: 'include',
       })	
+
+      this.setState({
+         editLanguages: false,
+      })
    }
 
 
@@ -236,6 +241,14 @@ class SelectLanguages extends React.Component {
       })
    }
   	
+   turnOnEditLanguages = (e) => {
+      e.preventDefault();
+
+      this.setState({
+         editLanguages: true,
+      })
+   }
+
 
    render() {
 
@@ -272,78 +285,98 @@ class SelectLanguages extends React.Component {
 
          <div>
 
-            {this.state.languageEditListToggle 
-               ? 
+            {this.state.editLanguages
+               ?
                   <div>
 
-                     <Card>
-                        <Card.Content>
+                     {this.state.languageEditListToggle 
+                        ? 
+                              <Card>
+                                 <Card.Content>
 
-                           <Card.Header>Edit Language List</Card.Header>
-                        
-                           <Card.Description>
-                              {blankBoxLanguageList}
-                           </Card.Description>
-                           <br/>
+                                    <Card.Header>Edit Language List</Card.Header>
+                                 
+                                    <Card.Description>
+                                       {blankBoxLanguageList}
+                                    </Card.Description>
+                                    <br/>
 
-                           <Card.Meta>
-                              <Form className="checkbox-selections" onSubmit={this.deleteLanguages}>
-                                 <Button>Delete All Checked Languages</Button>
-                              </Form>
-                     
-                              <p>CAUTION: Deleting a language deletes it from all existing challenges.</p>
-                           </Card.Meta>
-                           <br/>
+                                    <Card.Meta>
+                                       <Form className="checkbox-selections" onSubmit={this.deleteLanguages}>
+                                          <Button>Delete All Checked Languages</Button>
+                                       </Form>
+                              
+                                       <p>CAUTION: Deleting a language deletes it from all existing challenges.</p>
+                                    </Card.Meta>
+                                    <br/>
 
-                           <Card.Meta>
-                              <Form className="add-a-new-checkbox-item" onSubmit={this.addLanguage}>
-                                 <Form.Input 
-                                    type="text"
-                                    name="newLanguage"
-                                    value={this.state.newLanguage}
-                                    placeholder="Enter a new language"
-                                    onChange={this.handleChange}
-                                 />
-                                 <Button>Submit New Language</Button>
-                              </Form>
-                           </Card.Meta>
+                                    <Card.Meta>
+                                       <Form className="add-a-new-checkbox-item" onSubmit={this.addLanguage}>
+                                          <Form.Input 
+                                             type="text"
+                                             name="newLanguage"
+                                             value={this.state.newLanguage}
+                                             placeholder="Enter a new language"
+                                             onChange={this.handleChange}
+                                          />
+                                          <Button>Submit New Language</Button>
+                                       </Form>
+                                    </Card.Meta>
 
-                        </Card.Content>
-                     </Card>
+                                 </Card.Content>
+                              </Card>
 
-                  </div>   
-               :
-                  <div>
-                     
-                     <Card>
-                        <Card.Content>
+                        :
+                              
+                              <Card>
+                                 <Card.Content>
 
-                           <Card.Header>Select Languages for the Challenge</Card.Header>
-                        
-                           <Card.Description>
-                              {languageList}
-                           </Card.Description>
-                           <br/>
+                                    <Card.Header>Select Languages for the Challenge</Card.Header>
+                                 
+                                    <Card.Description>
+                                       {languageList}
+                                    </Card.Description>
+                                    <br/>
 
-                           <Card.Meta>
-                        		<Form 
-                                 className="checkbox-selections" 
-                                 onSubmit={this.updateLanguageSelections}
-                              >
-                              	<Button>Submit Selected Languages</Button>
-                              </Form>
-                           </Card.Meta>
-                           <br/>
-                           <Card.Meta>
-                              <Form onSubmit={this.toggleLanguageEditList}>
-                                 <Button>Edit List of Available Languages</Button>
-                              </Form>
-                           </Card.Meta>
+                                    <Card.Meta>
+                                 		<Form 
+                                          className="checkbox-selections" 
+                                          onSubmit={this.updateLanguageSelections}
+                                       >
+                                       	<Button>Submit Selected Languages</Button>
+                                       </Form>
+                                    </Card.Meta>
+                                    <br/>
+                                    <Card.Meta>
+                                       <Form onSubmit={this.toggleLanguageEditList}>
+                                          <Button>Edit List of Available Languages</Button>
+                                       </Form>
+                                    </Card.Meta>
 
-                        </Card.Content>
-                     </Card>
+                                 </Card.Content>
+                              </Card>
+                     }  
+
                   </div>
-            }  
+               :
+                  <Card>
+                     <Card.Content>
+
+                        <Card.Header>Languages for this Challenge</Card.Header>
+                     
+                        <Card.Description>
+                           {languageList}
+                        </Card.Description>
+                        <br/>
+
+                        <Button
+                           content="Edit Languages"
+                           onClick={this.turnOnEditLanguages}
+                        />
+
+                     </Card.Content>
+                  </Card>
+            }
 
          </div>
       );

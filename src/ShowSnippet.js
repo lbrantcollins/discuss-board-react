@@ -56,6 +56,14 @@ class ShowSnippet extends React.Component {
    saveSnippet = async (e) => {
       e.preventDefault();
 
+      // if no change made to snippet (this.state.snippetText is empty, 
+      // then save the original snippet
+      if (!this.state.snippetText) {
+         await this.setState({
+            snippetText: this.props.snippet.snippet,
+         })
+      }
+
       await fetch(API_URL + '/snippets/' + this.props.snippet.id, {
          method: 'PUT',
          body: JSON.stringify({snippet: this.state.snippetText}),
@@ -150,7 +158,7 @@ class ShowSnippet extends React.Component {
                                  <Form.TextArea 
                                     name="snippetText" 
                                     value={this.state.snippetText}
-                                    placeholder={this.props.snippet.snippet}
+                                    placeholder={this.state.snippetText}
                                     onChange={this.handleChange}
                                  />
                                  <Button 
