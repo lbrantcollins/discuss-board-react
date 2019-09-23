@@ -138,19 +138,18 @@ class EditChallenge extends React.Component {
    
    render() {
 
-      // set up an edit toggle for each of the three elements below:
-      // title/description, keywords, and languages
-
-      // display each as is (when it's edit toggle is false), but with a button for toggling
-      // once changes are submitted for that element, return to the display as is (toggle=false)
-
-      // put the toggle variables in state so that we get a re-render when elements change
-
-      // Need overall "changes complete" button (and that should send us back to showChallenge)
-
       return (
 
          <div>
+
+            <Button 
+               content="Submit Updated Challenge"
+               className="secondary" 
+               onClick={this.handleSubmit}
+            />
+
+            <br/>
+            <br/>
 
             <Card.Group>
                <Card>
@@ -236,19 +235,8 @@ class EditChallenge extends React.Component {
                <SelectKeywords challenge_id={this.props.challenge.id} />
 
                <SelectLanguages challenge_id={this.props.challenge.id} /> 
-            </Card.Group> 
-
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-               
-            <Button 
-               content="Submit Updated Challenge"
-               className="secondary" 
-               onClick={this.handleSubmit}
-            />
-
+            </Card.Group>         
+            
          </div>
            
       );

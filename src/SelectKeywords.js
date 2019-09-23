@@ -88,6 +88,7 @@ class SelectKeywords extends React.Component {
 
       this.setState({
          keywordEditListToggle: !this.state.keywordEditListToggle,
+         editKeywords: true,
       })
    }
 
@@ -238,13 +239,13 @@ class SelectKeywords extends React.Component {
       })
    }
 
-   turnOnEditKeywords = (e) => {
-      e.preventDefault();
+   // turnOnEditKeywords = (e) => {
+   //    e.preventDefault();
 
-      this.setState({
-         editKeywords: true,
-      })
-   }
+   //    this.setState({
+   //       editKeywords: true,
+   //    })
+   // }
   	
 
    render() {
@@ -282,9 +283,7 @@ class SelectKeywords extends React.Component {
 
          <div>
 
-            {this.state.editKeywords
-               ?
-                  <div>
+            
                      {this.state.keywordEditListToggle 
                         ? 
 
@@ -323,37 +322,7 @@ class SelectKeywords extends React.Component {
                                  </Card.Content>
                               </Card>
 
-                        :
 
-                              <Card>
-                                 <Card.Content>
-
-                                    <Card.Header>Select Keywords for this Challenge</Card.Header>
-                                 
-                                    <Card.Description>
-                                       {keywordList}
-                                    </Card.Description>
-                                    <br/>
-
-                                    <Card.Meta>
-                                       <Form 
-                                          className="checkbox-selections" 
-                                          onSubmit={this.updateKeywordSelections}>
-                                          <Button>Submit Selected Keywords</Button>
-                                       </Form>
-                                    </Card.Meta>
-                                    <br/>
-                                    <Card.Meta>
-                                       <Form onSubmit={this.toggleKeywordEditList}>
-                                          <Button>Edit List of Available Keywords</Button>
-                                       </Form>
-                                    </Card.Meta>
-
-                                 </Card.Content>
-                              </Card>
-
-                     }  
-                  </div>
                :
                   <Card>
                      <Card.Content>
@@ -365,9 +334,19 @@ class SelectKeywords extends React.Component {
                         </Card.Description>
                         <br/>
 
+                        <Card.Meta>
+                           <Form 
+                              className="checkbox-selections" 
+                              onSubmit={this.updateKeywordSelections}>
+                              <Button>Submit Selected Keywords</Button>
+                           </Form>
+                        </Card.Meta>
+                        <br/>
+                        <br/>
+
                         <Button
-                           content="Edit Keywords"
-                           onClick={this.turnOnEditKeywords}
+                           content="Edit List of Available Keywords"
+                           onClick={this.toggleKeywordEditList}
                         />
 
                      </Card.Content>

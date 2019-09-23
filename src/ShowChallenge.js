@@ -178,8 +178,6 @@ class ShowChallenge extends React.Component {
 
 			<div>
 
-				<h2> The Challenge: </h2>
-
 				{this.state.editChallenge
 					?
 					 	<EditChallenge 
