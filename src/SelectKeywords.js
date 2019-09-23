@@ -201,6 +201,9 @@ class SelectKeywords extends React.Component {
          }
       }
 
+      console.log("keywordsToAdd in SelectKeywords");
+      console.log(keywordsToAdd);
+      
       // Create challenge-keyword through-table entries for NEW selected keywords
       await fetch(API_URL + '/challengekeywords/', {
          method: 'POST',

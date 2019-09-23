@@ -8,7 +8,7 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 class AddSnippet extends React.Component {
    constructor() {
-   	// props: challenge_id, student_id
+   	// props: challenge, toggleAddSnippet (function)
       super();
 
       this.state = {
@@ -34,7 +34,7 @@ class AddSnippet extends React.Component {
          const allLanguages = await response1.json();        
         
          // retrieve ids of languages associated with props.challenge_id
-         const response2 = await fetch(API_URL + "/challengelanguages/" + this.props.challenge_id, {
+         const response2 = await fetch(API_URL + "/challengelanguages/" + this.props.challenge.id, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -89,12 +89,12 @@ class AddSnippet extends React.Component {
    	const languageId = this.state.languages[languageIndex].id;
 
    	// add the snippet to the database
-   	const response = await fetch(API_URL + '/snippets', {
+   	await fetch(API_URL + '/snippets', {
    		method: 'POST',
    		body: JSON.stringify({
-	   		challenge_id: this.props.challenge_id,
+	   		challenge_id: this.props.challenge.id,
 	   		language_id: languageId,
-	   		student_id: this.props.student_id,
+	   		student_id: this.props.challenge.student_id,
 	   		snippet: this.state.snippet,
 	   		substantial: false,
    		}),
@@ -102,11 +102,8 @@ class AddSnippet extends React.Component {
          credentials: 'include',
    	})
 
-   	// return the new snippet in case the call needs a return
-      const newSnippet = await response.json();
-
-      return newSnippet;
-  
+      this.props.toggleAddSnippet();
+ 
    }
 
 
@@ -124,6 +121,9 @@ class AddSnippet extends React.Component {
          	</div>
 			);
       })
+
+      console.log("languageList in AddSnippet");
+      console.log(languageList);
 
    	return (
             		

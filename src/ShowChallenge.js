@@ -4,6 +4,7 @@ import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment
 import EditChallenge from './EditChallenge'
 import AddRemark from './AddRemark';
 import ShowRemark from './ShowRemark'
+import AddSnippet from './AddSnippet'
 import ShowSnippet from './ShowSnippet'
 
 // use the API url from environment if it exists
@@ -20,6 +21,7 @@ class ShowChallenge extends React.Component {
 			index: null,
 			snippets: [],
 			editChallenge: false,
+			addSnippet: false,
 			loaded: false,
 		}
 	}
@@ -75,6 +77,13 @@ class ShowChallenge extends React.Component {
   		this.setState({
    		...this.state,
    		editChallenge: false,
+   	})
+   }
+
+  	toggleAddSnippet = () => {
+  		this.setState({
+   		...this.state,
+   		addSnippet: !this.state.addSnippet,
    	})
    }
 
@@ -200,7 +209,23 @@ class ShowChallenge extends React.Component {
 														onClick={this.editChallenge}
 													/> 
 												:
-													null
+													<div>
+														<Button 
+															content="Contribute an Answer"
+															onClick={this.toggleAddSnippet}
+														/> 
+
+														{this.state.addSnippet
+															?
+																<AddSnippet 
+																	challenge={this.props.challenge}
+																	addSnippet={this.toggleAddSnippet}
+																/>
+															:
+																null
+														}
+													</div>
+
 											}
 										</Card.Meta>				
 									</Card.Content>

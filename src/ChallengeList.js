@@ -74,6 +74,8 @@ class ChallengeList extends React.Component {
 			)
 		})
 
+
+
 		return (
 
 			<div>
