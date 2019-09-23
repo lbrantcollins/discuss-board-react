@@ -8,7 +8,7 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 class AddSnippet extends React.Component {
    constructor() {
-   	// props: challenge, toggleAddSnippet (function)
+   	// props: challenge, student_id, toggleAddSnippet (function)
       super();
 
       this.state = {
@@ -23,6 +23,9 @@ class AddSnippet extends React.Component {
    
    componentDidMount = async () => {
 
+      console.log("this.props.challenge.id in addSnippet");
+      console.log(this.props.challenge.id);
+
    	try {
 
    		// retrieve list of all available language choices
@@ -33,7 +36,7 @@ class AddSnippet extends React.Component {
          })
          const allLanguages = await response1.json();        
         
-         // retrieve ids of languages associated with props.challenge_id
+         // retrieve ids of languages associated with props.challenge.id
          const response2 = await fetch(API_URL + "/challengelanguages/" + this.props.challenge.id, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
@@ -94,7 +97,7 @@ class AddSnippet extends React.Component {
    		body: JSON.stringify({
 	   		challenge_id: this.props.challenge.id,
 	   		language_id: languageId,
-	   		student_id: this.props.challenge.student_id,
+	   		student_id: this.props.student_id,
 	   		snippet: this.state.snippet,
 	   		substantial: false,
    		}),
@@ -109,6 +112,9 @@ class AddSnippet extends React.Component {
 
    render() {
 
+      console.log("languages in AddSnippet");
+      console.log(this.state.languages);
+
    	const languageList = this.state.languages.map( (language, i) => {
          return (
          	<div key={language.id}>
@@ -122,8 +128,8 @@ class AddSnippet extends React.Component {
 			);
       })
 
-      console.log("languageList in AddSnippet");
-      console.log(languageList);
+      // console.log("languageList in AddSnippet");
+      // console.log(languageList);
 
    	return (
             		
@@ -148,8 +154,9 @@ class AddSnippet extends React.Component {
 	               />
 	               <br/> 
 
-                  <Button>Submit</Button>
+                  <Button>Submit Answer</Button>
                </Form>
+               <br/>
             </div>
    		</div>
 

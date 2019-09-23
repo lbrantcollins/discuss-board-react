@@ -148,29 +148,33 @@ class ShowSnippet extends React.Component {
                         Student answer:
                      </Card.Header>
 
-                        Language: {this.props.snippet.language}
+                     <Card.Meta>
+                        <div>
+                           Language: {this.props.snippet.language.language}
+                        </div>
+                     </Card.Meta>
                   
                      <Card.Description>
 
-                        {this.props.user.is_teacher || this.props.snippet.student_id === this.props.user.id
-                           ?
-                              <Form>
-                                 <Form.TextArea 
-                                    name="snippetText" 
-                                    value={this.state.snippetText}
-                                    placeholder={this.state.snippetText}
-                                    onChange={this.handleChange}
-                                 />
-                                 <Button 
-                                    content={this.props.user.is_teacher ? "Submit Corrections" : "Submit Changes"}
-                                    onClick={this.saveSnippet}
-                                 />
-                              </Form>                             
-                           : 
-                              <div>
-                                 <pre><code> {this.props.snippet.snippet}</code></pre>
-                              </div>                       
-                        }
+                           {this.props.user.is_teacher || this.props.snippet.student_id === this.props.user.id
+                              ?
+                                 <Form>
+                                    <Form.TextArea 
+                                       name="snippetText" 
+                                       value={this.state.snippetText}
+                                       placeholder={this.state.snippetText}
+                                       onChange={this.handleChange}
+                                    />
+                                    <Button 
+                                       content={this.props.user.is_teacher ? "Submit Corrections" : "Submit Changes"}
+                                       onClick={this.saveSnippet}
+                                    />
+                                 </Form>                             
+                              : 
+                                 <div>
+                                    <pre><code> {this.props.snippet.snippet}</code></pre>
+                                 </div>                       
+                           }
 
                      </Card.Description>
                   </Card.Content>

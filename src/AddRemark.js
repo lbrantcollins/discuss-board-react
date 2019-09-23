@@ -17,7 +17,7 @@ class AddRemark extends React.Component {
          label: '',
          buttonText: '',
          placeholder: '',
-
+         loaded: false,
       }
 
    }
@@ -69,6 +69,7 @@ class AddRemark extends React.Component {
          label: label,
          buttonText: buttonText,
          placeholder: placeholder,
+         loaded: true,
       })
    
    }
@@ -76,40 +77,40 @@ class AddRemark extends React.Component {
    ///////////////////////////////////////////////////////////////////
    // THIS FUNCTION IS LIKELY NOT NEEDED
    ///////////////////////////////////////////////////////////////////
-   initializeFormPlaceholder = () => {
+   // initializeFormPlaceholder = async () => {
 
-      // set a placeholder for the add-remark text box
-      // (customized for the specific component)
-      let placeholder;
+   //    // set a placeholder for the add-remark text box
+   //    // (customized for the specific component)
+   //    let placeholder;
        
-      switch (this.props.elementType) {
+   //    switch (this.props.elementType) {
 
-         case 'challenge':
-            placeholder = "...about the challenge your instructor posed.";
-            break;
+   //       case 'challenge':
+   //          placeholder = "...about the challenge your instructor posed.";
+   //          break;
 
-         case 'snippet':
-            placeholder = "...about your fellow student's suggested code snippet.";
-            break;
+   //       case 'snippet':
+   //          placeholder = "...about your fellow student's suggested code snippet.";
+   //          break;
 
-         case 'question':
-            placeholder = "...to your student's question about the challenge posed.";
-            break;
+   //       case 'question':
+   //          placeholder = "...to your student's question about the challenge posed.";
+   //          break;
 
-         case 'comment':
-             placeholder = "...about your student's comment on the code snippet.";
-            break;
+   //       case 'comment':
+   //           placeholder = "...about your student's comment on the code snippet.";
+   //          break;
 
-         default:
-            console.log("Remarks are only for a challenge, snippet, question, or comment")
-      }
+   //       default:
+   //          console.log("Remarks are only for a challenge, snippet, question, or comment")
+   //    }
 
-      this.setState({
-         placeholder: placeholder,
-      })
+   //    await this.setState({
+   //       placeholder: placeholder,
+   //    })
 
       
-   }
+   // }
 
    handleChange = (e) => {
       this.setState({
@@ -190,41 +191,52 @@ class AddRemark extends React.Component {
          credentials: 'include',
       })
 
-      // blank out the form for adding another remark on the relevant component
-      // this.initializeFormPlaceholder();
-      this.setState({
-         placeholder: this.state.remark,
+      await this.setState({
+         remark: '',
       })
 
-      // redirect back to the relevant component
-      // this.props.history.push('/media/' + newMedia.data.id). ?????
       this.props.addRemark();
    }
 
 
    render() {
-       
+
+      console.log("placeholder in AddRemark render");
+      console.log(this.props.placeholder);
+
       return (
 
-         <Card>
-            <Card.Content>
 
-               <Card.Header>{this.state.label}</Card.Header>
+         <div>
 
-               <Form>
-                  <Form.TextArea 
-                     name="remark"
-                     placeholder={this.state.placeholder}
-                     onChange={this.handleChange}
-                  />
-                     <Button 
-                        content={this.state.buttonText}
-                        onClick={this.handleSubmit}
-                     />
-               </Form>
-               
-            </Card.Content>
-         </Card>
+            {this.state.loaded
+               ?
+
+                  <Card>
+                     <Card.Content>
+
+                        <Card.Header>{this.state.label}</Card.Header>
+
+                        <Form>
+                           <Form.TextArea 
+                              name="remark"
+                              placeholder={this.state.placeholder}
+                              value={this.state.remark}
+                              onChange={this.handleChange}
+                           />
+                              <Button 
+                                 content={this.state.buttonText}
+                                 onClick={this.handleSubmit}
+                              />
+                        </Form>
+                        
+                     </Card.Content>
+                  </Card>
+               :
+                  null
+            }
+
+         </div>
            
       );
 

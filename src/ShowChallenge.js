@@ -85,6 +85,8 @@ class ShowChallenge extends React.Component {
    		...this.state,
    		addSnippet: !this.state.addSnippet,
    	})
+   	// Need to re-render the snippets
+   	this.componentDidMount();
    }
 
    render() {
@@ -219,7 +221,8 @@ class ShowChallenge extends React.Component {
 															?
 																<AddSnippet 
 																	challenge={this.props.challenge}
-																	addSnippet={this.toggleAddSnippet}
+																	student_id={this.props.user.id}
+																	toggleAddSnippet={this.toggleAddSnippet}
 																/>
 															:
 																null
