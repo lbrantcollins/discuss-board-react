@@ -11,6 +11,7 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 class ShowSnippet extends React.Component {
    // props: user, snippet
+   //       returnToShowChallengePage (function)
    constructor() {
       super();
 
@@ -77,6 +78,11 @@ class ShowSnippet extends React.Component {
       this.componentDidMount();
    }
 
+   handleSubmitReturnToShowChallengePage = (e) => {
+      e.preventDefault();
+
+      this.props.returnToShowChallengePage();
+   }
    
    render() {
 
@@ -139,6 +145,15 @@ class ShowSnippet extends React.Component {
     	return (
             		
    		<div>
+
+            <br/>
+            <br/>
+            <Button 
+               content="Return to the Page for this Challenge"
+               onClick={this.handleSubmitReturnToShowChallengePage}
+            />
+            <br/>
+            <br/>
    			
             <Card.Group>
             

@@ -9,7 +9,6 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 class AddSnippet extends React.Component {
    constructor() {
    	// props: challenge, student_id, toggleAddSnippet (function)
-      //        turnOffAddSnippetButton (function)
       super();
 
       this.state = {
@@ -23,8 +22,6 @@ class AddSnippet extends React.Component {
 
    
    componentDidMount = async () => {
-
-      this.props.turnOffAddSnippetButton();
 
    	try {
 
@@ -132,7 +129,9 @@ class AddSnippet extends React.Component {
 				<div>                   
                <Form onSubmit={this.addSnippet}>
 
-            	<h4>What language are you submitting for this challenge?</h4>
+            	<Card.Description>
+                  What language are you submitting for this challenge?
+               </Card.Description>
 
                {languageList}
 

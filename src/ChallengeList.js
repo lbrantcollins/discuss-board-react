@@ -17,7 +17,8 @@ class ChallengeList extends React.Component {
 
 		this.state = {
 			index: null,
-			challenges: []
+			challenges: [],
+			loaded: false,
 		}
 	}
 
@@ -51,6 +52,19 @@ class ChallengeList extends React.Component {
    	})
    }
 
+   updateChallengeForShowChallenge = () => {
+   	this.componentDidMount();
+   }
+
+   returnToChallengeList = () => {
+   	// re-initialize state and re-mount component
+   	this.setState({
+   		index: null,
+   		challenges:[],
+   	})
+   	this.componentDidMount();
+   }
+
 	render() {
 
 		const challengeList = this.state.challenges.map( (challenge, i) => {
@@ -80,11 +94,19 @@ class ChallengeList extends React.Component {
 
 			<div>
 
+				<Button 
+					content="Log Out"
+				/>
+				<br/>
+				<br/>
+
 				{this.state.index || this.state.index === 0
 					?
 						<ShowChallenge 
 							user={this.props.user}
 							challenge={this.state.challenges[this.state.index]}
+							updateChallengeForShowChallenge={this.updateChallengeForShowChallenge}
+							returnToChallengeList={this.returnToChallengeList}
 						/>
 					:
 						<Card.Group>

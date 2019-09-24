@@ -13,6 +13,7 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 class ShowChallenge extends React.Component {
 	// props: user (user info), challenge (challenge info)
+	// 			returnToChallengeList (function)
 	constructor() {
 		super();
 
@@ -80,6 +81,13 @@ class ShowChallenge extends React.Component {
   		this.setState({
    		editChallenge: false,
    	})
+   	this.props.updateChallengeForShowChallenge();
+   }
+
+  handleSubmitReturnToChallengeList = (e) => {
+   	e.preventDefault();
+
+   	this.props.returnToChallengeList();
    }
 
   	toggleAddSnippet = async () => {
@@ -90,10 +98,24 @@ class ShowChallenge extends React.Component {
    	this.componentDidMount();
    }
 
-   turnOffAddSnippetButton = () => {
+   // turnOffAddSnippetButton = () => {
+   // 	this.setState({
+   // 		turnOffAddSnippetButton: true,
+   // 	})
+   // }
+
+   returnToShowChallengePage = () => {
+   	// re-initialize state and re-mount component
    	this.setState({
-   		turnOffAddSnippetButton: true,
+   		questions: [],
+			index: null,
+			snippets: [],
+			editChallenge: false,
+			addSnippet: false,
+			turnOffAddSnippetButton: false,
+			loaded: false,
    	})
+   	this.componentDidMount();
    }
 
    render() {
@@ -206,6 +228,15 @@ class ShowChallenge extends React.Component {
 						<div>
 
 							<div>
+								<Button 
+				               content="Return to Challenge List"
+				               onClick={this.handleSubmitReturnToChallengeList}
+				            />
+				            <br/>
+				            <br/>
+			            </div>
+
+							<div>
 								<Card>
 									<Card.Content>
 										<Card.Header> {this.props.challenge.title} </Card.Header>
@@ -218,33 +249,8 @@ class ShowChallenge extends React.Component {
 														onClick={this.editChallenge}
 													/> 
 												:
-													<div>
-														{this.state.showChallenge
-															?
-																<div>
-																
-																	<Button 
-																		content="Contribute an Answer"
-																		onClick={this.toggleAddSnippet}
-																	/> 
+													null
 
-																	{this.state.addSnippet
-																		?
-																			<AddSnippet 
-																				challenge={this.props.challenge}
-																				student_id={this.props.user.id}
-																				toggleAddSnippet={this.toggleAddSnippet}
-																				turnOffAddSnippetButton={this.turnOffAddSnippetButton}
-																			/>
-																		:
-																			null
-																	}
-
-																</div>
-															:
-																null
-														}
-													</div>
 
 											}
 										</Card.Meta>				
@@ -252,37 +258,72 @@ class ShowChallenge extends React.Component {
 								</Card>
 							</div>
 
+							<div>
 
-							{questionList === null
-								? null
-								: 
-									<div>
-										<Card.Group>
-											{questionList}
-										</Card.Group>
-									</div>
-							}
+								{this.state.index || this.state.index === 0
+									?
+										<ShowSnippet 
+											user={this.props.user}
+											snippet={this.state.snippets[this.state.index]}
+											returnToShowChallengePage={this.returnToShowChallengePage}
+										/>
+									:
 
-							{snippetList === null
-								? null
-			 					: 
-			 						<div>
-				 					   {this.state.index || this.state.index === 0
-											?
-												<ShowSnippet 
-													user={this.props.user}
-													snippet={this.state.snippets[this.state.index]}
-												/>
-											:
-												<div>
-						 							<Card.Group>
-						 								{snippetList}
-						 							</Card.Group>
-						 						</div>
-										}
-									</div>
-							}
+										<div>
 
+											<div>
+
+												<br/>
+												<br/>
+												<Button 
+													content="Contribute an Answer"
+													onClick={this.toggleAddSnippet}
+												/> 
+												<br/>
+
+												{this.state.addSnippet
+													?
+														<Card>
+                     								<Card.Content>
+																<AddSnippet 
+																	challenge={this.props.challenge}
+																	student_id={this.props.user.id}
+																	toggleAddSnippet={this.toggleAddSnippet}
+																/>
+															</Card.Content>
+														</Card>
+													:
+														null
+												}
+
+											</div>
+
+
+											{questionList === null
+												? null
+												: 
+													<div>
+														<Card.Group>
+															{questionList}
+														</Card.Group>
+													</div>
+											}
+
+											{snippetList === null
+												? null
+							 					: 
+							 						
+													<div>
+							 							<Card.Group>
+							 								{snippetList}
+							 							</Card.Group>
+							 						</div>
+											}
+										</div>
+								}
+
+							</div>
+										
 						</div>
 				}
 								
@@ -293,8 +334,4 @@ class ShowChallenge extends React.Component {
 }
 
 export default ShowChallenge;
-
-
-
-
 

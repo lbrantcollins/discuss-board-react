@@ -21,6 +21,7 @@ class EditChallenge extends React.Component {
       	description: this.props.challenge.description,
          editTitle: false,
          editDescription: false,
+         message: '',
       }
 
    }
@@ -87,20 +88,31 @@ class EditChallenge extends React.Component {
    handleSubmitTitle = async (e) => {
       e.preventDefault();
 
-      const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
-         method: 'PUT',
-         body: JSON.stringify({
-            title: this.state.title,
-            description: this.props.challenge.description,
-         }),
-         headers: {'Content-Type': 'application/json'},
-         credentials: 'include',
-      })
+      if (this.state.title.length === 0) {
+         this.setState({
+            message: "You must enter a challenge title."
+         })
+      } else {
 
-      this.setState({
-         ...this.state,
-         editTitle: false,
-      })
+         const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
+            method: 'PUT',
+            body: JSON.stringify({
+               title: this.state.title,
+               description: this.props.challenge.description,
+            }),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+
+         this.setState({
+            ...this.state,
+            editTitle: false,
+            message: '',
+            title: this.state.title,
+         })
+
+      }
+
    }
 
    handleSubmitDescription = async (e) => {
@@ -119,6 +131,7 @@ class EditChallenge extends React.Component {
       this.setState({
          ...this.state,
          editDescription: false,
+         description: this.state.description,
       })
    }
 
@@ -144,11 +157,11 @@ class EditChallenge extends React.Component {
 
             <Button 
                content="Submit Updated Challenge"
-               className="secondary" 
                onClick={this.handleSubmit}
             />
 
             <br/>
+            <p>{this.state.message}</p>
             <br/>
 
             <Card.Group>
