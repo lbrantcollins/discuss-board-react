@@ -28,6 +28,9 @@ class SelectKeywords extends React.Component {
    // and all keywords selected for the current challenge
    componentDidMount = async () => {
 
+      console.log("props in SelectKeyword");
+      console.log(this.props);
+
       try {
 
          // retrieve list of all available keyword choices

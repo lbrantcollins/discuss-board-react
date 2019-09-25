@@ -49,41 +49,23 @@ class AddChallenge extends React.Component {
             credentials: 'include',
          })
 
-         if (response.success) {
+         const challenge = await response.json();
+
+         if (challenge.success) {
+            console.log("-----> new challenge created <-----");
             this.setState({
+               challenge_id: challenge.challenge.id,
                newChallengeCreated: true,
             })
          }
-
-
-
-         // add the new challenge to state
-         // get the challenge (including it's new id)
-         // const newChallenge = await response.json();
-
-         // make a copy of the current state
-         // const newList = [...this.state.challenges];
-
-         // add the new challenge to the local list
-         // newList.push(newChallenge)
-
-         // set state to the local list (includes new challenge)
-         // this.setState({
-         //    challenges: newList,
-         //    addChallenge: false
-         // })
-
-         // return the new challenge in case call needs the return
-         // return newChallenge;
-
-         // a little cheating:
-         // this.componentDidMount();
-
 
       } catch (err) {
          console.log(err)
       }
 
+   }
+
+   handleSubmitChallenge = () => {
       this.props.returnToChallengeList();
    }
 
@@ -118,49 +100,65 @@ class AddChallenge extends React.Component {
       return (
 
          <div>
-
-            <div>
-               <h2>Add a challenge:</h2>
-
-               <Form onSubmit={this.addChallenge}>
-                  <label>Title:</label>
-                  <br/>
-                  <Form.Input 
-                     type="text" 
-                     name="title" 
-                     placeholder="Challenge Title" 
-                     onChange={this.handleChange}
-                  />
-                  <br/>
-                  <label>Description:</label>
-                  <br/>
-                  <Form.TextArea 
-                     rows="8"
-                     name="description" 
-                     placeholder="Challenge Description"
-                     onChange={this.handleChange}
-                  />
-                  <br/>
-                  <Button>Submit Challenge</Button>
-               </Form>
-            </div>
-
-            
-
-            {/* Allow keyword selection after challenge created */}
-            {this.state.newChallengeCreated 
+       
+            {/* Allow keyword selection only after challenge created */}
+            {!this.state.newChallengeCreated 
                ? 
+
                   <div>
+                     <h2>Add a challenge:</h2>
+
+                     <Form onSubmit={this.addChallenge}>
+                        <label>Title:</label>
+                        <br/>
+                        <Form.Input 
+                           type="text" 
+                           name="title" 
+                           placeholder="Challenge Title" 
+                           onChange={this.handleChange}
+                        />
+                        <br/>
+                        <label>Description:</label>
+                        <br/>
+                        <Form.TextArea 
+                           rows="8"
+                           name="description" 
+                           placeholder="Challenge Description"
+                           onChange={this.handleChange}
+                        />
+                        <br/>
+                        <Button>Save Challenge</Button>
+                     </Form>
+                  </div>
+
+               :
+
+                  <div>
+
+                     <Card>
+                        <Card.Content>
+                           <Card.Header> {this.state.title} </Card.Header>
+                           <Card.Description> {this.state.description} </Card.Description>           
+                        </Card.Content>
+                     </Card>
+
                      <h4>Select keywords and languages for the challenge</h4>
+
                      <Card.Group>
                         <SelectKeywords challenge_id={this.state.challenge_id} />
 
                         <SelectLanguages challenge_id={this.state.challenge_id} />
 
                      </Card.Group> 
+
+                     <br/>
+                     <br/>
+                     <Button
+                        content="Submit Completed Challenge"
+                        onClick={this.handleSubmitChallenge}
+                     />
+
                   </div>
-               :
-                  null
             }              
 
          </div>
