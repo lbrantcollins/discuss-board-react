@@ -5,6 +5,9 @@ import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment
 import SelectKeywords from './SelectKeywords';
 import SelectLanguages from './SelectLanguages';
 
+// use the API url from environment if it exists
+const API_URL = process.env.REACT_APP_API_URL || ''; 
+
 class AddChallenge extends React.Component {
    // props: teacher_id (user_id), addChallenge (function)
    constructor() {
@@ -29,11 +32,49 @@ class AddChallenge extends React.Component {
       });
    }
 
+   addChallenge = async (data) => {
+ 
+      try {
+
+         // create a new challenge in database
+         // using data from "AddChallenge" input form
+         const response = await fetch(API_URL + '/challenges', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+
+         // add the new challenge to state
+         // get the challenge (including it's new id)
+         const newChallenge = await response.json();
+         // make a copy of the current state
+         const newList = [...this.state.challenges];
+         // add the new challenge to the local list
+         newList.push(newChallenge)
+         // set state to the local list (includes new challenge)
+         this.setState({
+            challenges: newList,
+            addChallenge: false
+         })
+
+         // return the new challenge in case call needs the return
+         return newChallenge;
+
+         // a little cheating:
+         this.componentDidMount();
+
+      } catch (err) {
+         console.log(err)
+      }
+   }
+
+
    handleSubmit = async (e) => {
       e.preventDefault();
 
       // send new challenge data to database
-      const newChallenge = await this.props.addChallenge({
+      const newChallenge = await this.addChallenge({
          teacher_id: this.props.teacher_id,
          title: this.state.title,
          description: this.state.description
@@ -90,8 +131,16 @@ class AddChallenge extends React.Component {
             </Form>
 
             {/* Allow keyword selection after challenge created */}
-            {this.state.newChallengeCreated ? <SelectKeywords challenge_id={this.state.id} /> : null}
-            
+            {this.state.newChallengeCreated 
+               ? 
+                  <Card.Group>
+                     <SelectKeywords challenge_id={this.state.id} />
+
+                     <SelectLanguages challenge_id={this.state.id} /> 
+                  </Card.Group> 
+               :
+                  null
+            }              
 
          </div>
            

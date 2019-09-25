@@ -143,51 +143,7 @@ class App extends React.Component {
 
    }
 
-   showAddChallenge = () => {
-      this.setState({
-         addChallenge: true
-      })
-      
-   }
-
-   addChallenge = async (data) => {
- 
-      try {
-
-         // create a new challenge in database
-         // using data from "AddChallenge" input form
-         const response = await fetch(API_URL + '/challenges', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
-
-         // add the new challenge to state
-         // get the challenge (including it's new id)
-         const newChallenge = await response.json();
-         // make a copy of the current state
-         const newList = [...this.state.challenges];
-         // add the new challenge to the local list
-         newList.push(newChallenge)
-         // set state to the local list (includes new challenge)
-         this.setState({
-            challenges: newList,
-            addChallenge: false
-         })
-
-         // return the new challenge in case call needs the return
-         return newChallenge;
-
-         // a little cheating:
-         this.componentDidMount();
-
-      } catch (err) {
-         console.log(err)
-      }
-   }
-
-   
+     
    render() {
 
       return (

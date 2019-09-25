@@ -1,7 +1,8 @@
 import React from 'react';
 import { Container, Card, Checkbox, Button, Form, Grid, Header, Message, Segment} from 'semantic-ui-react';
 
-import ChallengeSummary from './ChallengeSummary'
+// import ChallengeSummary from './ChallengeSummary'
+import AddChallenge from './AddChallenge'
 import ShowChallenge from './ShowChallenge'
 
 // import AddChallenge from './AddChallenge'
@@ -19,6 +20,7 @@ class ChallengeList extends React.Component {
 			index: null,
 			challenges: [],
 			loaded: false,
+			addChallenge: false,
 		}
 	}
 
@@ -38,13 +40,11 @@ class ChallengeList extends React.Component {
 
    }
 
-   // showEditChallenge = (challengeToBeEdited) => {
-   //    this.setState({
-   //       challengeToBeEdited: challengeToBeEdited,
-   //       editChallenge: true
-   //    })
-      
-   // }
+   addChallenge = () => {
+   	this.setState({
+   		addChallenge: true,
+   	})
+   }
 
    showChallenge = (i) => {
    	this.setState({
@@ -64,6 +64,15 @@ class ChallengeList extends React.Component {
    	})
    	this.componentDidMount();
    }
+
+   showAddChallenge = () => {
+      this.setState({
+         addChallenge: true
+      })
+      
+   }
+
+   
 
 	render() {
 
@@ -94,18 +103,39 @@ class ChallengeList extends React.Component {
 
 			<div>
 
-				{this.state.index || this.state.index === 0
-					?
-						<ShowChallenge 
-							user={this.props.user}
-							challenge={this.state.challenges[this.state.index]}
-							updateChallengeForShowChallenge={this.updateChallengeForShowChallenge}
-							returnToChallengeList={this.returnToChallengeList}
-						/>
-					:
-						<Card.Group>
-							{challengeList}
-						</Card.Group>
+				{this.state.addChallenge
+						?
+							<AddChallenge />
+						:
+							<div>
+								{this.state.index || this.state.index === 0
+									?
+										<ShowChallenge 
+											user={this.props.user}
+											challenge={this.state.challenges[this.state.index]}
+											updateChallengeForShowChallenge={this.updateChallengeForShowChallenge}
+											returnToChallengeList={this.returnToChallengeList}
+										/>
+									:
+										<div>
+
+											{this.props.user.is_teacher
+												?
+													<Button
+														content="Add a Challenge"
+														onClick={this.addChallenge}
+													/>
+												:
+													null
+											}
+
+											<Card.Group>
+												{challengeList}
+											</Card.Group>
+
+										</div>
+								}
+							</div>
 				}
 				
 			</div>
