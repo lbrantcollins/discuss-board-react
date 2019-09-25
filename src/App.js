@@ -30,16 +30,6 @@ class App extends React.Component {
          useLoginPage: true,
          loggedIn: false,
          user: {}
-         // challenge_index: null,
-         // challenges: [],
-         // message: '',
-         // addChallenge: false,
-         // editChallenge: false,
-         // challengeToBeEdited: '',
-         // challengeSnippets: false,
-         // challengeToBeShown: '',
-         // activeItem: 'show-challenges'
-
       }
    }
    
@@ -131,6 +121,28 @@ class App extends React.Component {
       }
    }
 
+   logout = async (data) => {
+
+      try {
+
+         // create a new user in the database
+         const response = await fetch(API_URL + '/users/logout', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         
+         // set state so that user is considered "logged out"
+         this.setState({
+            loggedIn: false,
+         })
+   
+      } catch (err) {
+         console.log(err)
+      }
+
+   }
+
    showAddChallenge = () => {
       this.setState({
          addChallenge: true
@@ -175,264 +187,7 @@ class App extends React.Component {
       }
    }
 
-   // showEditChallenge = (challengeToBeEdited) => {
-   //    this.setState({
-   //       challengeToBeEdited: challengeToBeEdited,
-   //       editChallenge: true
-   //    })
-      
-   // }
-
-   // editChallenge = async (id, data) => {
- 
-   //    try {
-
-   //       // update the title, description for a challenge
-   //       // using data from EditChallenge component input form
-   //       // (keywords/languages are updated from EditChallenge component)
-   //       const response = await fetch(API_URL + '/challenges/' + id, {
-   //          method: 'PUT',
-   //          body: JSON.stringify(data),
-   //          headers: {'Content-Type': 'application/json'},
-   //          credentials: 'include',
-   //       })
-
-   //       // return the new challenge in case call needs the return
-   //       const editedChallenge = await response.json();
-
-   //       this.setState({
-   //          editChallenge: false,
-   //          challengeToBeEdited: ''
-   //       })
-
-   //       // a little cheating:
-   //       this.componentDidMount();
-
-   //       return editedChallenge;
-
-   //    } catch (err) {
-   //       console.log(err)
-   //    }
-   // }
-
-   // addRemark = async (remarkRoute, data) => {
-      
-   //    try {
-
-   //       const response = await fetch(API_URL + '/' + remarkRoute, {
-   //          method: 'POST',
-   //          body: JSON.stringify(data),
-   //          headers: {'Content-Type': 'application/json'},
-   //          credentials: 'include',
-   //       })    
-
-   //       // return the new remark in case call needs the return
-   //       const newRemark = await response.json();
-
-   //       return newRemark;
-
-   //    } catch (err) {
-   //       console.log(err)
-   //    }        
-      
-   // }
-
-   // editRemark = async (elementType, parentId, remarkId, remarkUserId, remark, substantial) => {
-
-   //    // variables to hold response from the database PUT
-   //    let putResponse;
-   //    let returnRemark;
-
-   //    switch (elementType) {
-
-   //       // Set a label to title the remark box
-
-   //       case 'challenge':
-            
-   //          // update database
-   //          try {
-
-   //             putResponse = await fetch(API_URL + '/questions/' + remarkId, {
-   //                method: 'PUT',
-   //                body: JSON.stringify({
-   //                   challenge_id: parentId,
-   //                   student_id: remarkUserId,
-   //                   question: remark,
-   //                   substantial: substantial,
-   //                }),
-   //                headers: {'Content-Type': 'application/json'},
-   //                credentials: 'include',
-   //             }) 
-   //             returnRemark = await putResponse.json();
-
-   //          } catch(err) {
-   //             console.log(err);
-   //          }
-
-   //          break;
-
-   //       case 'snippet':
-            
-   //          // update database
-   //          try {
-
-   //             putResponse = await fetch(API_URL + '/comments/' + remarkId, {
-   //                method: 'PUT',
-   //                body: JSON.stringify({
-   //                   snippet_id: parentId,
-   //                   student_id: remarkUserId,
-   //                   comment: remark,
-   //                   substantial: substantial,
-   //                }),
-   //                headers: {'Content-Type': 'application/json'},
-   //                credentials: 'include',
-   //             }) 
-   //             returnRemark = await putResponse.json();
-
-   //          } catch(err) {
-   //             console.log(err);
-   //          }
-
-   //          break;
-
-   //       case 'question':
-                       
-   //          // update database
-   //          try {
-
-   //             putResponse = await fetch(API_URL + '/responses/' + remarkId, {
-   //                method: 'PUT',
-   //                body: JSON.stringify({
-   //                   comment_id: parentId,
-   //                   teacher_id: remarkUserId,
-   //                   response: remark,
-   //                }),
-   //                headers: {'Content-Type': 'application/json'},
-   //                credentials: 'include',
-   //             }) 
-   //             returnRemark = await putResponse.json();
-
-   //          } catch(err) {
-   //             console.log(err);
-   //          }
-
-   //          break;
-
-   //       case 'comment':
-            
-   //          // update database
-   //          try {
-
-   //             putResponse = await fetch(API_URL + '/observations/' + remarkId, {
-   //                method: 'PUT',
-   //                body: JSON.stringify({
-   //                   comment_id: parentId,
-   //                   teacher_id: remarkUserId,
-   //                   observation: remark,
-   //                }),
-   //                headers: {'Content-Type': 'application/json'},
-   //                credentials: 'include',
-   //             }) 
-   //             returnRemark = await putResponse.json();
-
-   //          } catch(err) {
-   //             console.log(err);
-   //          }
-
-   //          break;
-
-   //       default:
-   //          console.log("Remarks are only for a challenge, snippet, question, or comment")
-   //    }
-
-   //    // just in case the call needs a return
-   //    return returnRemark;
-
-
-
-   // }
-
-   // showSnippets = async (challenge_id) => {
-
-   //    const response = await fetch(API_URL + '/challenges', {
-   //          method: 'GET',
-   //          headers: {'Content-Type': 'application/json'},
-   //          credentials: 'include',
-   //       })
-   //       const challenges = await response.json();
-
-   //       this.setState({
-   //          challenges: challenges
-   //       })
-
-   //    this.setState({
-   //       challengeSnippets: true,
-   //       challengeToBeShown: challenge_id,
-   //    })
-      
-   // }
-
-
-            
-            // <AddChallenge 
-               // teacher_id={2} 
-               // addChallenge={this.addChallenge}
-            // />
-
-            // <EditChallenge
-               // challenge_id={2}
-               // editChallenge={this.editChallenge}
-            // />
-
-            // <AddRemark
-            //    userId={2}
-            //    elementId={1}
-            //    elementType={"question"}
-            // />
-
-            // <AddSnippet
-               // challenge_id={2} 
-               // student_id={1}
-            // />
-
-            // <EditSnippet
-               // snippet_id={1} 
-            // />
-
-            // <ShowRemark
-                           // userId={2}
-                           // loggedIn={this.state.loggedIn}
-                           // is_teacher={false}
-                           // elementId={3}
-                           // elementType={"challenge"}
-                        // />
-
-
-
-
-
-
-                           // <AddChallenge 
-                        // teacher_id={1} 
-                        // addChallenge={this.addChallenge}
-                     // />  
-
-                     // <ShowSnippet
-                        // userId={this.state.id}
-                        // loggedIn={this.state.loggedIn}
-                        // is_teacher={this.state.is_teacher}
-                        // snippet_id={1} 
-                        // editRemark={this.editRemark}
-                     // />
-
-   // handleItemClick = (e, { name }) => {
-
-   //    console.log(name);
-
-   //    this.setState({ activeItem: name })
-
-   // }
-
+   
    render() {
 
       return (
@@ -442,6 +197,13 @@ class App extends React.Component {
             {this.state.loggedIn
                ?
                   <div>
+
+                  <Button 
+                     content="Log Out"
+                     onClick={this.logout}
+                  />
+                  <br/>
+                  <br/>
 
                   <ChallengeList user={this.state.user}/>
 
@@ -472,72 +234,6 @@ class App extends React.Component {
 }
 
 
-
 export default App;
 
 
-// <Menu className='nav'>
-
-               // <Menu.Item
-         //          className='Link'
-         //          name='show-challenges'
-         //          active={this.state.activeItem === 'show-challenges'}
-         //          onClick={this.handleItemClick}>
-         //          Challenges
-               // </Menu.Item>
-
-               
-         //             {this.state.is_teacher ?
-         //             <Menu.Item
-         //                className='Link'
-         //                name='edit-challenge2'
-         //                active={this.state.activeItem === 'edit-challenge2'}
-         //                onClick={this.handleItemClick}>
-         //                Edit Challenge
-         //             </Menu.Item>
-         //             : null}
-         //             {false ?
-         //             <Menu.Item
-         //                className='Link'
-         //                name='edit-challenge5'
-         //                active={this.state.activeItem === 'edit-challenge5'}
-         //                onClick={this.handleItemClick}>
-         //                Edit Another
-         //             </Menu.Item>
-         //             : null}
-         //             {this.state.is_teacher ?
-
-         //             <Menu.Item
-         //                className='Link'
-         //                name='add-challenge'
-         //                active={this.state.activeItem === 'add-challenge'}
-         //                onClick={this.handleItemClick}>
-         //                Add Challenge
-         //             </Menu.Item>
-         //             : null}
-         //             <Menu.Item
-         //                className='Link'
-         //                name='show-snippet'
-         //                active={this.state.activeItem === 'show-snippet'}
-         //                onClick={this.handleItemClick}>
-         //                Show Snippet
-         //             </Menu.Item>
-         //             <Menu.Item
-         //                className='Link'
-         //                name='add-snippet'
-         //                active={this.state.activeItem === 'add-snippet'}
-         //                onClick={this.handleItemClick}>
-         //                Add Snippet
-         //             </Menu.Item>
-         //             {false ?
-         //             <Menu.Item
-         //                className='Link'
-         //                name='show-snippet-new'
-         //                active={this.state.activeItem === 'show-snippet-new'}
-         //                onClick={this.handleItemClick}>
-         //                Show New Snippet
-         //             </Menu.Item>
-         //             : null}
-                                    
-                                    
-            // </Menu>

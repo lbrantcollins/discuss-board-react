@@ -94,12 +94,6 @@ class ChallengeList extends React.Component {
 
 			<div>
 
-				<Button 
-					content="Log Out"
-				/>
-				<br/>
-				<br/>
-
 				{this.state.index || this.state.index === 0
 					?
 						<ShowChallenge 

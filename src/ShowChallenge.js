@@ -274,11 +274,11 @@ class ShowChallenge extends React.Component {
 											<div>
 
 												<br/>
-												<br/>
 												<Button 
 													content="Contribute an Answer"
 													onClick={this.toggleAddSnippet}
 												/> 
+												<br/>
 												<br/>
 
 												{this.state.addSnippet
