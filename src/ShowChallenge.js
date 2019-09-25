@@ -123,6 +123,8 @@ class ShowChallenge extends React.Component {
 
    	let questionList = null;
    	let snippetList = null;
+   	let keywords = null;
+   	let languages = null;
 
    	if (this.state.loaded) {
 
@@ -215,6 +217,25 @@ class ShowChallenge extends React.Component {
 					})
 
 				}
+
+				if (this.props.challenge.keywords) {
+
+					const keywordList = this.props.challenge.keywords.map( (keyword) => {
+						return keyword.keyword
+					})
+
+					keywords = keywordList.join(', ')
+				}
+
+				if (this.props.challenge.languages) {
+
+					const languageList = this.props.challenge.languages.map( (language) => {
+						return language.language
+					})
+
+					languages = languageList.join(', ')
+				}
+
 			}
 
 		}
@@ -245,20 +266,38 @@ class ShowChallenge extends React.Component {
 								<Card>
 									<Card.Content>
 										<Card.Header> {this.props.challenge.title} </Card.Header>
+										
 										<Card.Description> {this.props.challenge.description} </Card.Description>
+
+										<br/>
+
+										<Card.Meta>
+											Keywords: {keywords}
+										</Card.Meta>
+
+										<Card.Meta>
+											Languages: {languages}
+										</Card.Meta>
+
 										<Card.Meta>	
-											{this.props.user.is_teacher
-												?
-													<Button 
-														content="Edit"
-														onClick={this.editChallenge}
-													/> 
-												:
-													null
+											<div>
+
+												<br/>
+												{this.props.user.is_teacher
+													?
+														<Button 
+															content="Edit"
+															onClick={this.editChallenge}
+														/> 
+													:
+														null
 
 
-											}
-										</Card.Meta>				
+												}
+
+											</div>
+										</Card.Meta>	
+
 									</Card.Content>
 								</Card>
 							</div>

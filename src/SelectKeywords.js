@@ -328,7 +328,7 @@ class SelectKeywords extends React.Component {
                   <Card>
                      <Card.Content>
 
-                        <Card.Header>Keywords for this Challenge</Card.Header>
+                        <Card.Header>Select Keywords for this Challenge</Card.Header>
                      
                         <Card.Description>
                            {keywordList}
@@ -342,7 +342,6 @@ class SelectKeywords extends React.Component {
                               <Button>Submit Selected Keywords</Button>
                            </Form>
                         </Card.Meta>
-                        <br/>
                         <br/>
 
                         <Button
