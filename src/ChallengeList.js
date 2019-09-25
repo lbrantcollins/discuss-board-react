@@ -105,7 +105,10 @@ class ChallengeList extends React.Component {
 
 				{this.state.addChallenge
 						?
-							<AddChallenge />
+							<AddChallenge 
+								user={this.props.user}
+								returnToChallengeList={this.returnToChallengeList}
+							/>
 						:
 							<div>
 								{this.state.index || this.state.index === 0

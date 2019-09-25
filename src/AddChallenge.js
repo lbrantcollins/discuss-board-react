@@ -9,12 +9,12 @@ import SelectLanguages from './SelectLanguages';
 const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 class AddChallenge extends React.Component {
-   // props: teacher_id (user_id), addChallenge (function)
+   // props: user, returnToChallengeList (function)
    constructor() {
       super();
 
       this.state = {
-         id: '',
+         challenge_id: '',
       	title: '',
       	description: '',
          newChallengeCreated: false,
@@ -32,7 +32,7 @@ class AddChallenge extends React.Component {
       });
    }
 
-   addChallenge = async (data) => {
+   addChallenge = async () => {
  
       try {
 
@@ -40,29 +40,43 @@ class AddChallenge extends React.Component {
          // using data from "AddChallenge" input form
          const response = await fetch(API_URL + '/challenges', {
             method: 'POST',
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+               teacher_id: this.props.user.id,
+               title: this.state.title,
+               description: this.state.description,
+            }),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
          })
 
+         if (response.success) {
+            this.setState({
+               newChallengeCreated: true,
+            })
+         }
+
          // add the new challenge to state
          // get the challenge (including it's new id)
-         const newChallenge = await response.json();
+         // const newChallenge = await response.json();
+
          // make a copy of the current state
-         const newList = [...this.state.challenges];
+         // const newList = [...this.state.challenges];
+
          // add the new challenge to the local list
-         newList.push(newChallenge)
+         // newList.push(newChallenge)
+
          // set state to the local list (includes new challenge)
-         this.setState({
-            challenges: newList,
-            addChallenge: false
-         })
+         // this.setState({
+         //    challenges: newList,
+         //    addChallenge: false
+         // })
 
          // return the new challenge in case call needs the return
-         return newChallenge;
+         // return newChallenge;
 
          // a little cheating:
-         this.componentDidMount();
+         // this.componentDidMount();
+
 
       } catch (err) {
          console.log(err)
@@ -70,74 +84,77 @@ class AddChallenge extends React.Component {
    }
 
 
-   handleSubmit = async (e) => {
-      e.preventDefault();
+  //  handleSubmit = async (e) => {
+  //     e.preventDefault();
 
-      // send new challenge data to database
-      const newChallenge = await this.addChallenge({
-         teacher_id: this.props.teacher_id,
-         title: this.state.title,
-         description: this.state.description
-      })
+  //     // send new challenge data to database
+  //     const newChallenge = await this.addChallenge({
+  //        teacher_id: this.props.user.id,
+  //        title: this.state.title,
+  //        description: this.state.description
+  //     })
 
-      this.setState({
-         id: newChallenge.id,
-         newChallengeCreated: true
-      })
+  //     this.setState({
+  //        challenge_id: newChallenge.id,
+  //        newChallengeCreated: true
+  //     })
 
-      // how to access session[:message] here?
-      // and then reset it to null so does not continue to display?
-      // and can CSS style good "message" vs. "bad" message:
-      // className="message {session[:message][:status]}"
+  //     // how to access session[:message] here?
+  //     // and then reset it to null so does not continue to display?
+  //     // and can CSS style good "message" vs. "bad" message:
+  //     // className="message {session[:message][:status]}"
 
-      // return the new challenge in case we need a return
-      return newChallenge;
+  //     // return the new challenge in case we need a return
+  //     return newChallenge;
 
-      // this.props.history.push('/media/' + newMedia.data.id)
-
-  }
+  // }
    
    render() {
-
-      console.log(this.state);
-      console.log("this.state");
 
       return (
 
          <div>
 
-            <h2>Add a challenge:</h2>
+            <div>
+               <h2>Add a challenge:</h2>
 
-            <Form onSubmit={this.handleSubmit}>
-               <label>Title:</label>
-               <br/>
-               <Form.Input 
-                  type="text" 
-                  name="title" 
-                  placeholder="Challenge Title" 
-                  onChange={this.handleChange}
-               />
-               <br/>
-               <label>Description:</label>
-               <br/>
-               <Form.TextArea 
-                  rows="8"
-                  name="description" 
-                  placeholder="Challenge Description"
-                  onChange={this.handleChange}
-               />
-               <br/>
-               <Button>Submit Challenge</Button>
-            </Form>
+               <Form onSubmit={this.addChallenge}>
+                  <label>Title:</label>
+                  <br/>
+                  <Form.Input 
+                     type="text" 
+                     name="title" 
+                     placeholder="Challenge Title" 
+                     onChange={this.handleChange}
+                  />
+                  <br/>
+                  <label>Description:</label>
+                  <br/>
+                  <Form.TextArea 
+                     rows="8"
+                     name="description" 
+                     placeholder="Challenge Description"
+                     onChange={this.handleChange}
+                  />
+                  <br/>
+                  <Button>Submit Challenge</Button>
+               </Form>
+            </div>
+
+            {this.props.returnToChallengeList}
 
             {/* Allow keyword selection after challenge created */}
             {this.state.newChallengeCreated 
                ? 
-                  <Card.Group>
-                     <SelectKeywords challenge_id={this.state.id} />
+                  <div>
+                     <h4>Select keywords and languages for the challenge</h4>
+                     <Card.Group>
+                        <SelectKeywords challenge_id={this.state.challenge_id} />
 
-                     <SelectLanguages challenge_id={this.state.id} /> 
-                  </Card.Group> 
+                        <SelectLanguages challenge_id={this.state.challenge_id} />
+
+                     </Card.Group> 
+                  </div>
                :
                   null
             }              
