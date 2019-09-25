@@ -55,6 +55,8 @@ class AddChallenge extends React.Component {
             })
          }
 
+
+
          // add the new challenge to state
          // get the challenge (including it's new id)
          // const newChallenge = await response.json();
@@ -81,6 +83,8 @@ class AddChallenge extends React.Component {
       } catch (err) {
          console.log(err)
       }
+
+      this.props.returnToChallengeList();
    }
 
 
@@ -141,7 +145,7 @@ class AddChallenge extends React.Component {
                </Form>
             </div>
 
-            {this.props.returnToChallengeList}
+            
 
             {/* Allow keyword selection after challenge created */}
             {this.state.newChallengeCreated 

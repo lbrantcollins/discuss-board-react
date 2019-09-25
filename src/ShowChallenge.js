@@ -13,7 +13,8 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 
 class ShowChallenge extends React.Component {
 	// props: user (user info), challenge (challenge info)
-	// 			returnToChallengeList (function)
+	// 		 updateChallengeForShowChallenge (function)
+	//        returnToChallengeList (function)
 	constructor() {
 		super();
 

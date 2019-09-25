@@ -61,6 +61,7 @@ class ChallengeList extends React.Component {
    	this.setState({
    		index: null,
    		challenges:[],
+   		addChallenge: false,
    	})
    	this.componentDidMount();
    }
