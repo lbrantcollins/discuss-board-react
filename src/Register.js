@@ -70,6 +70,16 @@ class Register extends React.Component {
                      <Message>
                         Already registered? <span className="link-text" onClick={this.props.toggleLoginRegister}>Log in</span>
                      </Message>
+
+                     {this.props.message
+                           ?
+                              <div>
+                                 <br/>
+                                 <p className="message bad"> {this.props.message} </p>
+                              </div>
+                           :
+                              null
+                        }
              
                   </Segment>
                </Form>

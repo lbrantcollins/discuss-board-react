@@ -28,6 +28,7 @@ class App extends React.Component {
 
       this.state = {
          useLoginPage: true,
+         message: '',
          loggedIn: false,
          user: {}
       }
@@ -36,7 +37,8 @@ class App extends React.Component {
    toggleLoginRegister = () => {
 
       this.setState({
-         useLoginPage: !this.state.useLoginPage
+         useLoginPage: !this.state.useLoginPage,
+         message: '',
       })
    }
 
@@ -61,7 +63,10 @@ class App extends React.Component {
                user: user
             })
          } else {
-            this.toggleLoginRegister();
+            this.setState({
+               message: "Username or password is incorrect."
+            })
+            // this.toggleLoginRegister();
          }
 
       } catch (err) {
@@ -73,52 +78,61 @@ class App extends React.Component {
 
    register = async (data) => {
 
-      try {
+      if (data.username && data.password) {
 
-         // create a new user in the database
-         const response = await fetch(API_URL + '/users/register', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
-         const user = await response.json();
+         try {
 
-         if (user.success) {
-
-            // set state so that user is considered "loggedIn"
-            this.setState({
-               loggedIn: true,
-               user: user
+            // create a new user in the database
+            const response = await fetch(API_URL + '/users/register', {
+               method: 'POST',
+               body: JSON.stringify(data),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
             })
+            const user = await response.json();
 
-            // add new user to either the student or teachers table
-            if (user.is_teacher) {
-               await fetch(API_URL + '/teachers', {
-                  method: 'POST',
-                  body: JSON.stringify({
-                     user_id: user.id,
-                  }),
-                  headers: {'Content-Type': 'application/json'},
-                  credentials: 'include',
-               })
-            } else {
-               await fetch(API_URL + '/students', {
-                  method: 'POST',
-                  body: JSON.stringify({
-                     user_id: user.id,
-                  }),
-                  headers: {'Content-Type': 'application/json'},
-                  credentials: 'include',
+            if (user.success) {
+
+               // set state so that user is considered "loggedIn"
+               this.setState({
+                  loggedIn: true,
+                  user: user
                })
 
-            }
+               // add new user to either the student or teachers table
+               if (user.is_teacher) {
+                  await fetch(API_URL + '/teachers', {
+                     method: 'POST',
+                     body: JSON.stringify({
+                        user_id: user.id,
+                     }),
+                     headers: {'Content-Type': 'application/json'},
+                     credentials: 'include',
+                  })
+               } else {
+                  await fetch(API_URL + '/students', {
+                     method: 'POST',
+                     body: JSON.stringify({
+                        user_id: user.id,
+                     }),
+                     headers: {'Content-Type': 'application/json'},
+                     credentials: 'include',
+                  })
 
-         } 
+               }
 
-      } catch (err) {
-         console.log(err)
+            } 
+
+         } catch (err) {
+            console.log(err)
+         }
+
+      } else {
+         this.setState({
+            message: 'You must choose a usernamd and a password.',
+         })
       }
+
    }
 
    logout = async (data) => {
@@ -134,6 +148,8 @@ class App extends React.Component {
          
          // set state so that user is considered "logged out"
          this.setState({
+            useLoginPage: true,
+            message: '',
             loggedIn: false,
          })
    
@@ -171,12 +187,14 @@ class App extends React.Component {
                         ? 
                            <Login 
                               toggleLoginRegister={this.toggleLoginRegister}
-                              login={this.login} 
+                              login={this.login}
+                              message={this.state.message} 
                            />
                         :
                            <Register 
                               toggleLoginRegister={this.toggleLoginRegister}
                               register={this.register}
+                              message={this.state.message}
                            />
                      }
 

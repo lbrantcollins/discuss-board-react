@@ -36,31 +36,46 @@ class Login extends React.Component {
    render() {
 
       return (
+
+         <div>
       
-         <Grid textAlign='center' verticalAlign='middle' style={{ height: '100vh'}}>
-            <Grid.Column style={{maxWidth: 450}}>
-               <Header as='h2' textAlign='center'>
-                  Welcome!  Please log in.
-               </Header>
-               <Form onSubmit={this.handleSubmit}>
-                  <Segment stacked textAlign='left'>
+            <Grid textAlign='center' verticalAlign='middle' style={{ height: '100vh'}}>
+               <Grid.Column style={{maxWidth: 450}}>
+                  <Header as='h2' textAlign='center'>
+                     Welcome!  Please log in.
+                  </Header>
+                  <Form onSubmit={this.handleSubmit}>
+                     <Segment stacked textAlign='left'>
 
-                     Username:
-                     <Form.Input fluid icon='user' iconPosition='left' placeholder='username' type='text' name='username' onChange={this.handleChange}/>
+                        Username:
+                        <Form.Input fluid icon='user' iconPosition='left' placeholder='username' type='text' name='username' onChange={this.handleChange}/>
 
-                     Password:
-                     <Form.Input fluid icon='lock' iconPosition='left' type='password' name='password' onChange={this.handleChange}/>
-                     
-                     <Button fluid size='large' type='sumbit'>Log in</Button>
+                        Password:
+                        <Form.Input fluid icon='lock' iconPosition='left' type='password' name='password' onChange={this.handleChange}/>
+                        
+                        <Button fluid size='large' type='sumbit'>Log in</Button>
 
-                     <Message>
+                        <Message>
                         Not registered? <span className="link-text" onClick={this.props.toggleLoginRegister}>Sign up</span>
-                     </Message>
-             
-                  </Segment>
-               </Form>
-            </Grid.Column>
-         </Grid>
+                        </Message>
+
+                        {this.props.message
+                           ?
+                              <div>
+                                 <br/>
+                                 <p className="message bad"> {this.props.message} </p>
+                              </div>
+                           :
+                              null
+                        }
+
+                
+                     </Segment>
+                  </Form>
+               </Grid.Column>
+            </Grid>
+
+         </div>
       )
   }
 }
