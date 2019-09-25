@@ -18,6 +18,7 @@ class AddChallenge extends React.Component {
       	title: '',
       	description: '',
          newChallengeCreated: false,
+         message: '',
       }
 
    }
@@ -52,7 +53,6 @@ class AddChallenge extends React.Component {
          const challenge = await response.json();
 
          if (challenge.success) {
-            console.log("-----> new challenge created <-----");
             this.setState({
                challenge_id: challenge.challenge.id,
                newChallengeCreated: true,
@@ -65,36 +65,37 @@ class AddChallenge extends React.Component {
 
    }
 
-   handleSubmitChallenge = () => {
-      this.props.returnToChallengeList();
+   handleSubmitChallenge = async () => {
+
+      try {  
+
+         const response = await fetch(API_URL + '/challenges/' + this.state.challenge_id, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         const challenge = await response.json();
+
+
+         if (challenge.keywords.length === 0) {
+            this.setState({
+               message: "You must select at least one keyword.",
+            })
+         } else if (challenge.languages.length === 0) {
+            this.setState({
+               message: "You must select at least one language.",
+            })
+         } else {
+
+            this.props.returnToChallengeList();
+
+         }
+         
+      } catch(err) {
+         console.log(err);
+      }
    }
 
-
-  //  handleSubmit = async (e) => {
-  //     e.preventDefault();
-
-  //     // send new challenge data to database
-  //     const newChallenge = await this.addChallenge({
-  //        teacher_id: this.props.user.id,
-  //        title: this.state.title,
-  //        description: this.state.description
-  //     })
-
-  //     this.setState({
-  //        challenge_id: newChallenge.id,
-  //        newChallengeCreated: true
-  //     })
-
-  //     // how to access session[:message] here?
-  //     // and then reset it to null so does not continue to display?
-  //     // and can CSS style good "message" vs. "bad" message:
-  //     // className="message {session[:message][:status]}"
-
-  //     // return the new challenge in case we need a return
-  //     return newChallenge;
-
-  // }
-   
    render() {
 
       return (
@@ -143,6 +144,10 @@ class AddChallenge extends React.Component {
                      </Card>
 
                      <h4>Select keywords and languages for the challenge</h4>
+
+                     <br/>
+                     <p className="message bad">{this.state.message}</p>
+                     <br/>
 
                      <Card.Group>
                         <SelectKeywords challenge_id={this.state.challenge_id} />

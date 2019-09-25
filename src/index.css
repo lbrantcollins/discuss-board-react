@@ -28,15 +28,15 @@ body {
 
 
 .message.good {
-	background-color: lightgreen;
+	color: green;
 }
 
 .message.bad {
-	background-color: pink;
+	color: red;
 }
 
 .message.neutral {
-	background-color: lightblue;
+	color: blue;
 }
 
 /*.keyword-selection {

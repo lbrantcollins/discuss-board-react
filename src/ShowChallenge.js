@@ -32,6 +32,9 @@ class ShowChallenge extends React.Component {
 	// retrieve all existing questions and snippets for this challenge
 	componentDidMount = async () => {
 
+		console.log("this.props.challenge in ShowChallenge");
+		console.log(this.props.challenge);
+
 		this.setState({
 			turnOffAddSnippetButton: false,
 		})
@@ -274,13 +277,19 @@ class ShowChallenge extends React.Component {
 
 											<div>
 
-												<br/>
-												<Button 
-													content="Contribute an Answer"
-													onClick={this.toggleAddSnippet}
-												/> 
-												<br/>
-												<br/>
+												{this.props.user.is_teacher
+													? null
+													:
+														<div>
+															<br/>
+															<Button 
+																content="Contribute an Answer"
+																onClick={this.toggleAddSnippet}
+															/> 
+															<br/>
+															<br/>
+														</div>
+												}
 
 												{this.state.addSnippet
 													?

@@ -24,9 +24,6 @@ class ShowRemark extends React.Component {
    // pre-processing for this component
    componentDidMount = async () => {
 
-      console.log("this.props.remark inside ShowRemark, componentDidMount");
-      console.log(this.props.remark);
-
       // provide a label (a remark title) and button text customized 
       // for the specific component and grab the remark text from props
       let label;

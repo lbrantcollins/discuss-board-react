@@ -36,52 +36,37 @@ class EditChallenge extends React.Component {
       });
    }
 
-// editChallenge = async (id, data) => {
- 
-   //    try {
-
-   //       // update the title, description for a challenge
-   //       // using data from EditChallenge component input form
-   //       // (keywords/languages are updated from EditChallenge component)
-   //       const response = await fetch(API_URL + '/challenges/' + id, {
-   //          method: 'PUT',
-   //          body: JSON.stringify(data),
-   //          headers: {'Content-Type': 'application/json'},
-   //          credentials: 'include',
-   //       })
-
-   //       // return the new challenge in case call needs the return
-   //       const editedChallenge = await response.json();
-
-   //       this.setState({
-   //          editChallenge: false,
-   //          challengeToBeEdited: ''
-   //       })
-
-   //       // a little cheating:
-   //       this.componentDidMount();
-
-   //       return editedChallenge;
-
-   //    } catch (err) {
-   //       console.log(err)
-   //    }
-   // }
-
    handleSubmit = async (e) => {
       e.preventDefault();
 
-      // const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
-      //    method: 'PUT',
-      //    body: JSON.stringify({
-      //       title: this.state.title,
-      //       description: this.state.description,
-      //    }),
-      //    headers: {'Content-Type': 'application/json'},
-      //    credentials: 'include',
-      // })
+      try {
 
-      this.props.returnToShowChallenge();
+         const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+         })
+         const challenge = await response.json();
+
+         if (challenge.keywords.length === 0) {
+            this.setState({
+               message: "You must select at least one keyword.",
+            })
+         } else if (challenge.languages.length === 0) {
+            this.setState({
+               message: "You must select at least one language.",
+            })
+         } else {
+
+            this.props.returnToShowChallenge();
+
+         }
+
+      } catch(err) {
+         console.log(err);
+      }
+
+
 
    }
 
@@ -92,24 +77,31 @@ class EditChallenge extends React.Component {
          this.setState({
             message: "You must enter a challenge title."
          })
+
       } else {
 
-         const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
-            method: 'PUT',
-            body: JSON.stringify({
-               title: this.state.title,
-               description: this.props.challenge.description,
-            }),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
+         try{
 
-         this.setState({
-            ...this.state,
-            editTitle: false,
-            message: '',
-            title: this.state.title,
-         })
+            const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
+               method: 'PUT',
+               body: JSON.stringify({
+                  title: this.state.title,
+                  description: this.props.challenge.description,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            })
+
+            this.setState({
+               ...this.state,
+               editTitle: false,
+               message: '',
+               title: this.state.title,
+            })
+
+         } catch(err) {
+            console.log(err);
+         }
 
       }
 
@@ -118,21 +110,36 @@ class EditChallenge extends React.Component {
    handleSubmitDescription = async (e) => {
       e.preventDefault();
 
-      const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
-         method: 'PUT',
-         body: JSON.stringify({
-            title: this.props.challenge.title,
-            description: this.state.description,
-         }),
-         headers: {'Content-Type': 'application/json'},
-         credentials: 'include',
-      })
+      if (this.state.title.length === 0) {
+         this.setState({
+            message: "You must enter a challenge description."
+         })
 
-      this.setState({
-         ...this.state,
-         editDescription: false,
-         description: this.state.description,
-      })
+      } else {
+
+         try {
+
+            const response = await fetch(API_URL + '/challenges/' + this.props.challenge.id, {
+               method: 'PUT',
+               body: JSON.stringify({
+                  title: this.props.challenge.title,
+                  description: this.state.description,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            })
+
+            this.setState({
+               ...this.state,
+               editDescription: false,
+               message: '',
+               description: this.state.description,
+            })
+
+         } catch(err) {
+            console.log(err);
+         }
+      }
    }
 
    toggleEditTitle = () => {
@@ -161,7 +168,8 @@ class EditChallenge extends React.Component {
             />
 
             <br/>
-            <p>{this.state.message}</p>
+            <br/>
+            <p className="message bad">{this.state.message}</p>
             <br/>
 
             <Card.Group>

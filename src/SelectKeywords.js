@@ -20,6 +20,7 @@ class SelectKeywords extends React.Component {
          newKeyword: '',
          keywordEditListToggle: false,
          editKeywords: false,
+         message: '',
       }
 
    }
@@ -28,10 +29,7 @@ class SelectKeywords extends React.Component {
    // and all keywords selected for the current challenge
    componentDidMount = async () => {
 
-      console.log("props in SelectKeyword");
-      console.log(this.props);
-
-      try {
+       try {
 
          // retrieve list of all available keyword choices
          const response1 = await fetch(API_URL + '/keywords', {
@@ -204,9 +202,6 @@ class SelectKeywords extends React.Component {
          }
       }
 
-      console.log("keywordsToAdd in SelectKeywords");
-      console.log(keywordsToAdd);
-      
       // Create challenge-keyword through-table entries for NEW selected keywords
       await fetch(API_URL + '/challengekeywords/', {
          method: 'POST',
