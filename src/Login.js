@@ -41,7 +41,7 @@ class Login extends React.Component {
 
          <Segment>
 
-            <h1>Classroom discussion board for a participation grade</h1>
+            <h1>Project: Classroom discussion board</h1>
 
             <ul>
                <li>Teachers can pose challenges</li>
