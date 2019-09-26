@@ -34,34 +34,45 @@ class AddChallenge extends React.Component {
    }
 
    addChallenge = async () => {
- 
+
       try {
+         if (this.state.title && this.state.description) {
 
-         // create a new challenge in database
-         // using data from "AddChallenge" input form
-         const response = await fetch(API_URL + '/challenges', {
-            method: 'POST',
-            body: JSON.stringify({
-               teacher_id: this.props.user.id,
-               title: this.state.title,
-               description: this.state.description,
-            }),
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-         })
 
-         const challenge = await response.json();
+            // create a new challenge in database
+            // using data from "AddChallenge" input form
+            const response = await fetch(API_URL + '/challenges', {
+               method: 'POST',
+               body: JSON.stringify({
+                  teacher_id: this.props.user.id,
+                  title: this.state.title,
+                  description: this.state.description,
+               }),
+               headers: {'Content-Type': 'application/json'},
+               credentials: 'include',
+            })
 
-         if (challenge.success) {
+            const challenge = await response.json();
+
+            if (challenge.success) {
+               this.setState({
+                  challenge_id: challenge.challenge.id,
+                  newChallengeCreated: true,
+                  message: '',
+               })
+            }
+
+         } else {
             this.setState({
-               challenge_id: challenge.challenge.id,
-               newChallengeCreated: true,
+               message: "You must include a title and a description."
             })
          }
 
       } catch (err) {
          console.log(err)
       }
+
+ 
 
    }
 
@@ -88,7 +99,6 @@ class AddChallenge extends React.Component {
          } else {
 
             this.props.returnToChallengeList();
-
          }
          
       } catch(err) {
@@ -108,6 +118,10 @@ class AddChallenge extends React.Component {
 
                   <div>
                      <h2>Add a challenge:</h2>
+
+                     <br/>
+                     <p className="message bad">{this.state.message}</p>
+                     <br/>
 
                      <Form onSubmit={this.addChallenge}>
                         <label>Title:</label>
@@ -143,7 +157,7 @@ class AddChallenge extends React.Component {
                         </Card.Content>
                      </Card>
 
-                     <h4>Select keywords and languages for the challenge</h4>
+                     <h2>Select keywords and languages for the challenge</h2>
 
                      <br/>
                      <p className="message bad">{this.state.message}</p>

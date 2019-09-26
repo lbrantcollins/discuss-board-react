@@ -25,6 +25,7 @@ class ShowChallenge extends React.Component {
 			editChallenge: false,
 			addSnippet: false,
 			turnOffAddSnippetButton: false,
+			deleteChallenge: false,
 			loaded: false,
 		}
 	}
@@ -44,7 +45,7 @@ class ShowChallenge extends React.Component {
 	         headers: {'Content-Type': 'application/json'},
 	         credentials: 'include',
 	      })
-	      const parsedResponse1 = await response1.json();
+	      const questions = await response1.json();
 
 	      // retrieve all existing snippets for this challenge
 			const response2 = await fetch(API_URL + '/snippets/challenge/' + this.props.challenge.id, {
@@ -52,12 +53,12 @@ class ShowChallenge extends React.Component {
 	         headers: {'Content-Type': 'application/json'},
 	         credentials: 'include',
 	      })
-	      const parsedResponse2 = await response2.json();
+	      const snippets = await response2.json();
 
 	      this.setState({
 	      	...this.state,
-	         questions: parsedResponse1.questions,
-	         snippets: parsedResponse2.snippets,
+	         questions: questions.questions,
+	         snippets: snippets.snippets,
 	         loaded: true,
 	      })
 
@@ -97,6 +98,32 @@ class ShowChallenge extends React.Component {
    	})
    	// Need to re-render the snippets
    	this.componentDidMount();
+   }
+
+   toggleDeleteChallenge = () => {
+   	this.setState({
+   		deleteChallenge: !this.state.deleteChallenge,
+   	})
+   }
+
+   deleteChallenge = async () => {
+   	this.setState({
+   		deleteChallenge: !this.state.deleteChallenge,
+   	})
+
+   	try {
+
+   		await fetch(API_URL + "/challenges/" + this.props.challenge.id, {
+   			method: 'DELETE',
+	         headers: {'Content-Type': 'application/json'},
+	         credentials: 'include',
+	      })
+
+   	} catch(err) {
+   		console.log(err);
+   	}
+
+   	this.props.returnToChallengeList();
    }
 
    // turnOffAddSnippetButton = () => {
@@ -283,12 +310,36 @@ class ShowChallenge extends React.Component {
 											<div>
 
 												<br/>
+
 												{this.props.user.is_teacher
 													?
-														<Button 
-															content="Edit"
-															onClick={this.editChallenge}
-														/> 
+														<div>
+															<Button 
+																content="Edit"
+																onClick={this.editChallenge}
+															/> 
+															<Button 
+																content="Delete"
+																onClick={this.toggleDeleteChallenge}
+															/> 
+
+															{this.state.deleteChallenge
+																?
+																	<div>
+																		<p className="message bad">
+																			CAUTION: Deleting this challenge will also 
+																			delete all student answers and comments.
+																		</p>
+
+																		<Button 
+																			content="Confirm Delete"
+																			onClick={this.deleteChallenge}
+																		/>
+																	</div>
+																: 
+																	null
+															}
+														</div>
 													:
 														null
 

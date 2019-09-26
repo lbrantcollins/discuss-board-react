@@ -201,9 +201,6 @@ class AddRemark extends React.Component {
 
    render() {
 
-      console.log("placeholder in AddRemark render");
-      console.log(this.props.placeholder);
-
       return (
 
 

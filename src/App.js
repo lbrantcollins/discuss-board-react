@@ -129,7 +129,7 @@ class App extends React.Component {
 
       } else {
          this.setState({
-            message: 'You must choose a usernamd and a password.',
+            message: 'You must choose a username and a password.',
          })
       }
 
