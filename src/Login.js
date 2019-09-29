@@ -57,18 +57,7 @@ class Login extends React.Component {
                Yet all students can see all threads (anonymously).
             </p>
 
-            <h3>Nice-to-have add-ons</h3>
-
-            <ul>
-               <li>Students can ask clarifying questions about the challenge</li>
-               <li>Teachers can give feedback on a student answer</li>
-               <li>Display date/time for each challenge, answer, comment, response</li>
-               <li>Use highlighting to alert teachers to follow-on comments not yet addressed
-                  (for timely 1-on-1 conversation between student and teacher)</li>
-               <li>Students must be on a roster to be allowed to register on the site</li>
-               <li>Display computer code with syntax highlighting</li>
-            </ul>
-
+            
             <h3>Technologies</h3>
 
             <ul>
@@ -122,3 +111,18 @@ class Login extends React.Component {
 }
 
 export default Login;
+
+
+// <h3>Nice-to-have add-ons</h3>
+
+            // <ul>
+               // <li>Students can ask clarifying questions about the challenge</li>
+               // <li>Teachers can give feedback on a student answer</li>
+               // <li>Display date/time for each challenge, answer, comment, response</li>
+               // <li>Use highlighting to alert teachers to follow-on comments not yet addressed
+                  // (for timely 1-on-1 conversation between student and teacher)</li>
+               // <li>Students must be on a roster to be allowed to register on the site</li>
+               // <li>Display computer code with syntax highlighting</li>
+            // </ul>
+
+            

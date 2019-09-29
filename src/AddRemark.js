@@ -74,44 +74,6 @@ class AddRemark extends React.Component {
    
    }
 
-   ///////////////////////////////////////////////////////////////////
-   // THIS FUNCTION IS LIKELY NOT NEEDED
-   ///////////////////////////////////////////////////////////////////
-   // initializeFormPlaceholder = async () => {
-
-   //    // set a placeholder for the add-remark text box
-   //    // (customized for the specific component)
-   //    let placeholder;
-       
-   //    switch (this.props.elementType) {
-
-   //       case 'challenge':
-   //          placeholder = "...about the challenge your instructor posed.";
-   //          break;
-
-   //       case 'snippet':
-   //          placeholder = "...about your fellow student's suggested code snippet.";
-   //          break;
-
-   //       case 'question':
-   //          placeholder = "...to your student's question about the challenge posed.";
-   //          break;
-
-   //       case 'comment':
-   //           placeholder = "...about your student's comment on the code snippet.";
-   //          break;
-
-   //       default:
-   //          console.log("Remarks are only for a challenge, snippet, question, or comment")
-   //    }
-
-   //    await this.setState({
-   //       placeholder: placeholder,
-   //    })
-
-      
-   // }
-
    handleChange = (e) => {
       this.setState({
         [e.target.name]: e.target.value

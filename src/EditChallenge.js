@@ -162,7 +162,7 @@ class EditChallenge extends React.Component {
 
          <div>
 
-            <Button 
+            <Button className="secondary"
                content="Submit Updated Challenge"
                onClick={this.handleSubmit}
             />

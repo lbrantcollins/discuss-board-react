@@ -281,7 +281,7 @@ class ShowChallenge extends React.Component {
 						<div>
 
 							<div>
-								<Button 
+								<Button className="secondary"
 				               content="Return to Challenge List"
 				               onClick={this.handleSubmitReturnToChallengeList}
 				            />

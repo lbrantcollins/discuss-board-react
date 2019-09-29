@@ -125,10 +125,14 @@ class ChallengeList extends React.Component {
 
 											{this.props.user.is_teacher
 												?
-													<Button
-														content="Add a Challenge"
-														onClick={this.addChallenge}
-													/>
+													<div>
+														<Button className="secondary"
+															content="Add a Challenge"
+															onClick={this.addChallenge}
+														/>
+														<br/>
+														<br/>
+													</div>
 												:
 													null
 											}

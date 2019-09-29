@@ -5,15 +5,7 @@ import { Menu, Icon, Button } from 'semantic-ui-react';
 // require('./index.css'); 
 
 import ChallengeList from './ChallengeList';
-// import AddChallenge from './AddChallenge';
-// import EditChallenge from './EditChallenge';
 
-// // just temporary to test component functionality
-// import AddRemark from './AddRemark';
-// import AddSnippet from './AddSnippet';
-// import EditSnippet from './EditSnippet';
-// import ShowSnippet from './ShowSnippet';
-// import ShowRemark from './ShowRemark';
 import Register from './Register';
 import Login from './Login';
 // import Header from './Header';

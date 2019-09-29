@@ -90,11 +90,11 @@ class AddChallenge extends React.Component {
 
          if (challenge.keywords.length === 0) {
             this.setState({
-               message: "You must select at least one keyword.",
+               message: "You must select and submit at least one keyword.",
             })
          } else if (challenge.languages.length === 0) {
             this.setState({
-               message: "You must select at least one language.",
+               message: "You must select and submit at least one language.",
             })
          } else {
 
@@ -150,6 +150,14 @@ class AddChallenge extends React.Component {
 
                   <div>
 
+                     <br/>
+                     <br/>
+                     <Button className="secondary"
+                        content="Submit Completed Challenge"
+                        onClick={this.handleSubmitChallenge}
+                     />
+                     <br/>
+
                      <Card>
                         <Card.Content>
                            <Card.Header> {this.state.title} </Card.Header>
@@ -170,12 +178,7 @@ class AddChallenge extends React.Component {
 
                      </Card.Group> 
 
-                     <br/>
-                     <br/>
-                     <Button
-                        content="Submit Completed Challenge"
-                        onClick={this.handleSubmitChallenge}
-                     />
+                     
 
                   </div>
             }              

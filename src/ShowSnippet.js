@@ -148,8 +148,8 @@ class ShowSnippet extends React.Component {
 
             <br/>
             <br/>
-            <Button 
-               content="Return to the Page for this Challenge"
+            <Button className="secondary"
+               content="Return to the Summary Page for this Challenge"
                onClick={this.handleSubmitReturnToShowChallengePage}
             />
             <br/>
